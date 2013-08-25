@@ -36,6 +36,12 @@
   (setq package-archive-exclude-alist
          '(("melpa"
             melpa               ;; don't want to self-host this
+            diminish            ;; not updated in forever
+            evil                ;; want stable version
+            evil-nerd-commenter ;; want stable version
+            flymake-cursor      ;; Melpa version is on wiki
+            idomenu             ;; not updated in ages
+            json-mode           ;; not on Melpa
             ))))
 
 (require 'package nil t)
