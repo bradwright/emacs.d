@@ -114,7 +114,7 @@
 (global-set-key (kbd "C-c r") 'revert-buffer)
 
 ;; indent automatically
-(electric-indent-mode 1)
+(add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
 
 ;;; ido
 (eval-after-load 'ido
