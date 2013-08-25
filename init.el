@@ -26,6 +26,9 @@
 
 (require 'utils)
 
+;; tmp directory for storing non-config things
+(make-directory (setq tmp-local-dir (bw/join-dirs dotfiles-dir ".tmp/")) t)
+
 ;; My font
 (when (display-graphic-p)
   (custom-set-faces
@@ -221,6 +224,25 @@
         (kill-buffer buffer))
     ad-do-it))
 
+;;; backup and autosave configuration
+(make-directory (setq tmp-backups-dir (bw/join-dirs tmp-local-dir "backups")) t)
+(make-directory (setq tmp-autosaves-dir (bw/join-dirs tmp-local-dir "autosaves")) t)
+
+(setq
+ ;; don't clobber symlinks
+ backup-by-copying t
+ ;; copy into temporary directory
+ backup-directory-alist `((".*" . ,tmp-backups-dir))
+ ;; copy into autosaves directory
+ auto-save-file-name-transforms `((".*" ,tmp-autosaves-dir t))
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ ;; Use versioned backups
+ version-control t)
+
+
+;;; ELPA customisation and installation
 (require 'setup-elpa)
 
 ;; Load custom file last
