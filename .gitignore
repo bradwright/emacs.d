@@ -1,3 +1,4 @@
 *~
 *.elc
 .elpa
+node_modules
