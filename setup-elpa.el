@@ -1,40 +1,39 @@
 ;;; Packaging via ELPA
-(eval-after-load 'package
-  '(progn
-     ;; Store installed packages alongside this code
-     (setq package-user-dir
-       (bw/join-dirs dotfiles-dir ".elpa"))
+(after-load 'package
+  ;; Store installed packages alongside this code
+  (setq package-user-dir
+        (bw/join-dirs dotfiles-dir ".elpa"))
 
-     ;; Only use 3 specific directories
-     (setq package-archives
-           '(("gnu"       . "http://elpa.gnu.org/packages/")
-             ("marmalade" . "http://marmalade-repo.org/packages/")
-             ("melpa"     . "http://melpa.milkbox.net/packages/")))
+  ;; Only use 3 specific directories
+  (setq package-archives
+        '(("gnu"       . "http://elpa.gnu.org/packages/")
+          ("marmalade" . "http://marmalade-repo.org/packages/")
+          ("melpa"     . "http://melpa.milkbox.net/packages/")))
 
-     ;; initialise package.el
-     (package-initialize)
+  ;; initialise package.el
+  (package-initialize)
 
-     ;; Clean up after ELPA installs:
-     ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
-     (defadvice package-generate-autoloads
-       (after close-autoloads (name pkg-dir) activate)
-       "Stop package.el from leaving open autoload files lying around."
-       (let ((path (expand-file-name (concat name "-autoloads.el") pkg-dir)))
-         (with-current-buffer (find-file-existing path)
-           (kill-buffer nil))))
+  ;; Clean up after ELPA installs:
+  ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
+  (defadvice package-generate-autoloads
+    (after close-autoloads (name pkg-dir) activate)
+    "Stop package.el from leaving open autoload files lying around."
+    (let ((path (expand-file-name (concat name "-autoloads.el") pkg-dir)))
+      (with-current-buffer (find-file-existing path)
+        (kill-buffer nil))))
 
-     ;; Auto-install the Melpa package, since it's used to filter
-     ;; packages.
-     (when (not (package-installed-p 'melpa))
-       (progn
-         (switch-to-buffer
-          (url-retrieve-synchronously
-           "https://raw.github.com/milkypostman/melpa/master/melpa.el"))
-         (package-install-from-buffer (package-buffer-info) 'single)))))
+  ;; Auto-install the Melpa package, since it's used to filter
+  ;; packages.
+  (when (not (package-installed-p 'melpa))
+    (progn
+      (switch-to-buffer
+       (url-retrieve-synchronously
+        "https://raw.github.com/milkypostman/melpa/master/melpa.el"))
+      (package-install-from-buffer (package-buffer-info) 'single))))
 
 ;; Blacklist some non-melpa packages
-(eval-after-load 'melpa
-  '(setq package-archive-exclude-alist
+(after-load 'melpa
+  (setq package-archive-exclude-alist
          '(("melpa"
             melpa               ;; don't want to self-host this
             ))))
