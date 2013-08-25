@@ -1,7 +1,10 @@
 ;;; Packaging via ELPA
-
 (eval-after-load 'package
   '(progn
+     ;; Store installed packages alongside this code
+     (setq package-user-dir
+       (bw/join-dirs dotfiles-dir ".elpa"))
+
      ;; Only use 3 specific directories
      (setq package-archives
            '(("gnu"       . "http://elpa.gnu.org/packages/")
