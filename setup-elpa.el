@@ -161,15 +161,12 @@ files, because it won't try to open any .gitignored files."
 
 (add-hook 'minibuffer-setup-hook 'conditionally-enable-paredit-mode)
 
-
-
-
 ;;; idomenu - navigate code in current buffer using ido
+
 (require-package 'idomenu)
 ;; autoloaded
 (global-set-key (kbd "C-c i") 'idomenu)
 (setq imenu-auto-rescan t)
-
 
 
 (provide 'setup-elpa)
