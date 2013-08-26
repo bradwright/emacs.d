@@ -119,6 +119,10 @@
 ;; indent automatically
 (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
 
+;; Add parts of each file's directory to the buffer name if not unique
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
 ;;; ido
 (eval-after-load 'ido
   '(progn
