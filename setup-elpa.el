@@ -140,6 +140,8 @@
 (require-package 'ag)
 ;; auto-loaded
 (global-set-key (kbd "C-c f") 'ag-project)
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "s-F") 'ag-project))
 ;; reuse ag buffers
 (setq ag-reuse-buffers t)
 
@@ -148,6 +150,8 @@
 ;; this function is auto-loaded
 (global-set-key (kbd "C-c t") 'magit-find-file-completing-read)
 (global-set-key (kbd "M-p") 'magit-find-file-completing-read)
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
 
 ;; OSX packages
 (when (eq system-type 'darwin)
