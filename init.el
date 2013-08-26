@@ -123,6 +123,17 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
 
+
+;;; ediff mode
+(setq
+ ;; make two side-by-side windows
+ ediff-split-window-function 'split-window-horizontally
+ ;; ignore whitespace diffs
+ ediff-diff-options          "-w"
+ ;; Do everything in one frame always
+ ediff-window-setup-function 'ediff-setup-windows-plain)
+
+
 ;;; ido
 (eval-after-load 'ido
   '(progn
