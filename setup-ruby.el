@@ -1,0 +1,23 @@
+;;; enh-ruby-mode - better Ruby semantic parsing
+(require-package 'enh-ruby-mode)
+(autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
+(dolist (spec '(("\\.rb$" . enh-ruby-mode)
+                ("[vV]agrantfile$" . enh-ruby-mode)
+                ("[gG]emfile$" . enh-ruby-mode)
+                ("\\.rake$" . enh-ruby-mode)
+                ("\\.rabl$" . enh-ruby-mode)
+                ("[cC]apfile$" . enh-ruby-mode)
+                ("\\.gemspec$" . enh-ruby-mode)
+                ("\\.builder$" . enh-ruby-mode)))
+  (add-to-list 'auto-mode-alist spec))
+(add-hook 'enh-ruby-mode-hook 'bw/turn-on-subword-mode)
+(setq enh-ruby-use-encoding-map nil)
+(custom-set-faces
+ '(erm-syn-errline ((t (:box nil))))
+ '(erm-syn-warnline ((t (:box nil))))
+ '(enh-ruby-op-face ((t (:inherit default))))
+ '(enh-ruby-string-delimiter-face ((t (:foreground "#dc322f" :background nil))))
+ '(enh-ruby-regexp-delimiter-face ((t (:foreground "#dc322f" :background nil))))
+ '(enh-ruby-heredoc-delimiter-face ((t (:foreground "#dc322f" :background nil)))))
+
+(provide 'setup-ruby)

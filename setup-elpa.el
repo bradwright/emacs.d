@@ -168,5 +168,6 @@ files, because it won't try to open any .gitignored files."
 (global-set-key (kbd "C-c i") 'idomenu)
 (setq imenu-auto-rescan t)
 
+(require 'setup-ruby)
 
 (provide 'setup-elpa)
