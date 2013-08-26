@@ -168,6 +168,16 @@ by using nxml's indentation rules."
   (interactive)
   (electric-indent-mode -1))
 
+(defun bw/turn-on-electric-pair-mode ()
+  "Turns on electric-pair-mode"
+  (interactive)
+  (electric-pair-mode 1))
+
+(defun bw/turn-off-electric-pair-mode ()
+  "Turns off electric-pair-mode"
+  (interactive)
+  (electric-pair-mode -1))
+
 (defun bw/locate-library-dir (library)
   "Locates the directory containing a loaded library"
   (file-name-directory (locate-library library)))

@@ -118,6 +118,8 @@
 
 ;; indent automatically
 (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
+;; auto-pair
+(add-hook 'prog-mode-hook 'bw/turn-on-electric-pair-mode)
 
 ;; Add parts of each file's directory to the buffer name if not unique
 (require 'uniquify)
