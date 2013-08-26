@@ -148,5 +148,27 @@ files, because it won't try to open any .gitignored files."
 (require-package 'eproject)
 (require 'eproject)
 
+;;; paredit - tools for editing sexps
+
+(require-package 'paredit)
+;; autoloaded
+(add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+;; Enable `paredit-mode' in the minibuffer, during `eval-expression'.
+(defun conditionally-enable-paredit-mode ()
+  (if (eq this-command 'eval-expression)
+      (paredit-mode 1)))
+
+(add-hook 'minibuffer-setup-hook 'conditionally-enable-paredit-mode)
+
+
+
+
+;;; idomenu - navigate code in current buffer using ido
+(require-package 'idomenu)
+;; autoloaded
+(global-set-key (kbd "C-c i") 'idomenu)
+(setq imenu-auto-rescan t)
+
+
 
 (provide 'setup-elpa)
