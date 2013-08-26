@@ -35,7 +35,7 @@
 (after-load 'melpa
   (setq package-archive-exclude-alist
          '(("melpa"
-            melpa               ;; don't want to self-host this
+            melpa               ;; This will always update due to Melpa versioning
             diminish            ;; not updated in forever
             evil                ;; want stable version
             evil-nerd-commenter ;; want stable version
