@@ -137,30 +137,29 @@
 
 
 ;;; ido
-(eval-after-load 'ido
-  '(progn
-     (ido-mode t)
-     (ido-everywhere t)
-     ;; Ignore shitty Dropbox icon stuff:
-     ;; http://stackoverflow.com/a/11341239/61435
-     (add-to-list 'ido-ignore-files "Icon\n")
+(after-load 'ido
+  (ido-mode t)
+  (ido-everywhere t)
+  ;; Ignore shitty Dropbox icon stuff:
+  ;; http://stackoverflow.com/a/11341239/61435
+  (add-to-list 'ido-ignore-files "Icon\n")
 
-     ;; configure ido
-     (setq
-      ;; Speed up ido by using less candidates
-      ido-max-prospects 10
-      ;; Match arbitrary points in strings
-      ido-enable-prefix nil
-      ;; Match across entire string
-      ido-enable-flex-matching t
-      ;; Create a new buffer if there's no match candidate
-      ido-create-new-buffer 'always
-      ;; Don't try and guess if the string under point is a file
-      ido-use-filename-at-point nil
-      ;; case-insensitive matching
-      ido-case-fold t
-      ;; go back in time if required
-      ido-use-virtual-buffers nil)))
+  ;; configure ido
+  (setq
+   ;; Speed up ido by using less candidates
+   ido-max-prospects 10
+   ;; Match arbitrary points in strings
+   ido-enable-prefix nil
+   ;; Match across entire string
+   ido-enable-flex-matching t
+   ;; Create a new buffer if there's no match candidate
+   ido-create-new-buffer 'always
+   ;; Don't try and guess if the string under point is a file
+   ido-use-filename-at-point nil
+   ;; case-insensitive matching
+   ido-case-fold t
+   ;; go back in time if required
+   ido-use-virtual-buffers nil))
 
 (require 'ido)
 
@@ -180,16 +179,15 @@
   (add-to-list 'recentf-filename-handlers 'abbreviate-file-name)
 
   ;; handle recent candidates with ido
-  (eval-after-load 'ido
-    '(progn
-       (defun bw/recentf-ido-find-file ()
-         "Find a recent file using ido."
-         (interactive)
-         (let ((file (ido-completing-read "Recently: " recentf-list nil t)))
-           (when file
-             (find-file file))))
+  (after-load 'ido
+    (defun bw/recentf-ido-find-file ()
+      "Find a recent file using ido."
+      (interactive)
+      (let ((file (ido-completing-read "Recently: " recentf-list nil t)))
+        (when file
+          (find-file file))))
 
-       (global-set-key (kbd "C-x C-r") 'bw/recentf-ido-find-file))))
+    (global-set-key (kbd "C-x C-r") 'bw/recentf-ido-find-file)))
 
 (require 'recentf)
 
