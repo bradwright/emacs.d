@@ -1,6 +1,8 @@
 ;; Magit - Git interface
 ;; https://github.com/magit/magit
 
+(autoload 'magit-grep "magit" "Grep for files" t)
+
 ;; key
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c f") 'magit-grep)
