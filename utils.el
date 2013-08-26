@@ -73,20 +73,6 @@ with prefix"
       (ansi-term (getenv "SHELL"))
     (switch-to-buffer "*ansi-term*")))
 
-(defun bw/eproject-ido-switch-buffers ()
-  "Like ido-switch-buffer, but for the current eproject."
-  (interactive)
-  (if (not (eproject-root))
-      (error "No active project was found")
-    (switch-to-buffer
-     (ido-completing-read
-      (concat (eproject-name) " buffers: ")
-      (mapcar #'buffer-name (--eproject-buffers))))))
-
-(defun --eproject-buffers ()
-  (when (eproject-root)
-    (cdr (assoc (eproject-root) (eproject--project-buffers)))))
-
 (defun bw/require-list (items)
   "Require each thing in ITEMS"
   (interactive)
