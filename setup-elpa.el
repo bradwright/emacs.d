@@ -85,9 +85,10 @@
 (when (eq system-type 'darwin)
   ;;; exec-path-from-shell - Copy shell environment variables to Emacs
   (require-package 'exec-path-from-shell)
-  (dolist (env-var '("PATH" "MANPATH" "SHELL"))
-    (add-to-list 'exec-path-from-shell-variables env-var))
-  (exec-path-from-shell-initialize)
+  (after-load 'exec-path-from-shell
+    (dolist (env-var '("PATH" "MANPATH" "SHELL"))
+      (add-to-list 'exec-path-from-shell-variables env-var))
+    (exec-path-from-shell-initialize))
   (when (display-graphic-p)
     ;;; solarized-theme - Emacs version of Solarized
     (require-package 'solarized-theme)
