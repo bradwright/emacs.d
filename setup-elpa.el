@@ -130,5 +130,6 @@
 (setq imenu-auto-rescan t)
 
 (require 'setup-ruby)
+(require 'setup-evil)
 
 (provide 'setup-elpa)
