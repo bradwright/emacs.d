@@ -24,6 +24,10 @@
 (defadvice git-commit-commit (after delete-window activate)
   (delete-window))
 
+;; Close popup when cancelling commit
+(defadvice git-commit-abort (after delete-window activate)
+  (delete-window))
+
 ;; these two force a new line to be inserted into a commit window,
 ;; which stops the invalid style showing up.
 ;; From: http://git.io/rPBE0Q
