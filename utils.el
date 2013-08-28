@@ -134,6 +134,14 @@ by using nxml's indentation rules."
   (interactive)
   (auto-fill-mode -1))
 
+(defun bw/enable-linum-mode ()
+  "Enables linum-mode"
+  (linum-on))
+
+(defun bw/disable-linum-mode ()
+  "Disables linum-mode"
+  (linum-mode -1))
+
 (defun bw/enable-hl-line-mode ()
   "Enables hl-line-mode"
   (interactive)
