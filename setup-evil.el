@@ -26,6 +26,7 @@
                       (term-mode . emacs)
                       (eshell-mode . emacs)
                       (help-mode . emacs)
+                      (git-commit-mode . insert)
                       (fundamental-mode . emacs)))
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map))))
 
