@@ -157,4 +157,8 @@
 (require-package 'puppet-mode)
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
+;;; undo-tree-mode - visualise undo history
+(after-load 'undo-tree-mode
+  (diminish 'undo-tree-mode))
+
 (provide 'setup-elpa)
