@@ -256,6 +256,8 @@
  ;; Use versioned backups
  version-control t)
 
+;;; python-mode - Python major mode
+(add-hook 'python-mode-hook 'bw/turn-on-subword-mode)
 
 ;;; ELPA customisation and installation
 (require 'setup-elpa)
