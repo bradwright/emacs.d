@@ -53,9 +53,6 @@
       (magit-key-mode-popup-committing)
     (magit-commit)))
 
-(after-load 'magit
-  (define-key magit-mode-map "c" 'magit-maybe-commit))
-
 ;; magit settings
 (setq
  ;; use ido to look for branches
