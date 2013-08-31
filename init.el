@@ -263,6 +263,21 @@
 ;;; ELPA customisation and installation
 (require 'setup-elpa)
 
+
+;;; Load system specific code
+
+(setq local-dotfiles-dir (bw/join-dirs dotfiles-dir "local"))
+
+(setq
+ bw/user-config (concat local-dotfiles-dir user-login-name ".el")
+ bw/system-config (concat local-dotfiles-dir system-name ".el"))
+
+(when (file-exists-p bw/user-config)
+  (load bw/user-config))
+(when (file-exists-p bw/system-config)
+  (load bw/system-config))
+
+
 ;; Load custom file last
 (setq custom-file (concat dotfiles-dir "custom.el"))
 (load custom-file 'noerror)
