@@ -165,12 +165,13 @@
 
 ;; recently opened files
 (after-load 'recentf
-
   (setq
    recentf-auto-cleanup 'never
    recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.ido\\.last\\'" "[/\\]\\.git/" ".*\\.gz\\'" ".*-autoloads\\.el\\'" "[/\\]archive-contents\\'" "[/\\]\\.loaddefs\\.el\\'" "url/cookies")
    ;; save 100 most recent files
-   recentf-max-saved-items 100)
+   recentf-max-saved-items 100
+   ;; keep recent files in consistent place
+   recentf-save-file (expand-file-name ".recentf" tmp-local-dir))
 
   ;; enable recentf
   (recentf-mode 1)
