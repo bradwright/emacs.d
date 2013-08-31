@@ -3,3 +3,4 @@
 .elpa
 node_modules
 .tmp
+/custom.el
