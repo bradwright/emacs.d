@@ -145,6 +145,14 @@
     (when (= pos (point))
       ad-do-it)))
 
+;; I want to use narrowing
+(put 'narrow-to-defun  'disabled nil)
+(put 'narrow-to-page   'disabled nil)
+(put 'narrow-to-region 'disabled nil)
+
+;; I want to use scrolling
+(put 'scroll-left 'disabled nil)
+
 ;;; Remap execute-extended-command
 ;; This is Yegge's advice
 (global-unset-key (kbd "C-x m"))
