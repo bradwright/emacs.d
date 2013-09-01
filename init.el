@@ -26,7 +26,7 @@
 (require 'utils)
 
 ;; tmp directory for storing non-config things
-(make-directory (setq tmp-local-dir (bw/join-dirs dotfiles-dir ".tmp/")) t)
+(make-directory (setq tmp-local-dir (bw/join-dirs dotfiles-dir ".tmp")) t)
 
 ;; My font
 (when (display-graphic-p)
