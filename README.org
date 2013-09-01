@@ -1,0 +1,61 @@
+* My emacs.d configuration
+
+As my editor of choice I run Emacs. One of the benefits of Emacs is
+that it'll install basically anywhere.
+
+This configuration is designed to run in shells as well as on
+desktops. There are some platform specific optimisations as well.
+
+** Old version
+
+   The previous version can be found at [[https://www.github.com/bradleywright/emacs-d][bradleywright/emacs-d]]. This
+   version has been refactored to use traditional Emacs loading
+   techniques and macros for installing packages.
+
+** Installing
+
+Just check it out straight to the right directory, and use Make to
+install it:
+
+: cd ~/Projects/emacs.d && make
+
+** Platform specific configuration
+
+*** OS X desktop (Emacs.app)
+
+- Left =option= key is remapped to =M-=
+- =M-3= prints a literal =#= (UK Mac keyboards being weird)
+- We use the [[https://github.com/bbatsov/solarized-emacs][Solarized Dark]] theme
+- Font is [[http://www.levien.com/type/myfonts/inconsolata.html][Inconsolata]]
+
+*** OS X CLI in iTerm2
+
+- When the [[https://github.com/altercation/solarized/blob/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors][Solarized Dark iTerm2 theme]] is installed, we use the
+  =solarized-dark= color theme
+- Cut/paste are made to write/read from the clipboard (via =pbcopy=
+  and =pbpaste=)
+- Mouse highlighting works via xTerm capabilities
+
+**** Required iTerm 2 Configuration
+
+     - Re-map left =option= key to =+Esc=
+     - Untick =Smart cursor color=
+
+** Included libraries
+
+The following libraries are included in non-attributable ways, i.e not
+via package install or via a Git submodule:
+
+- [[https://github.com/technomancy/emacs-starter-kit][Emacs Starter Kit]] was a very big early influence, and continues to
+  be helpful.
+
+** License and copyright
+
+Copyright 2010-2013 Bradley Wright.
+
+Files are licensed under the same license as Emacs (GPL) unless
+otherwise specified. See the =COPYING= file for more information.
+
+Any external/third party works included in this work are licensed under
+their own licenses - refer to the submodules or packages for more
+information.
