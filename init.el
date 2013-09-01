@@ -88,6 +88,9 @@
 (setq blink-cursor-interval 1.0)
 (blink-cursor-mode 1)
 
+;; show keystrokes immediately
+(setq echo-keystrokes 0.1)
+
 ;; OSX specific overrides
 (when (eq system-type 'darwin)
   ;; OSX ls doesn't support --dired
