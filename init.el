@@ -234,6 +234,13 @@ keyboard-quit"
 
 (require 'ido)
 
+
+;;; bookmarks
+(after-load 'bookmark
+  ;; make the file location consistent
+  (setq bookmark-default-file (expand-file-name ".emacs.bmk" tmp-local-dir)))
+
+
 ;; recently opened files
 (after-load 'recentf
   (setq
