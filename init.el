@@ -71,8 +71,19 @@
 ;; Don't clobber things in the system clipboard when killing
 (setq save-interprogram-paste-before-kill t)
 
-;; show help in the echo area instead of as a tooltip
-(tooltip-mode -1)
+(when (display-graphic-p)
+  ;; show help in the echo area instead of as a tooltip
+  (tooltip-mode -1)
+
+  ;; never pop a dialogue box
+  (setq use-dialog-box nil)
+
+  ;; From:
+  ;; http://emacs-fu.blogspot.co.uk/2011/01/setting-frame-title.html
+  (setq frame-title-format
+        '((:eval (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   "%b")))))
 
 ;; blink the cursor
 (setq blink-cursor-interval 1.0)
@@ -84,7 +95,7 @@
   (setq dired-use-ls-dired nil)
 
   ;; OSX in a GUI
-  (when window-system
+  (when (display-graphic-p)
     ;; This makes left-option do M-
     (setq ns-alternate-modifier 'meta)
     ;; ... and right-option just do option so I can still type
