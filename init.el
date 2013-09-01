@@ -153,6 +153,11 @@
 ;; I want to use scrolling
 (put 'scroll-left 'disabled nil)
 
+;; stop allowing point over minibuffer prompt
+;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
+(setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'minibuffer-avoid-prompt))
+(setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'point-entered))
+
 ;;; Remap execute-extended-command
 ;; This is Yegge's advice
 (global-unset-key (kbd "C-x m"))
