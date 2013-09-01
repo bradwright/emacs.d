@@ -153,6 +153,17 @@
 ;; I want to use scrolling
 (put 'scroll-left 'disabled nil)
 
+;; Show bell instead of making a sound
+(setq visible-bell t)
+;; Conditionally ring the bell
+(setq ring-bell-function
+      (lambda ()
+        "Only rings the bell if it's not a valid quit case, e.g
+keyboard-quit"
+        (unless (memq this-command
+                      '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
+          (ding))))
+
 ;; stop allowing point over minibuffer prompt
 ;; http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
 (setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'minibuffer-avoid-prompt))
