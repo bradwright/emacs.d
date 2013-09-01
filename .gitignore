@@ -5,3 +5,4 @@ node_modules
 .tmp
 /custom.el
 /local/*.el
+/.mc-lists.el

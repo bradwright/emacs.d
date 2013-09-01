@@ -161,4 +161,24 @@
 (after-load 'undo-tree-mode
   (diminish 'undo-tree-mode))
 
+
+;;; multiple-cursors.el - like the Sublime Text 2 thing
+;;; https://github.com/magnars/multiple-cursors.el
+(require-package 'multiple-cursors)
+;; mc/* requires this `require` form as the autoload doesn't cleanly
+;; work - the selected regions are always off in the first instance.
+(after-load 'multiple-cursors
+  (global-set-key (kbd "C-c .") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-c ,") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-l") 'mc/mark-all-like-this))
+(require 'multiple-cursors)
+
+
+;;; expand-region - Increase selected region by semantic units
+;;; https://github.com/magnars/expand-region.el
+(require-package 'expand-region)
+(global-set-key (kbd "C-c =") 'er/expand-region)
+
 (provide 'setup-elpa)
