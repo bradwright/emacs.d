@@ -132,6 +132,19 @@
     (setq interprogram-cut-function 'bw/paste-to-osx)
     (setq interprogram-paste-function 'bw/copy-from-osx)))
 
+;; smart beginning-of-line, from:
+;; http://irreal.org/blog/?p=1946
+(defadvice move-beginning-of-line (around smarter-bol activate)
+  ;; Move to requested line if needed.
+  (let ((arg (or (ad-get-arg 0) 1)))
+    (when (/= arg 1)
+      (forward-line (1- arg))))
+  ;; Move to indentation on first call, then to actual BOL on second.
+  (let ((pos (point)))
+    (back-to-indentation)
+    (when (= pos (point))
+      ad-do-it)))
+
 ;;; Remap execute-extended-command
 ;; This is Yegge's advice
 (global-unset-key (kbd "C-x m"))
@@ -242,19 +255,6 @@
         try-expand-line
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
-
-;; smart beginning-of-line, from:
-;; http://irreal.org/blog/?p=1946
-(defadvice move-beginning-of-line (around smarter-bol activate)
-  ;; Move to requested line if needed.
-  (let ((arg (or (ad-get-arg 0) 1)))
-    (when (/= arg 1)
-      (forward-line (1- arg))))
-  ;; Move to indentation on first call, then to actual BOL on second.
-  (let ((pos (point)))
-    (back-to-indentation)
-    (when (= pos (point))
-      ad-do-it)))
 
 ;; emacs lisp configuration
 
