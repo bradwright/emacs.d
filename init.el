@@ -2,9 +2,8 @@
 ;;; <brad@intranation.com>
 
 ;; Turn off chrome
-(progn
-  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
-    (when (fboundp mode) (funcall mode -1))))
+(dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+  (when (fboundp mode) (funcall mode -1)))
 
 ;; inhibit startup screen
 (setq inhibit-startup-screen t
