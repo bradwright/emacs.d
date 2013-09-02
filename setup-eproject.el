@@ -1,4 +1,5 @@
 ;;; eproject - lightweight hooks around 'projects'
+;;; https://github.com/jrockway/eproject
 (after-load 'eproject
   ;; hide minor-mode
   (diminish 'eproject-mode)

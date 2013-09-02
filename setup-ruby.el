@@ -1,4 +1,5 @@
 ;;; enh-ruby-mode - better Ruby semantic parsing
+;;; https://github.com/zenspider/enhanced-ruby-mode
 (require-package 'enh-ruby-mode)
 (autoload 'enh-ruby-mode "enh-ruby-mode" "Major mode for ruby files" t)
 (dolist (spec '(("\\.rb$" . enh-ruby-mode)

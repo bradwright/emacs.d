@@ -1,4 +1,5 @@
 ;;; Evil - Emacs vi emulation
+;;; http://gitorious.org/evil/pages/Home
 (require-package 'evil)
 
 (after-load 'evil
@@ -33,8 +34,9 @@
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
 (global-set-key (kbd "C-z") 'evil-mode)
 
+;;; evil-leader - ViM leader key for evil-mode
+;;; https://github.com/cofi/evil-leader
 (require-package 'evil-leader)
-
 (after-load 'evil-leader
 
   (global-evil-leader-mode)
@@ -65,11 +67,10 @@
     )
   )
 
-;; linum-relative - makes Evil behave like:
-;; https://github.com/myusuf3/numbers.vim
-
+;;; linum-relative - makes Evil behave like:
+;;; https://github.com/myusuf3/numbers.vim
+;;; https://github.com/coldnew/linum-relative
 (require-package 'linum-relative)
-
 (after-load 'linum-relative
   (defun bw/linum-non-relative (line-number)
     "Linum formatter that copies the format"

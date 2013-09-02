@@ -1,7 +1,11 @@
-;;; js2-mode - Major mode for editing Javascript
+;;; flymake-cursor - show flymake errors in the minibuffer
+;;; http://www.emacswiki.org/emacs/flymake-cursor.el
 (require-package 'flymake-cursor)
 (require 'flymake-cursor)
 
+;;; js2-mode - Major mode for editing Javascript
+;;; https://github.com/mooz/js2-mode
+(require-package 'js2-mode)
 (after-load 'js2-mode
   (rename-modeline "js2-mode" js2-mode "JS2")
 
@@ -43,7 +47,6 @@
    ;; jslint shows missing semi-colons
    js2-strict-missing-semi-warning nil))
 
-(require-package 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 (provide 'setup-javascript)
