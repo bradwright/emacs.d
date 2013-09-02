@@ -212,4 +212,15 @@
   (setq browse-kill-ring-replace-yank t))
 
 
+;;; scss-mode - Major mode for editing SCSS files
+;;; https://github.com/antonj/scss-mode
+(require-package 'scss-mode)
+(after-load 'scss-mode
+  ;; these aren't safe-local-variables, so they can't normally be
+  ;; overriden by other things. Fix that.
+  (put 'scss-sass-command 'safe-local-variable 'stringp)
+  (put 'css-indent-offset 'safe-local-variable 'integerp)
+  (put 'scss-compile-at-save 'safe-local-variable 'booleanp))
+
+
 (provide 'setup-elpa)
