@@ -184,4 +184,14 @@
 (require-package 'expand-region)
 (global-set-key (kbd "C-c =") 'er/expand-region)
 
+
+;;; browse-kill-ring - instead of a literal ring, let me pick
+;;; https://github.com/browse-kill-ring/browse-kill-ring
+(require-package 'browse-kill-ring)
+(global-set-key (kbd "M-y") 'browse-kill-ring)
+(after-load
+  ;; make it act like pop and overwrite previous yank
+  (setq browse-kill-ring-replace-yank t))
+
+
 (provide 'setup-elpa)
