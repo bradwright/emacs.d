@@ -46,6 +46,22 @@
 
 (require 'package nil t)
 
+
+;; OSX packages and PATH mangling
+(when (eq system-type 'darwin)
+  ;;; exec-path-from-shell - Copy shell environment variables to Emacs
+  (require-package 'exec-path-from-shell)
+
+  (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
+  (exec-path-from-shell-initialize)
+
+  (when (display-graphic-p)
+    ;;; solarized-theme - Emacs version of Solarized
+    (require-package 'solarized-theme)
+    (setq solarized-high-contrast-mode-line t)
+    (load-theme 'solarized-dark t)))
+
+
 (require 'setup-magit)
 
 ;;; ido-ubiquitous - because ido-everywhere isn't enough
@@ -81,19 +97,6 @@
 (when (eq system-type 'darwin)
   (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
 
-;; OSX packages
-(when (eq system-type 'darwin)
-  ;;; exec-path-from-shell - Copy shell environment variables to Emacs
-  (require-package 'exec-path-from-shell)
-  (after-load 'exec-path-from-shell
-    (dolist (env-var '("PATH" "MANPATH" "SHELL"))
-      (add-to-list 'exec-path-from-shell-variables env-var))
-    (exec-path-from-shell-initialize))
-  (when (display-graphic-p)
-    ;;; solarized-theme - Emacs version of Solarized
-    (require-package 'solarized-theme)
-    (setq solarized-high-contrast-mode-line t)
-    (load-theme 'solarized-dark t)))
 
 ;;; flx-ido - advanced flex matching for ido
 (require-package 'flx-ido)
