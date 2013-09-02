@@ -160,8 +160,10 @@
 (require-package 'puppet-mode)
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
-;;; undo-tree-mode - visualise undo history
-(after-load 'undo-tree-mode
+;;; undo-tree - visualise undo history as a tree
+;;; http://www.dr-qubit.org/undo-tree/undo-tree.el
+;;; This comes bundled with evil-mode
+(after-load 'undo-tree
   (diminish 'undo-tree-mode))
 
 
