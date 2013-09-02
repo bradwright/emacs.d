@@ -30,8 +30,7 @@
 
 ;; My font
 (when (display-graphic-p)
-  (custom-set-faces
-   '(default ((t (:height 180 :family "Inconsolata"))))))
+  (set-face-attribute 'default nil :height 180 :family "Inconsolata"))
 
 ;; always highlight syntax
 (global-font-lock-mode t)

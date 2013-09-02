@@ -12,12 +12,13 @@
   (add-to-list 'auto-mode-alist spec))
 (add-hook 'enh-ruby-mode-hook 'bw/turn-on-subword-mode)
 (setq enh-ruby-use-encoding-map nil)
-(custom-set-faces
- '(erm-syn-errline ((t (:box nil))))
- '(erm-syn-warnline ((t (:box nil))))
- '(enh-ruby-op-face ((t (:inherit default))))
- '(enh-ruby-string-delimiter-face ((t (:foreground "#dc322f" :background nil))))
- '(enh-ruby-regexp-delimiter-face ((t (:foreground "#dc322f" :background nil))))
- '(enh-ruby-heredoc-delimiter-face ((t (:foreground "#dc322f" :background nil)))))
+
+(after-load 'enh-ruby-mode
+  (set-face-attribute 'erm-syn-errline nil :box nil)
+  (set-face-attribute 'erm-syn-warnline nil :box nil)
+  (set-face-attribute 'enh-ruby-op-face nil :foreground nil :inherit 'default)
+  (set-face-attribute 'enh-ruby-string-delimiter-face nil :foreground "#dc322f" :background nil)
+  (set-face-attribute 'enh-ruby-regexp-delimiter-face nil :foreground "#dc322f" :background nil)
+  (set-face-attribute 'enh-ruby-heredoc-delimiter-face nil :foreground "#dc322f" :background nil))
 
 (provide 'setup-ruby)

@@ -102,9 +102,7 @@
   (add-hook 'evil-normal-state-exit-hook 'bw/linum-normal-formatting)
 
   ;; copy linum face so it doesn't look weird
-  (custom-set-faces
-   '(linum-relative-current-face
-     ((t (:inherit linum :weight bold :reverse t))))))
+  (set-face-attribute 'linum-relative-current-face nil :foreground (face-attribute 'font-lock-keyword-face :foreground) :background nil :inherit 'linum :bold t))
 
 (require 'linum-relative)
 
