@@ -50,14 +50,17 @@
 ;; OSX packages and PATH mangling
 (when (eq system-type 'darwin)
   ;;; exec-path-from-shell - Copy shell environment variables to Emacs
+  ;;; https://github.com/purcell/exec-path-from-shell
   (require-package 'exec-path-from-shell)
-
   (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
   (exec-path-from-shell-initialize)
 
   (when (display-graphic-p)
     ;;; solarized-theme - Emacs version of Solarized
+    ;;; https://github.com/bbatsov/solarized-emacs
     (require-package 'solarized-theme)
+    ;; default modeline is a bit low contrast for me, this reverses it
+    ;; out.
     (setq solarized-high-contrast-mode-line t)
     (load-theme 'solarized-dark t)))
 
@@ -65,31 +68,38 @@
 (require 'setup-magit)
 
 ;;; ido-ubiquitous - because ido-everywhere isn't enough
+;;; https://github.com/DarwinAwardWinner/ido-ubiquitous
 (require-package 'ido-ubiquitous)
 (ido-ubiquitous-mode 1)
 
 ;;; ido-vertical - display ido candidates vertically
+;;; https://github.com/rson/ido-vertical-mode.el
 (require-package 'ido-vertical-mode)
 (ido-vertical-mode 1)
 ;; only show 5 candidates because it's vertical
 (setq ido-max-prospects 5)
 
-;;; smex - IDO completion for M-x
+;;; smex - IDO completion and access frequent commands for M-x
+;;; https://github.com/nonsequitur/smex
+;;; XXX: This is somewhat clobbered by flx matching further down
 (require-package 'smex)
 (global-set-key (kbd "C-x m") 'smex)
 (global-set-key (kbd "C-x C-m") 'smex)
 (global-set-key (kbd "C-c C-m") 'smex)
 
 ;;; ag.el - Emacs frontend to ag search
+;; https://github.com/Wilfred/ag.el
 (require-package 'ag)
 ;; auto-loaded
 (global-set-key (kbd "C-c f") 'ag-project)
 (when (eq system-type 'darwin)
   (global-set-key (kbd "s-F") 'ag-project))
-;; reuse ag buffers
+;; reuse ag buffers - without this my buffer list is full of named
+;; buffers. I want it to behave like M-x rgrep.
 (setq ag-reuse-buffers t)
 
 ;;; magit-find-file - Completing read frontend to git ls-files
+;;; https://github.com/bradleywright/magit-find-file.el
 (require-package 'magit-find-file)
 ;; this function is auto-loaded
 (global-set-key (kbd "C-c t") 'magit-find-file-completing-read)
@@ -99,13 +109,16 @@
 
 
 ;;; flx-ido - advanced flex matching for ido
+;;; https://github.com/lewang/flx
 (require-package 'flx-ido)
 ;; use more RAM to cache more candidate lists
 (setq gc-cons-threshold 20000000)
+;; take over ido-mode
 (flx-ido-mode 1)
 
 
 ;;; diminish.el - hide minor-mode lighters in modeline
+;;; https://github.com/emacsmirror/diminish
 (require-package 'diminish)
 (after-load 'eldoc
   (diminish 'eldoc-mode))
@@ -114,7 +127,7 @@
 (require 'setup-eproject)
 
 ;;; paredit - tools for editing sexps
-
+;;; http://melpa.milkbox.net/#/paredit
 (require-package 'paredit)
 ;; autoloaded
 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
@@ -126,7 +139,7 @@
 (add-hook 'minibuffer-setup-hook 'conditionally-enable-paredit-mode)
 
 ;;; idomenu - navigate code in current buffer using ido
-
+;;; http://melpa.milkbox.net/#/idomenu
 (require-package 'idomenu)
 ;; autoloaded
 (global-set-key (kbd "C-c i") 'idomenu)
@@ -136,8 +149,10 @@
 (require 'setup-evil)
 
 ;;; markdown-mode - for editing markdown
+;;; http://melpa.milkbox.net/#/markdown-mode
 (require-package 'markdown-mode)
 (after-load 'markdown-mode
+  ;; allow for navigation of Markdown headings with imenu
   (setq markdown-imenu-generic-expression
         '(("title"  "^\\(.*\\)[\n]=+$" 1)
           ("h2-"    "^\\(.*\\)[\n]-+$" 1)
@@ -157,6 +172,7 @@
 (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
 
 ;;; puppet-mode - syntax highlighting for Puppet
+;;; https://github.com/lunaryorn/puppet-mode
 (require-package 'puppet-mode)
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
