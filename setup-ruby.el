@@ -11,15 +11,19 @@
                 ("\\.gemspec$" . enh-ruby-mode)
                 ("\\.builder$" . enh-ruby-mode)))
   (add-to-list 'auto-mode-alist spec))
-(add-hook 'enh-ruby-mode-hook 'bw/turn-on-subword-mode)
+
 (setq enh-ruby-use-encoding-map nil)
 
-(after-load 'enh-ruby-mode
+(defun bw/enh-ruby-mode-faces ()
+  "Lazily set faces"
   (set-face-attribute 'erm-syn-errline nil :box nil)
   (set-face-attribute 'erm-syn-warnline nil :box nil)
   (set-face-attribute 'enh-ruby-op-face nil :foreground nil :inherit 'default)
   (set-face-attribute 'enh-ruby-string-delimiter-face nil :foreground "#dc322f" :background nil)
   (set-face-attribute 'enh-ruby-regexp-delimiter-face nil :foreground "#dc322f" :background nil)
   (set-face-attribute 'enh-ruby-heredoc-delimiter-face nil :foreground "#dc322f" :background nil))
+
+(add-hook 'enh-ruby-mode-hook 'bw/turn-on-subword-mode)
+(add-hook 'enh-ruby-mode-hook 'bw/enh-ruby-mode-faces)
 
 (provide 'setup-ruby)
