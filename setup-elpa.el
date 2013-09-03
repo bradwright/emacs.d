@@ -223,4 +223,13 @@
   (put 'scss-compile-at-save 'safe-local-variable 'booleanp))
 
 
+;;; popwin-mode - Better window management
+;;; https://github.com/m2ym/popwin-el
+(require-package 'popwin)
+(after-load 'popwin
+  (add-to-list 'popwin:special-display-config `("*ag*")))
+(require 'popwin)
+(popwin-mode 1)
+
+
 (provide 'setup-elpa)
