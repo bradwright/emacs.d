@@ -62,7 +62,8 @@
                       (eshell-mode . emacs)
                       (help-mode . emacs)
                       (git-commit-mode . insert)
-                      (fundamental-mode . emacs)))
+                      (fundamental-mode . emacs)
+                      (ag-mode . emacs)))
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map))))
 
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
