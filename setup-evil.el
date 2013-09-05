@@ -1,3 +1,37 @@
+;;; evil-leader - ViM leader key for evil-mode
+;;; https://github.com/cofi/evil-leader
+(require-package 'evil-leader)
+(after-load 'evil-leader
+  (global-evil-leader-mode)
+  ;; keyboard shortcuts
+  (evil-leader/set-leader ",")
+  (evil-leader/set-key
+    "a" 'ag-project
+    "A" 'ag
+    "b" 'ido-switch-buffer
+    "c" 'mc/mark-next-like-this
+    "C" 'mc/mark-all-like-this
+    "e" 'er/expand-region
+    "E" 'mc/edit-lines
+    "f" 'ido-find-file
+    "g" 'magit-status
+    "i" 'idomenu
+    "j" 'ace-jump-mode
+    "k" 'kill-buffer
+    "K" 'kill-this-buffer
+    "o" 'occur
+    "p" 'magit-find-file-completing-read
+    "r" 'bw/recentf-ido-find-file
+    "s" 'ag-project
+    "t" 'bw-open-term
+    "T" 'eshell
+    "w" 'save-buffer
+    "x" 'smex
+    )
+  )
+(require 'evil-leader)
+
+
 ;;; Evil - Emacs vi emulation
 ;;; http://gitorious.org/evil/pages/Home
 (require-package 'evil)
@@ -33,39 +67,6 @@
 
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
 (global-set-key (kbd "C-z") 'evil-mode)
-
-;;; evil-leader - ViM leader key for evil-mode
-;;; https://github.com/cofi/evil-leader
-(require-package 'evil-leader)
-(after-load 'evil-leader
-
-  (global-evil-leader-mode)
-  ;; keyboard shortcuts
-  (evil-leader/set-leader ",")
-  (evil-leader/set-key
-    "a" 'ag-project
-    "A" 'ag
-    "b" 'ido-switch-buffer
-    "c" 'mc/mark-next-like-this
-    "C" 'mc/mark-all-like-this
-    "e" 'er/expand-region
-    "E" 'mc/edit-lines
-    "f" 'ido-find-file
-    "g" 'magit-status
-    "i" 'idomenu
-    "j" 'ace-jump-mode
-    "k" 'kill-buffer
-    "K" 'kill-this-buffer
-    "o" 'occur
-    "p" 'magit-find-file-completing-read
-    "r" 'recentf-ido-find-file
-    "s" 'ag-project
-    "t" 'bw-open-term
-    "T" 'eshell
-    "w" 'save-buffer
-    "x" 'smex
-    )
-  )
 
 ;;; linum-relative - makes Evil behave like:
 ;;; https://github.com/myusuf3/numbers.vim
