@@ -2,7 +2,7 @@
 ;;; https://github.com/cofi/evil-leader
 (require-package 'evil-leader)
 (after-load 'evil-leader
-  (global-evil-leader-mode)
+  (global-evil-leader-mode 1)
   ;; keyboard shortcuts
   (evil-leader/set-leader ",")
   (evil-leader/set-key
