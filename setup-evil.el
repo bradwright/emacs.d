@@ -81,11 +81,11 @@
 
   (defun bw/linum-relative-formatting ()
     "Turn on relative formatting"
-    (setq linum-format 'linum-relative))
+    (setq-local linum-format 'linum-relative))
 
   (defun bw/linum-normal-formatting ()
     "Turn on non-relative formatting"
-    (setq linum-format 'bw/linum-non-relative))
+    (setq-local linum-format 'bw/linum-non-relative))
 
   ;; I never use linum-mode except for this, so it's okay to
   ;; clobber it
