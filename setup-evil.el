@@ -23,7 +23,7 @@
     "p" 'magit-find-file-completing-read
     "r" 'bw/recentf-ido-find-file
     "s" 'ag-project
-    "t" 'bw-open-term
+    "t" 'bw/open-term
     "T" 'eshell
     "w" 'save-buffer
     "x" 'smex
