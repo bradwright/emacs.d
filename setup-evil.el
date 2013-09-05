@@ -103,6 +103,7 @@
   (add-hook 'evil-normal-state-entry-hook 'bw/linum-relative-formatting)
   ;; when leaving normal state, restore normal linum behaviour
   (add-hook 'evil-normal-state-exit-hook 'bw/linum-normal-formatting)
+  (add-hook 'evil-insert-state-entry-hook 'bw/linum-normal-formatting)
 
   ;; copy linum face so it doesn't look weird
   (set-face-attribute 'linum-relative-current-face nil :foreground (face-attribute 'font-lock-keyword-face :foreground) :background nil :inherit 'linum :bold t))
