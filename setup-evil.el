@@ -108,4 +108,7 @@
 
 (require 'linum-relative)
 
+;; abbrev comes with evil
+(diminish 'abbrev-mode)
+
 (provide 'setup-evil)
