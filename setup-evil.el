@@ -14,6 +14,7 @@
   "E" 'mc/edit-lines
   "f" 'ido-find-file
   "g" 'magit-status
+  "G" 'magit-blame-mode
   "i" 'idomenu
   "j" 'ace-jump-mode
   "k" 'kill-buffer
@@ -26,7 +27,8 @@
   "t" 'bw/open-term
   "T" 'eshell
   "w" 'save-buffer
-  "x" 'smex)
+  "x" 'smex
+  "y" 'bury-buffer)
 
 ;;; Evil - Emacs vi emulation
 ;;; http://gitorious.org/evil/pages/Home
