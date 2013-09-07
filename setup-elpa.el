@@ -233,4 +233,16 @@
 (popwin-mode 1)
 
 
+;;; go-mode - Major mode for editing golang files
+;;; http://melpa.milkbox.net/#/go-mode
+(require-package 'go-mode)
+
+
+;;; flymake-go - wrapper around `gofmt` for syntax checking
+;;; https://github.com/robert-zaremba/flymake-go
+(require-package 'flymake-go)
+(after-load 'go-mode
+  (require 'flymake-go))
+
+
 (provide 'setup-elpa)
