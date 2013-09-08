@@ -6,3 +6,4 @@ node_modules
 /custom.el
 /local/*.el
 /.mc-lists.el
+/url/cookies
