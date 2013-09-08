@@ -250,4 +250,9 @@
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 
 
+;;; rust-mode - Major mode for editing Rust files
+;;; https://github.com/mozilla/rust/blob/master/src/etc/emacs/rust-mode.el
+(require-package 'rust-mode)
+
+
 (provide 'setup-elpa)
