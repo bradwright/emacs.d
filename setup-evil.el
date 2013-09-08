@@ -17,6 +17,7 @@
   "G" 'magit-blame-mode
   "i" 'idomenu
   "j" 'ace-jump-mode
+  "J" 'ace-jump-word-mode
   "k" 'kill-buffer
   "K" 'kill-this-buffer
   "l" 'linum-mode
@@ -53,6 +54,9 @@
   (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
+
+  ;; use <space> to activate ace-jump-mode
+  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
 
   ;; modes to map to different default states
   (dolist (mode-map '((comint-mode . emacs)
