@@ -256,4 +256,19 @@
 (require-package 'rust-mode)
 
 
+;;; web-mode - Major mode for editing various templates and HTML
+;;; https://github.com/fxbois/web-mode
+(require-package 'web-mode)
+(after-load 'web-mode
+  (setq web-mode-engines-alist
+        '(("\\.jinja\\'" . "django"))))
+
+(dolist (alist '(("\\.html$'" . web-mode)
+                 ("\\.html\\.erb$" . web-mode)
+                 ("\\.mustache$" . web-mode)
+                 ("\\.jinja$" . web-mode)
+                 ("\\.php$" . web-mode)))
+  (add-to-list 'auto-mode-alist alist))
+
+
 (provide 'setup-elpa)
