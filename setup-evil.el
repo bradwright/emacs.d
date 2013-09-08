@@ -22,6 +22,7 @@
   "K" 'kill-this-buffer
   "l" 'linum-mode
   "o" 'occur
+  "O" 'browse-url
   "p" 'magit-find-file-completing-read
   "r" 'bw/recentf-ido-find-file
   "s" 'ag-project
