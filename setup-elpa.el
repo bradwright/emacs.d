@@ -249,6 +249,7 @@
 ;;; https://github.com/winterTTr/ace-jump-mode
 (require-package 'ace-jump-mode)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+(global-set-key (kbd "C-;") 'ace-jump-mode)
 
 
 ;;; rust-mode - Major mode for editing Rust files
