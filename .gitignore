@@ -7,3 +7,4 @@ node_modules
 /local/*.el
 /.mc-lists.el
 /url/cookies
+/tramp
