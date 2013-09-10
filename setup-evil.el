@@ -8,8 +8,10 @@
   "a" 'ag-project
   "A" 'ag
   "b" 'ido-switch-buffer
+  "B" 'ido-switch-buffer-other-window
   "c" 'mc/mark-next-like-this
   "C" 'mc/mark-all-like-this
+  "d" 'dired-jump
   "e" 'er/expand-region
   "E" 'mc/edit-lines
   "f" 'ido-find-file
@@ -26,6 +28,7 @@
   "p" 'magit-find-file-completing-read
   "P" 'popwin:popup-last-buffer
   "r" 'bw/recentf-ido-find-file
+  "R" 'bookmark-jump
   "s" 'ag-project
   "t" 'bw/open-term
   "T" 'eshell
