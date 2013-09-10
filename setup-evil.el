@@ -24,6 +24,7 @@
   "o" 'occur
   "O" 'browse-url
   "p" 'magit-find-file-completing-read
+  "P" 'popwin:popup-last-buffer
   "r" 'bw/recentf-ido-find-file
   "s" 'ag-project
   "t" 'bw/open-term
