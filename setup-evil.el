@@ -60,8 +60,20 @@
   (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 
-  ;; use <space> to activate ace-jump-mode
-  (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
+  ;; advanced ace-jump-mode integration.
+  ;; keybindings and advice gotten from:
+  ;; https://gist.github.com/cofi/4963125
+  (dolist (ace-jump-map '(("SPC" . ace-jump-char-mode)
+                          ("C-SPC" . ace-jump-word-mode)
+                          ("C-<return>" . ace-jump-line-mode)))
+    (define-key evil-normal-state-map (kbd (car ace-jump-map)) `,(cdr ace-jump-map))
+    (define-key evil-motion-state-map (kbd (car ace-jump-map)) `,(cdr ace-jump-map)))
+  (defadvice evil-visual-line (before spc-for-line-jump activate)
+    (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-line-mode))
+  (defadvice evil-visual-char (before spc-for-char-jump activate)
+    (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
+  (defadvice evil-visual-block (before spc-for-char-jump activate)
+    (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
 
   ;; modes to map to different default states
   (dolist (mode-map '((comint-mode . emacs)
