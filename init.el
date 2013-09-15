@@ -103,6 +103,10 @@
     ;; alternate characters.
     (setq ns-right-alternate-modifier nil)
 
+    ;; use right command as a ctrl, since laptops never have right
+    ;; ctrls
+    (setq ns-right-command-modifier 'control)
+
     ;; command is super
     (setq ns-command-modifier 'super)
 
