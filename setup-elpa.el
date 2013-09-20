@@ -37,8 +37,6 @@
          '(("melpa"
             melpa               ;; This will always update due to Melpa versioning
             diminish            ;; not updated in forever
-            evil                ;; want stable version
-            evil-nerd-commenter ;; want stable version
             flymake-cursor      ;; Melpa version is on wiki
             idomenu             ;; not updated in ages
             json-mode           ;; not on Melpa
