@@ -46,7 +46,9 @@
    evil-default-cursor t
    ;; h/l wrap around to next lines
    evil-cross-lines t
-   evil-default-state 'normal)
+   evil-default-state 'normal
+   ;; include first/last character when moving to e/bol
+   evil-want-visual-char-semi-exclusive t)
 
   ;; use ido to open files
   (define-key evil-ex-map "e " 'ido-find-file)
