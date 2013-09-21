@@ -48,7 +48,10 @@
    evil-cross-lines t
    evil-default-state 'normal
    ;; include first/last character when moving to e/bol
-   evil-want-visual-char-semi-exclusive t)
+   evil-want-visual-char-semi-exclusive t
+   ;; don't move the cursor around like Vim
+   evil-move-cursor-back nil
+   )
 
   ;; use ido to open files
   (define-key evil-ex-map "e " 'ido-find-file)
