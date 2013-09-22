@@ -92,6 +92,9 @@
 
 ;; OSX specific overrides
 (when (eq system-type 'darwin)
+  ;; Mac hostnames have .local or similar appended
+  (setq system-name (car (split-string system-name "\\.")))
+
   ;; OSX ls doesn't support --dired
   (setq dired-use-ls-dired nil)
 
