@@ -57,6 +57,11 @@
   (define-key evil-ex-map "e " 'ido-find-file)
   (define-key evil-ex-map "b " 'ido-switch-buffer)
 
+  ;; Make C-g work like <esc>
+  (define-key evil-normal-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-visual-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-insert-state-map "\C-g" 'evil-normal-state)
+
   (define-key evil-normal-state-map [escape] 'keyboard-quit)
   (define-key evil-visual-state-map [escape] 'keyboard-quit)
   (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
