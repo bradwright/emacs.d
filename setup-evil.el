@@ -139,4 +139,9 @@
 ;; abbrev comes with evil
 (diminish 'abbrev-mode)
 
+;; evil-surround - Emacs version of surround.vim
+;; https://github.com/timcharper/evil-surround
+(require-package 'surround)
+(require 'surround)
+
 (provide 'setup-evil)
