@@ -20,8 +20,8 @@
   "i" 'idomenu
   "j" 'ace-jump-mode
   "J" 'ace-jump-word-mode
-  "k" 'kill-buffer
-  "K" 'kill-this-buffer
+  "k" 'kill-this-buffer
+  "K" 'kill-buffer
   "l" 'linum-mode
   "o" 'occur
   "O" 'browse-url
