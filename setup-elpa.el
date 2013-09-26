@@ -65,6 +65,15 @@
 
 (require 'setup-magit)
 
+
+;;; gitignore-mode - major mode for editing .gitignore files
+;;; https://github.com/magit/git-modes
+(require-package 'gitignore-mode)
+
+;;; gitconfig-mode - major mode for editing .git/config files
+;;; https://github.com/magit/git-modes
+(require-package 'gitconfig-mode)
+
 ;;; ido-ubiquitous - because ido-everywhere isn't enough
 ;;; https://github.com/DarwinAwardWinner/ido-ubiquitous
 (require-package 'ido-ubiquitous)
