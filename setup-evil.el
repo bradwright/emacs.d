@@ -57,6 +57,9 @@
   (define-key evil-ex-map "e " 'ido-find-file)
   (define-key evil-ex-map "b " 'ido-switch-buffer)
 
+  ;; make end-of-line work in insert
+  (define-key evil-insert-state-map "\C-e" 'end-of-line)
+
   ;; Make C-g work like <esc>
   (define-key evil-normal-state-map "\C-g" 'evil-normal-state)
   (define-key evil-visual-state-map "\C-g" 'evil-normal-state)
