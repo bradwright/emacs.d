@@ -85,6 +85,19 @@
   (defadvice evil-visual-block (before spc-for-char-jump activate)
     (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
 
+
+  ;; on OSX, stop copying each visual state move to the clipboard:
+  ;; https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on
+  ;; Most of this code grokked from:
+  ;; http://stackoverflow.com/questions/15873346/elisp-rename-macro
+  (defadvice evil-visual-update-x-selection (around clobber-x-select-text activate)
+    (if (not (fboundp 'old-x-select-text))
+        (fset 'old-x-select-text (symbol-function 'x-select-text)))
+    (fmakunbound 'x-select-text)
+    ad-do-it
+    (defalias 'x-select-text 'old-x-select-text))
+
+
   ;; modes to map to different default states
   (dolist (mode-map '((comint-mode . emacs)
                       (term-mode . emacs)
