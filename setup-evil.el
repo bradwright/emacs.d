@@ -94,11 +94,10 @@
   ;; Most of this code grokked from:
   ;; http://stackoverflow.com/questions/15873346/elisp-rename-macro
   (defadvice evil-visual-update-x-selection (around clobber-x-select-text activate)
-    (if (not (fboundp 'old-x-select-text))
-        (fset 'old-x-select-text (symbol-function 'x-select-text)))
+    (fset 'old-x-select-text (symbol-function 'x-select-text))
     (fmakunbound 'x-select-text)
     ad-do-it
-    (defalias 'x-select-text 'old-x-select-text))
+    (fset 'x-select-text (symbol-function 'old-x-select-text)))
 
 
   ;; modes to map to different default states
