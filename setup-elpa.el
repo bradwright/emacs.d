@@ -34,13 +34,13 @@
 ;; Blacklist some non-melpa packages
 (after-load 'melpa
   (setq package-archive-exclude-alist
-         '(("melpa"
-            melpa               ;; This will always update due to Melpa versioning
-            diminish            ;; not updated in forever
-            flymake-cursor      ;; Melpa version is on wiki
-            idomenu             ;; not updated in ages
-            json-mode           ;; not on Melpa
-            ))))
+        '(("melpa"
+           melpa               ;; This will always update due to Melpa versioning
+           diminish            ;; not updated in forever
+           flymake-cursor      ;; Melpa version is on wiki
+           idomenu             ;; not updated in ages
+           json-mode           ;; not on Melpa
+           ))))
 
 (require 'package nil t)
 
