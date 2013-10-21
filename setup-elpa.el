@@ -234,7 +234,8 @@
 ;;; https://github.com/m2ym/popwin-el
 (require-package 'popwin)
 (after-load 'popwin
-  (add-to-list 'popwin:special-display-config `"*ag*"))
+  (add-to-list 'popwin:special-display-config `"*ag*")
+  (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t)))
 (require 'popwin)
 (popwin-mode 1)
 
