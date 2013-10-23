@@ -101,6 +101,9 @@
   ;; OSX ls doesn't support --dired
   (setq dired-use-ls-dired nil)
 
+  ;; get OS X version from command line
+  (setq bw/osx-version (bw/chomp (shell-command-to-string "sw_vers | grep ProductVersion | awk '{print $2}'")))
+
   ;; OSX in a GUI
   (when (display-graphic-p)
     ;; This makes left-option do M-
@@ -119,8 +122,8 @@
     ;; set fn to hyper
     (setq ns-function-modifier 'hyper)
 
-    ;; don't use native fullscreen
-    (setq ns-use-native-fullscreen t)
+    ;; Always use native fullscreen on Mavericks
+    (setq ns-use-native-fullscreen (string= bw/osx-version "10.9"))
 
     (when (fboundp 'toggle-frame-fullscreen)
       (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)))
