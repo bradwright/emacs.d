@@ -117,7 +117,13 @@
     (setq ns-command-modifier 'super)
 
     ;; set fn to hyper
-    (setq ns-function-modifier 'hyper))
+    (setq ns-function-modifier 'hyper)
+
+    ;; don't use native fullscreen
+    (setq ns-use-native-fullscreen t)
+
+    (when (fboundp 'toggle-frame-fullscreen)
+      (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)))
 
   (unless (display-graphic-p)
     ;; Configuration to make Emacs run semi-normally in an OS X
