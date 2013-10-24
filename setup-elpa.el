@@ -238,6 +238,9 @@
   (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t)))
 (require 'popwin)
 (popwin-mode 1)
+(global-set-key (kbd "C-c P") 'popwin:popup-last-buffer)
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "s-P") 'popwin:popup-last-buffer))
 
 
 ;;; go-mode - Major mode for editing golang files
