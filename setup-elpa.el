@@ -2,7 +2,8 @@
 (after-load 'package
   ;; Store installed packages alongside this code
   (setq package-user-dir
-        (bw/join-dirs dotfiles-dir ".elpa"))
+        ;; this is version-specific
+        (bw/join-dirs (bw/join-dirs dotfiles-dir ".elpa") emacs-version))
 
   ;; Only use 3 specific directories
   (setq package-archives
@@ -24,7 +25,8 @@
 
   ;; Auto-install the Melpa package, since it's used to filter
   ;; packages.
-  (when (not (package-installed-p 'melpa))
+  (when (and (not (boundp 'package-pinned-packages))
+             (not (package-installed-p 'melpa)))
     (progn
       (switch-to-buffer
        (url-retrieve-synchronously
@@ -35,15 +37,14 @@
 (after-load 'melpa
   (setq package-archive-exclude-alist
         '(("melpa"
-           melpa               ;; This will always update due to Melpa versioning
-           diminish            ;; not updated in forever
-           flymake-cursor      ;; Melpa version is on wiki
-           idomenu             ;; not updated in ages
-           json-mode           ;; not on Melpa
+           melpa   ;; This will always update due to Melpa versioning
+           diminish      ;; not updated in forever
+           flymake-cursor ;; Melpa version is on wiki
+           idomenu        ;; not updated in ages
+           json-mode      ;; not on Melpa
            ))))
 
 (require 'package nil t)
-
 
 ;; OSX packages and PATH mangling
 (when (eq system-type 'darwin)
