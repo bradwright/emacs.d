@@ -16,12 +16,13 @@
 
   ;; Clean up after ELPA installs:
   ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
-  (defadvice package-generate-autoloads
-    (after close-autoloads (name pkg-dir) activate)
-    "Stop package.el from leaving open autoload files lying around."
-    (let ((path (expand-file-name (concat name "-autoloads.el") pkg-dir)))
-      (with-current-buffer (find-file-existing path)
-        (kill-buffer nil))))
+  (when (not (boundp 'package-pinned-packages))
+    (defadvice package-generate-autoloads
+      (after close-autoloads (name pkg-dir) activate)
+      "Stop package.el from leaving open autoload files lying around."
+      (let ((path (expand-file-name (concat name "-autoloads.el") pkg-dir)))
+        (with-current-buffer (find-file-existing path)
+          (kill-buffer nil)))))
 
   ;; Auto-install the Melpa package, since it's used to filter
   ;; packages.
