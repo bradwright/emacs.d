@@ -131,7 +131,7 @@
 (require-package 'diminish)
 
 (after-load 'diminish
-  (after-load 'subword-mode
+  (after-load 'subword
     (diminish 'subword-mode))
   (after-load 'eldoc
     (diminish 'eldoc-mode)))
