@@ -129,8 +129,12 @@
 ;;; diminish.el - hide minor-mode lighters in modeline
 ;;; https://github.com/emacsmirror/diminish
 (require-package 'diminish)
-(after-load 'eldoc
-  (diminish 'eldoc-mode))
+
+(after-load 'diminish
+  (after-load 'subword-mode
+    (diminish 'subword-mode))
+  (after-load 'eldoc
+    (diminish 'eldoc-mode)))
 
 (require 'setup-javascript)
 (require 'setup-eproject)
