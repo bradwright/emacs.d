@@ -12,7 +12,9 @@
                 ("\\.builder$" . enh-ruby-mode)))
   (add-to-list 'auto-mode-alist spec))
 
-(setq enh-ruby-use-encoding-map nil)
+(setq enh-ruby-use-encoding-map nil
+      ;; don't deep indent arrays and hashes
+      enh-ruby-deep-indent-paren nil)
 
 (defun bw/enh-ruby-mode-faces ()
   "Lazily set faces"
