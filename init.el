@@ -46,7 +46,7 @@
 (column-number-mode 1)
 
 ;; wrap at 80 columns - 70 is mad
-(setq fill-column 80)
+(setq-default fill-column 80)
 
 ;; UTF-8 FTW
 (set-terminal-coding-system 'utf-8)
