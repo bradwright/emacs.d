@@ -289,4 +289,13 @@
   (add-to-list 'auto-mode-alist alist))
 
 
+;;; smartparens - smarter matching and pairing of things
+;;; https://github.com/Fuco1/smartparens
+(require-package 'smartparens)
+(after-load 'smartparens
+  (require 'smartparens-config)
+  ;; replacement for show-paren-mode
+  (show-smartparens-global-mode 1))
+(require 'smartparens)
+
 (provide 'setup-elpa)

@@ -36,10 +36,6 @@
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
 
-;; Highlight matching parentheses
-(show-paren-mode 1)
-(setq show-paren-style 'parenthesis)
-
 ;; Always show line number in the mode line
 (line-number-mode 1)
 ;; ... and show the column number
