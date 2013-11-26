@@ -111,6 +111,8 @@
 
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
 (global-set-key (kbd "C-z") 'evil-mode)
+;; globally enable evil-mode
+(evil-mode 1)
 
 ;;; linum-relative - makes Evil behave like:
 ;;; https://github.com/myusuf3/numbers.vim
