@@ -10,23 +10,6 @@
 ;; we no longer need vc-git
 (delete 'Git vc-handled-backends)
 
-;; make magit status go full-screen but remember previous window
-;; settings
-;; from: http://whattheemacsd.com/setup-magit.el-01.html
-(defadvice magit-status (around magit-fullscreen activate)
-  (window-configuration-to-register :magit-fullscreen)
-  ad-do-it
-  (delete-other-windows))
-
-;; restore previously hidden windows
-(defadvice magit-mode-quit-window (around magit-restore-screen activate)
-  (let ((current-mode major-mode))
-    ad-do-it
-    ;; we only want to jump to register when the last seen buffer
-    ;; was a magit-status buffer.
-    (when (eq 'magit-status-mode current-mode)
-      (jump-to-register :magit-fullscreen))))
-
 (defun magit-maybe-commit (&optional show-options)
   "Runs magit-commit unless prefix is passed"
   (interactive "P")
@@ -55,5 +38,10 @@
  )
 
 (require-package 'magit)
+
+;;; fullframe - programatically fullscreen things
+;;; https://github.com/tomterl/fullframe
+(require-package 'fullframe)
+(fullframe magit-status magit-mode-quit-window :magit-fullscreen nil)
 
 (provide 'setup-magit)
