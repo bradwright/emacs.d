@@ -261,6 +261,13 @@
   (require 'flymake-go))
 
 
+;;; go-eldoc - show documentation for Go functions
+;;; https://github.com/syohex/emacs-go-eldoc
+(require-package 'go-eldoc)
+(after-load 'go-mode
+  (add-hook 'go-mode-hook 'go-eldoc-setup))
+
+
 ;;; ace-jump-mode - Minor mode to jump around buffers
 ;;; https://github.com/winterTTr/ace-jump-mode
 (require-package 'ace-jump-mode)
