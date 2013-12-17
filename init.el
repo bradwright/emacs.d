@@ -119,7 +119,7 @@
     (setq ns-function-modifier 'hyper)
 
     ;; Always use native fullscreen on Mavericks
-    (setq ns-use-native-fullscreen (string= bw/osx-version "10.9"))
+    (setq ns-use-native-fullscreen (string-match "^10\\.9\\*" bw/osx-version))
 
     (when (fboundp 'toggle-frame-fullscreen)
       (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)))
