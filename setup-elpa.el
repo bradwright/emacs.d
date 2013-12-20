@@ -305,4 +305,17 @@
   (show-smartparens-global-mode 1))
 (require 'smartparens)
 
+
+;;; cider - Clojure IDE and Repl
+;;; https://github.com/clojure-emacs/cider
+(require-package 'cider)
+(after-load 'cider-mode
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-hook 'cider-mode-hook 'enable-paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'enable-paredit-mode))
+
+(after-load 'clojure-mode
+  (add-hook 'clojure-mode-hook 'clojure-enable-cider))
+
+
 (provide 'setup-elpa)
