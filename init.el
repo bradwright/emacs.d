@@ -121,6 +121,10 @@
     ;; Always use native fullscreen on Mavericks
     (setq ns-use-native-fullscreen (string-match "^10\\.9" bw/osx-version))
 
+    ;; Use proper sRGB
+    ;; http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg00741.html
+    (setq ns-use-srgb-colorspace t)
+
     (when (fboundp 'toggle-frame-fullscreen)
       (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen)))
 
