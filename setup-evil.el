@@ -106,7 +106,8 @@
                       (help-mode . emacs)
                       (git-commit-mode . insert)
                       (fundamental-mode . emacs)
-                      (ag-mode . emacs)))
+                      (ag-mode . emacs)
+                      (cider-repl-mode . emacs)))
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map))))
 
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
