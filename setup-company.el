@@ -3,9 +3,17 @@
 
 (require-package 'company)
 
+(defun bw/company-complete-lambda (arg)
+  "Ignores passed in arg like a lambda and runs company-complete"
+  (company-complete))
+
 (after-load 'company
-  (global-company-mode)
-  (global-set-key (kbd "M-/") 'company-complete))
+  (global-company-mode t)
+  (global-set-key (kbd "M-/") 'company-complete)
+  (setq evil-complete-next-func 'bw/company-complete-lambda
+        evil-complete-previous-func 'bw/company-complete-lambda))
+
+(require 'company)
 
 
 ;;; company-go - company backend for Golang
