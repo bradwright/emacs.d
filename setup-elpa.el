@@ -134,7 +134,9 @@
   (after-load 'subword
     (diminish 'subword-mode))
   (after-load 'eldoc
-    (diminish 'eldoc-mode)))
+    (diminish 'eldoc-mode))
+  (after-load 'autorevert
+    (diminish 'auto-revert-mode)))
 
 (require 'setup-javascript)
 (require 'setup-eproject)
