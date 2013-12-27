@@ -138,10 +138,12 @@
 
 (require 'setup-javascript)
 (require 'setup-eproject)
-
 ;;; paredit - tools for editing sexps
 ;;; http://melpa.milkbox.net/#/paredit
 (require-package 'paredit)
+(require 'setup-company)
+
+
 ;; autoloaded
 (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
 ;; Enable `paredit-mode' in the minibuffer, during `eval-expression'.
