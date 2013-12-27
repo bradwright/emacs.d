@@ -256,6 +256,9 @@
 ;;; go-mode - Major mode for editing golang files
 ;;; http://melpa.milkbox.net/#/go-mode
 (require-package 'go-mode)
+(after-load 'go-mode
+  ;; auto-format my Golang files correctly
+  (add-hook 'before-save-hook 'gofmt-before-save))
 
 
 ;;; flymake-go - wrapper around `gofmt` for syntax checking
