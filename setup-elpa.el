@@ -258,7 +258,9 @@
 (require-package 'go-mode)
 (after-load 'go-mode
   ;; auto-format my Golang files correctly
-  (add-hook 'before-save-hook 'gofmt-before-save))
+  (add-hook 'before-save-hook 'gofmt-before-save)
+
+  (global-set-key (kbd "C-c C-r") 'go-remove-unused-imports))
 
 
 ;;; flymake-go - wrapper around `gofmt` for syntax checking
