@@ -12,5 +12,15 @@
 ;;; https://github.com/nsf/gocode/blob/master/emacs-company/company-go.el
 (require-package 'company-go)
 
+(require 'company-go)
+
+(defun bw/setup-company-go ()
+  "Hook for running on company-go"
+  (set (make-local-variable 'company-backends) '(company-go)))
+
+(after-load 'company-go
+  (add-hook 'go-mode-hook 'bw/setup-company-go))
+
+
 
 (provide 'setup-company)
