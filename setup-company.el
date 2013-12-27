@@ -9,6 +9,8 @@
 
 (after-load 'company
   (global-company-mode t)
+
+  (setq global-company-mode-buffers '(not git-commit-mode))
   ;; Make sure emacs does the right thing with completion command
   (global-set-key (kbd "M-/") 'company-complete)
   (setq company-minimum-prefix-length 0 ;; autocomplete right after '.'
