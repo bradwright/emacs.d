@@ -10,7 +10,6 @@
 (after-load 'company
   (global-company-mode t)
 
-  (setq global-company-mode-buffers '(not git-commit-mode))
   ;; Make sure emacs does the right thing with completion command
   (global-set-key (kbd "M-/") 'company-complete)
   (setq company-minimum-prefix-length 0 ;; autocomplete right after '.'
@@ -18,6 +17,8 @@
         company-idle-delay .3
         ;; remove echo delay
         company-echo-delay 0
+        ;; don't complete in certain modes
+        company-global-modes '(not git-commit-mode)
         ;; make sure evil uses the right completion functions
         evil-complete-next-func 'bw/company-complete-lambda
         evil-complete-previous-func 'bw/company-complete-lambda))
