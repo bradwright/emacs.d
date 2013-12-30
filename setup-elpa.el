@@ -327,4 +327,20 @@
   (add-hook 'clojure-mode-hook 'clojure-enable-cider))
 
 
+;;; flycheck - Modern on the fly syntax checking and linting
+;;; https://github.com/flycheck/flycheck
+(require-package 'flycheck)
+(after-load 'flycheck
+  (setq
+   ;; don't show anything in the left fringe
+   flycheck-indication-mode nil))
+(require 'flycheck)
+
+
+;;; flymake-cursor - show flymake errors in the minibuffer
+;;; http://www.emacswiki.org/emacs/flymake-cursor.el
+(require-package 'flymake-cursor)
+(require 'flymake-cursor)
+
+
 (provide 'setup-elpa)

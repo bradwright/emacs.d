@@ -1,8 +1,3 @@
-;;; flymake-cursor - show flymake errors in the minibuffer
-;;; http://www.emacswiki.org/emacs/flymake-cursor.el
-(require-package 'flymake-cursor)
-(require 'flymake-cursor)
-
 ;;; js2-mode - Major mode for editing Javascript
 ;;; https://github.com/mooz/js2-mode
 (require-package 'js2-mode)
@@ -10,27 +5,6 @@
   (rename-modeline "js2-mode" js2-mode "JS2")
 
   (add-hook 'js2-mode-hook 'bw/turn-on-subword-mode)
-
-  ;; Flymake uses node.js jslint
-  (defun flymake-jslint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (expand-file-name (file-relative-name
-                                          temp-file
-                                          (file-name-directory buffer-file-name))))
-           (node-bin (concat dotfiles-dir "node_modules/.bin"))
-           (exec-path (add-to-list 'exec-path node-bin)))
-      (list "jslint" (list "--terse" local-file))))
-
-  (when (load "flymake" t)
-    (add-to-list 'flymake-allowed-file-name-masks
-                 '("\\.js\\'" flymake-jslint-init))
-    ;; jslint lines look like:
-    ;; jslint:25:45:Missing trailing ; character
-    (add-to-list 'flymake-err-line-patterns
-                 '("^\\(.*\\)\\(([[:digit:]]+)\\):\\(.*\\)$" 1 2 nil 3)))
-
-  (add-hook 'js2-mode-hook 'bw/turn-on-flymake-mode)
 
   (setq
    ;; highlight everything
@@ -45,7 +19,26 @@
    ;; that
    js2-highlight-external-variables nil
    ;; jslint shows missing semi-colons
-   js2-strict-missing-semi-warning nil))
+   js2-strict-missing-semi-warning nil)
+
+  ;; Flycheck configuration
+  (after-load 'flycheck
+    (add-to-list 'exec-path (concat dotfiles-dir "node_modules/.bin/"))
+
+    (flycheck-define-checker
+     javascript-jslint-reporter
+     "JSLint based checker"
+     :command ("jslint" "--terse" source)
+     :error-patterns
+     ((warning line-start (1+ nonl) ":" line ":" column ":" blank (message) line-end))
+     :modes js2-mode))
+
+  (defun bw/turn-on-flycheck-mode-js2 ()
+    "Turn on and define JS2 mode checker"
+    (flycheck-select-checker 'javascript-jslint-reporter)
+    (flycheck-mode 1))
+
+  (add-hook 'js2-mode-hook 'bw/turn-on-flycheck-mode-js2))
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
