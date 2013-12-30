@@ -11,18 +11,19 @@
           ("marmalade" . "http://marmalade-repo.org/packages/")
           ("melpa"     . "http://melpa.milkbox.net/packages/")))
 
-  ;; initialise package.el
-  (package-initialize)
-
-  (if (boundp 'package-pinned-packages)
+  (when (boundp 'package-pinned-packages)
       ;; this is Emacs 24.4+
       (setq-default package-pinned-packages
                     '((diminish       . "marmalade")
                       (flymake-cursor . "marmalade")
                       (idomenu        . "marmalade")
-                      (json-mode      . "marmalade")))
+                      (json-mode      . "marmalade"))))
 
-    ;;; this is *not* Emacs 24.4+
+  ;; initialise package.el
+  (package-initialize)
+
+  ;;; this is *not* Emacs 24.4+
+  (unless (boundp 'package-pinned-packages)
 
     ;; Auto-install the Melpa package, since it's used to filter
     ;; packages.
@@ -44,6 +45,7 @@
                        idomenu        ;; not updated in ages
                        json-mode      ;; not on Melpa
                        ))))
+
     ;; Clean up after ELPA installs:
     ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
     (defadvice package-generate-autoloads
