@@ -7,8 +7,12 @@
   "Ignores passed in arg like a lambda and runs company-complete"
   (company-complete))
 
+(defun bw/enable-company-mode ()
+  "Enables company-mode"
+  (company-mode 1))
+
 (after-load 'company
-  (global-company-mode t)
+  (add-hook 'prog-mode-hook 'bw/enable-company-mode)
 
   ;; Make sure emacs does the right thing with completion command
   (global-set-key (kbd "M-/") 'company-complete)
