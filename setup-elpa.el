@@ -14,36 +14,44 @@
   ;; initialise package.el
   (package-initialize)
 
-  ;; Clean up after ELPA installs:
-  ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
-  (when (not (boundp 'package-pinned-packages))
+  (if (boundp 'package-pinned-packages)
+      ;; this is Emacs 24.4+
+      (setq-default package-pinned-packages
+                    '((diminish       . "marmalade")
+                      (flymake-cursor . "marmalade")
+                      (idomenu        . "marmalade")
+                      (json-mode      . "marmalade")))
+
+    ;;; this is *not* Emacs 24.4+
+
+    ;; Auto-install the Melpa package, since it's used to filter
+    ;; packages.
+    (unless (package-installed-p 'melpa)
+      (progn
+        (switch-to-buffer
+         (url-retrieve-synchronously
+          "https://raw.github.com/milkypostman/melpa/master/melpa.el"))
+        (package-install-from-buffer (package-buffer-info) 'single)))
+
+    ;; Blacklist some non-melpa packages
+    (after-load 'melpa
+      (setq-default package-archive-exclude-alist
+                    '(("melpa"
+                       melpa          ;; Otherwise this will always update due
+                                      ;; to Melpa versioning
+                       diminish       ;; not updated in forever
+                       flymake-cursor ;; Melpa version is on wiki
+                       idomenu        ;; not updated in ages
+                       json-mode      ;; not on Melpa
+                       ))))
+    ;; Clean up after ELPA installs:
+    ;; https://github.com/purcell/emacs.d/blob/master/init-elpa.el
     (defadvice package-generate-autoloads
-      (after close-autoloads (name pkg-dir) activate)
+        (after close-autoloads (name pkg-dir) activate)
       "Stop package.el from leaving open autoload files lying around."
       (let ((path (expand-file-name (concat name "-autoloads.el") pkg-dir)))
         (with-current-buffer (find-file-existing path)
-          (kill-buffer nil)))))
-
-  ;; Auto-install the Melpa package, since it's used to filter
-  ;; packages.
-  (when (and (not (boundp 'package-pinned-packages))
-             (not (package-installed-p 'melpa)))
-    (progn
-      (switch-to-buffer
-       (url-retrieve-synchronously
-        "https://raw.github.com/milkypostman/melpa/master/melpa.el"))
-      (package-install-from-buffer (package-buffer-info) 'single))))
-
-;; Blacklist some non-melpa packages
-(after-load 'melpa
-  (setq package-archive-exclude-alist
-        '(("melpa"
-           melpa   ;; This will always update due to Melpa versioning
-           diminish      ;; not updated in forever
-           flymake-cursor ;; Melpa version is on wiki
-           idomenu        ;; not updated in ages
-           json-mode      ;; not on Melpa
-           ))))
+          (kill-buffer nil))))))
 
 (require 'package nil t)
 
