@@ -260,14 +260,10 @@
   ;; auto-format my Golang files correctly
   (add-hook 'before-save-hook 'gofmt-before-save)
 
-  (global-set-key (kbd "C-c C-r") 'go-remove-unused-imports))
+  (global-set-key (kbd "C-c C-r") 'go-remove-unused-imports)
 
-
-;;; flymake-go - wrapper around `gofmt` for syntax checking
-;;; https://github.com/robert-zaremba/flymake-go
-(require-package 'flymake-go)
-(after-load 'go-mode
-  (require 'flymake-go))
+  (after-load 'flycheck
+    (add-hook 'go-mode-hook 'flycheck-mode-on-safe)))
 
 
 ;;; go-eldoc - show documentation for Go functions
