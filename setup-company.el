@@ -16,16 +16,16 @@
 (after-load 'company
   (add-hook 'prog-mode-hook 'bw/enable-company-mode)
 
-  (setq company-minimum-prefix-length 0 ;; autocomplete right after '.'
-        ;; shorter delay
-        company-idle-delay .3
-        ;; remove echo delay
-        company-echo-delay 0
-        ;; don't complete in certain modes
-        company-global-modes '(not git-commit-mode)
-        ;; make sure evil uses the right completion functions
-        evil-complete-next-func 'bw/company-complete-lambda
-        evil-complete-previous-func 'bw/company-complete-lambda))
+  (setq
+    ;; autocomplete right after '.'
+   company-minimum-prefix-length 0
+   ;; remove echo delay
+   company-echo-delay 0
+   ;; don't complete in certain modes
+   company-global-modes '(not git-commit-mode)
+   ;; make sure evil uses the right completion functions
+   evil-complete-next-func 'bw/company-complete-lambda
+   evil-complete-previous-func 'bw/company-complete-lambda))
 
 (require 'company)
 
