@@ -9,13 +9,13 @@
 
 (defun bw/enable-company-mode ()
   "Enables company-mode"
-  (company-mode 1))
+  (company-mode 1)
+  ;; Make sure emacs does the right thing with completion command
+  (define-key (current-local-map) [remap hippie-expand] 'company-complete))
 
 (after-load 'company
   (add-hook 'prog-mode-hook 'bw/enable-company-mode)
 
-  ;; Make sure emacs does the right thing with completion command
-  (global-set-key (kbd "M-/") 'company-complete)
   (setq company-minimum-prefix-length 0 ;; autocomplete right after '.'
         ;; shorter delay
         company-idle-delay .3
