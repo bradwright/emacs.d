@@ -100,6 +100,10 @@
   ;; get OS X version from command line
   (setq bw/osx-version (bw/chomp (shell-command-to-string "sw_vers | grep ProductVersion | awk '{print $2}'")))
 
+  ;; use aspell for spelling if it's available
+  (when (executable-find "aspell")
+    (setq ispell-program-name (executable-find "aspell")))
+
   ;; OSX in a GUI
   (when (display-graphic-p)
     ;; This makes left-option do M-
