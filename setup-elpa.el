@@ -350,4 +350,7 @@
 (require 'flymake-cursor)
 
 
+(require 'setup-god)
+
+
 (provide 'setup-elpa)
