@@ -17,7 +17,9 @@
   (add-hook 'prog-mode-hook 'bw/enable-company-mode)
 
   (setq
-    ;; autocomplete right after '.'
+   ;; never start auto-completion unless I ask for it
+   company-idle-delay nil
+   ;; autocomplete right after '.'
    company-minimum-prefix-length 0
    ;; remove echo delay
    company-echo-delay 0
