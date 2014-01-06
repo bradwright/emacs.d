@@ -105,6 +105,8 @@
 (global-set-key (kbd "C-x m") 'smex)
 (global-set-key (kbd "C-x C-m") 'smex)
 (global-set-key (kbd "C-c C-m") 'smex)
+;; stop showing me "click this menubar" advice in the minibuffer
+(setq-default smex-key-advice-ignore-menu-bar t)
 
 ;;; ag.el - Emacs frontend to ag search
 ;; https://github.com/Wilfred/ag.el
