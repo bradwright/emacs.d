@@ -8,6 +8,9 @@
   ;; press 'i' to enter normal Emacs mode
   (define-key god-local-mode-map (kbd "i") 'god-local-mode)
 
+  ;; don't enable god-mode in terminals
+  (add-to-list 'god-exempt-major-modes 'term-mode)
+
   ;; enable god-mode globally
   (god-mode-all))
 
