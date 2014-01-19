@@ -17,10 +17,7 @@
   (add-to-list 'god-exempt-major-modes 'term-mode)
 
   (add-hook 'god-mode-enabled-hook 'bw/god-mode-change-cursor)
-  (add-hook 'god-mode-disabled-hook 'bw/god-mode-change-cursor)
-
-  ;; enable god-mode globally
-  (god-mode-all))
+  (add-hook 'god-mode-disabled-hook 'bw/god-mode-change-cursor))
 
 (require 'god-mode)
 
