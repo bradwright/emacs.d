@@ -258,7 +258,8 @@
 (after-load 'popwin
   (add-to-list 'popwin:special-display-config `"*ag*")
   (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t))
-  (add-to-list 'popwin:special-display-config `"*Flycheck errors*"))
+  (add-to-list 'popwin:special-display-config `"*Flycheck errors*")
+  (add-to-list 'popwin:special-display-config `"*Occur*"))
 (require 'popwin)
 (popwin-mode 1)
 (global-set-key (kbd "C-c P") 'popwin:popup-last-buffer)
