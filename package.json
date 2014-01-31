@@ -1,9 +1,9 @@
 {
   "private": true,
   "name": "emacs",
-  "version" : "0.0.2",
+  "version" : "0.0.3",
   "description": "Packaging just to install JS dependencies for my Emacs configuration.",
   "dependencies": {
-      "jslint": "git+https://github.com/reid/node-jslint.git#42139893afd87128d2b6f0144f1d08d9266db169"
+      "jslint": "0.2.9"
   }
 }
