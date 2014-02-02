@@ -4,9 +4,10 @@
 (require-package 'god-mode)
 
 (defun bw/god-mode-change-cursor ()
+  "Changes cursor type if god-mode is enabled"
   (setq cursor-type (if (or god-local-mode buffer-read-only)
                         'hollow
-                      'box)))
+                      t)))
 
 (after-load 'god-mode
   (global-set-key (kbd "<escape>") 'god-local-mode)
