@@ -356,4 +356,9 @@
 (require 'setup-god)
 
 
+;;; httprepl.el - Make HTTP requests via a REPL
+;;; https://github.com/gregsexton/httprepl.el
+(require-package 'httprepl)
+
+
 (provide 'setup-elpa)
