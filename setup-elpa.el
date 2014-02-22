@@ -361,4 +361,10 @@
 (require-package 'httprepl)
 
 
+;;; simpleclip - Don't put yanks/kills on system clipboard
+;;; https://github.com/rolandwalker/simpleclip
+(require-package 'simpleclip)
+(simpleclip-mode 1)
+
+
 (provide 'setup-elpa)
