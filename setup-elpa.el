@@ -293,6 +293,9 @@
 (global-set-key (kbd "C-c SPC") 'ace-jump-char-mode)
 (global-set-key (kbd "C-;") 'ace-jump-char-mode)
 (global-set-key (kbd "C-<return>") 'ace-jump-line-mode)
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "s-j") 'ace-jump-char-mode)
+  (global-set-key (kbd "s-J") 'ace-jump-line-mode))
 
 
 ;;; rust-mode - Major mode for editing Rust files
