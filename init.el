@@ -212,6 +212,8 @@ keyboard-quit"
 (global-set-key (kbd "C-c y") 'bury-buffer)
 (global-set-key (kbd "C-c r") 'revert-buffer)
 
+(global-set-key (kbd "M-o") 'other-window)
+
 ;; indent automatically
 (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
 
