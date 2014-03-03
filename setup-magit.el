@@ -6,6 +6,8 @@
 ;; key
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c f") 'magit-grep)
+(when (eq system-type 'darwin)
+  (global-set-key (kbd "s-G") 'magit-status))
 
 ;; we no longer need vc-git
 (delete 'Git vc-handled-backends)
