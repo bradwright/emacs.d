@@ -256,7 +256,7 @@
 ;;; https://github.com/m2ym/popwin-el
 (require-package 'popwin)
 (after-load 'popwin
-  (add-to-list 'popwin:special-display-config `"*ag*")
+  (add-to-list 'popwin:special-display-config `"*ag search*")
   (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t))
   (add-to-list 'popwin:special-display-config `"*Flycheck errors*")
   (add-to-list 'popwin:special-display-config `"*Occur*"))
