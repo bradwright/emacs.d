@@ -7,17 +7,19 @@
 
   ;; Only use 3 specific directories
   (setq package-archives
-        '(("gnu"       . "http://elpa.gnu.org/packages/")
-          ("marmalade" . "http://marmalade-repo.org/packages/")
-          ("melpa"     . "http://melpa.milkbox.net/packages/")))
+        '(("gnu "         . "http://elpa.gnu.org/packages/")
+          ("marmalade"    . "http://marmalade-repo.org/packages/")
+          ("melpa"        . "http://melpa.milkbox.net/packages/")
+          ("elpy"         . "http://jorgenschaefer.github.io/packages/")
+          ("melpa-stable" . "http://hiddencameras.milkbox.net/packages/")))
 
   (when (boundp 'package-pinned-packages)
-      ;; this is Emacs 24.4+
-      (setq-default package-pinned-packages
-                    '((diminish       . "marmalade")
-                      (flymake-cursor . "marmalade")
-                      (idomenu        . "marmalade")
-                      (json-mode      . "marmalade"))))
+    ;; this is Emacs 24.4+
+    (setq-default package-pinned-packages
+                  '((diminish       . "marmalade")
+                    (flymake-cursor . "marmalade")
+                    (idomenu        . "marmalade")
+                    (json-mode      . "marmalade"))))
 
   ;; initialise package.el
   (package-initialize)
