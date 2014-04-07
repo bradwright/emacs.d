@@ -362,6 +362,11 @@ keyboard-quit"
                '((regexp-quote (system-name)) nil nil)))
 
 
+;;; org-mode
+;; Don't auto-fold my documents
+(setq org-startup-folded nil)
+
+
 ;;; ELPA customisation and installation
 (require 'setup-elpa)
 
