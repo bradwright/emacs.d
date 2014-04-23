@@ -88,7 +88,6 @@
   (defadvice evil-visual-block (before spc-for-char-jump activate)
     (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode))
 
-
   ;; on OSX, stop copying each visual state move to the clipboard:
   ;; https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on
   ;; Most of this code grokked from:
@@ -97,17 +96,16 @@
     (unless (featurep 'ns)
       ad-do-it))
 
-
-
   ;; modes to map to different default states
-  (dolist (mode-map '((comint-mode . emacs)
-                      (term-mode . emacs)
+  (dolist (mode-map '((ag-mode . emacs)
+                      (cider-repl-mode . emacs)
+                      (comint-mode . emacs)
                       (eshell-mode . emacs)
-                      (help-mode . emacs)
-                      (git-commit-mode . insert)
                       (fundamental-mode . emacs)
-                      (ag-mode . emacs)
-                      (cider-repl-mode . emacs)))
+                      (git-commit-mode . insert)
+                      (git-rebase-mode . emacs)
+                      (help-mode . emacs)
+                      (term-mode . emacs)))
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map))))
 
 (autoload 'evil-mode "evil" "Emacs Vi emuLation" t)
