@@ -15,6 +15,7 @@
 
 (after-load 'company
   (add-hook 'prog-mode-hook 'bw/enable-company-mode)
+  (add-hook 'enh-ruby-mode-hook 'bw/enable-company-mode)
 
   (setq
    ;; never start auto-completion unless I ask for it
