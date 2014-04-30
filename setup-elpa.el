@@ -125,7 +125,7 @@
 ;;; https://github.com/bradleywright/magit-find-file.el
 (require-package 'magit-find-file)
 ;; this function is auto-loaded
-(global-set-key (kbd "C-c t") 'magit-find-file-completing-read)
+(global-set-key (kbd "C-c p") 'magit-find-file-completing-read)
 (global-set-key (kbd "M-p") 'magit-find-file-completing-read)
 (when (eq system-type 'darwin)
   (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
