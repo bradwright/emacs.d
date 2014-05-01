@@ -32,8 +32,10 @@ the quit."
   (interactive)
   (if server-buffer-clients
       (server-edit)
-    (cond ((y-or-n-p "Quit Emacs? ")
-           (save-buffers-kill-terminal)))))
+    (if (= (length (frame-list)) 1)
+        (cond ((y-or-n-p "Quit Emacs? ")
+               (save-buffers-kill-terminal)))
+      (save-buffers-kill-terminal))))
 
 (global-set-key (kbd "C-x C-c") 'bw/kill-emacs)
 
