@@ -362,6 +362,16 @@ keyboard-quit"
 ;; Don't auto-fold my documents
 (setq org-startup-folded nil)
 
+;;; eshell-mode
+
+(setq eshell-directory-name (bw/join-dirs tmp-local-dir "eshell"))
+
+(after-load 'esh-opt
+  ;; when SSHing into another box, open in ansi-term as eshell won't be
+  ;; supported
+  (require 'em-term)
+  (add-to-list 'eshell-visual-commands "ssh"))
+
 
 ;;; ELPA customisation and installation
 (require 'setup-elpa)
