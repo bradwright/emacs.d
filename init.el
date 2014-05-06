@@ -370,7 +370,13 @@ keyboard-quit"
   ;; when SSHing into another box, open in ansi-term as eshell won't be
   ;; supported
   (require 'em-term)
-  (add-to-list 'eshell-visual-commands "ssh"))
+  (add-to-list 'eshell-visual-commands "ssh")
+  ;; vagrant ssh is similar
+  (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh")))
+
+;; `e` opens a file
+(defun eshell/e (file)
+  (find-file file))
 
 
 ;;; ELPA customisation and installation
