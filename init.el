@@ -378,6 +378,8 @@ keyboard-quit"
 (defun eshell/e (file)
   (find-file file))
 
+(global-set-key (kbd "C-c C-t e") 'eshell)
+
 
 ;;; ELPA customisation and installation
 (require 'setup-elpa)

@@ -74,7 +74,7 @@ with prefix"
   (if (or (not (get-buffer "*ansi-term*")) (= arg 4))
       (ansi-term (getenv "SHELL"))
     (switch-to-buffer "*ansi-term*")))
-(global-set-key (kbd "C-c t") 'bw/open-term)
+(global-set-key (kbd "C-c C-t t") 'bw/open-term)
 
 (defun bw/require-list (items)
   "Require each thing in ITEMS"
