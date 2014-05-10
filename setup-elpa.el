@@ -372,4 +372,10 @@
 (simpleclip-mode 1)
 
 
+;;; paradox - Package management with GitHub integration
+;;; https://github.com/Bruce-Connor/paradox
+(require-package 'paradox)
+;; automatically star packages I install on GitHub
+(setq paradox-automatically-star t)
+
 (provide 'setup-elpa)
