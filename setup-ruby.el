@@ -5,6 +5,7 @@
 (dolist (spec '(("\\.rb$" . enh-ruby-mode)
                 ("[vV]agrantfile$" . enh-ruby-mode)
                 ("[gG]emfile$" . enh-ruby-mode)
+                ("[pP]uppetfile$" . enh-ruby-mode)
                 ("\\.rake$" . enh-ruby-mode)
                 ("\\.rabl$" . enh-ruby-mode)
                 ("[cC]apfile$" . enh-ruby-mode)
