@@ -157,4 +157,12 @@
 (require-package 'surround)
 (require 'surround)
 
+
+;; evil-god-state - One-shot god-mode from a leader key in evil
+;; https://github.com/gridaphobe/evil-god-state
+(require-package 'evil-god-state)
+(after-load 'god-mode
+  (evil-define-key 'normal global-map "," 'evil-execute-in-god-state))
+
+
 (provide 'setup-evil)
