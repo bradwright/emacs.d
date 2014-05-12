@@ -115,8 +115,10 @@
 (require-package 'ag)
 ;; auto-loaded
 (global-set-key (kbd "C-c f") 'ag-project)
+(global-set-key (kbd "C-c a") 'ag)
 (when (eq system-type 'darwin)
-  (global-set-key (kbd "s-F") 'ag-project))
+  (global-set-key (kbd "s-F") 'ag-project)
+  (global-set-key (kbd "s-A") 'ag))
 ;; reuse ag buffers - without this my buffer list is full of named
 ;; buffers. I want it to behave like M-x rgrep.
 (setq ag-reuse-buffers t)
