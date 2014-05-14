@@ -37,6 +37,8 @@
  magit-process-popup-time 10
  ;; ask me if I want a tracking upstream
  magit-set-upstream-on-push t
+ ;; don't show " MRev" in modeline
+ magit-auto-revert-mode-lighter ""
  )
 
 (require-package 'magit)
