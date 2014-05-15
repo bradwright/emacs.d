@@ -379,6 +379,7 @@
 (require-package 'paradox)
 ;; automatically star packages I install on GitHub
 (setq paradox-automatically-star t)
+(setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
 
 
 ;;; Projectile - Project management
