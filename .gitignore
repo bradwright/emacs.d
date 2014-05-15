@@ -8,3 +8,4 @@ node_modules
 /.mc-lists.el
 /url/cookies
 /tramp
+/projectile-bookmarks.eld
