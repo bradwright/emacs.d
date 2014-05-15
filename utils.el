@@ -109,9 +109,8 @@ by using nxml's indentation rules."
   (bw/chomp
    (shell-command-to-string
     (concat
-     "security 2>&1 >/dev/null find-generic-password -ga "
-     account-name
-     "| sed 's/^password: \\\"\\(.*\\)\\\"/\\1/'"))))
+     "security find-generic-password -wa "
+     account-name))))
 
 ;; from:
 ;; https://github.com/technomancy/emacs-starter-kit/blob/31c2465712485a54aba6a3ef6d1bef9b564f8f37/starter-kit-defuns.el#L179
