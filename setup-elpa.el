@@ -380,4 +380,19 @@
 ;; automatically star packages I install on GitHub
 (setq paradox-automatically-star t)
 
+
+;;; Projectile - Project management
+;;; https://github.com/bbatsov/projectile
+(require-package 'projectile)
+(projectile-global-mode)
+
+(defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
+  "If magit-find-file-completing-read is available use that to
+call the files instead of Projectile's native caller - this is
+much much faster"
+  (autoload 'magit-find-file-files "magit-find-file")
+  (if (magit-get-top-dir)
+      (setq ad-return-value (magit-find-file-files (projectile-project-root)))
+    ad-do-it))
+
 (provide 'setup-elpa)
