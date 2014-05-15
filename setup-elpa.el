@@ -354,24 +354,12 @@
 (require 'flycheck)
 
 
-;;; flymake-cursor - show flymake errors in the minibuffer
-;;; http://www.emacswiki.org/emacs/flymake-cursor.el
-(require-package 'flymake-cursor)
-(require 'flymake-cursor)
-
-
 (require 'setup-god)
 
 
 ;;; httprepl.el - Make HTTP requests via a REPL
 ;;; https://github.com/gregsexton/httprepl.el
 (require-package 'httprepl)
-
-
-;;; simpleclip - Don't put yanks/kills on system clipboard
-;;; https://github.com/rolandwalker/simpleclip
-(require-package 'simpleclip)
-(simpleclip-mode 1)
 
 
 ;;; paradox - Package management with GitHub integration
