@@ -394,6 +394,8 @@ much much faster"
   (if (magit-get-top-dir)
       (setq ad-return-value (magit-find-file-files (projectile-project-root)))
     ad-do-it))
-(define-key (current-local-map) [remap projectile-grep] 'ag-project)
+
+(after-load 'projectile
+ (define-key projectile-mode-map [remap projectile-grep] 'ag-project))
 
 (provide 'setup-elpa)
