@@ -5,21 +5,16 @@
         ;; this is version-specific
         (bw/join-dirs (bw/join-dirs dotfiles-dir ".elpa") emacs-version))
 
-  ;; Only use 3 specific directories
   (setq package-archives
         '(("gnu"          . "http://elpa.gnu.org/packages/")
-          ("marmalade"    . "http://marmalade-repo.org/packages/")
           ("melpa"        . "http://melpa.milkbox.net/packages/")
-          ("elpy"         . "http://jorgenschaefer.github.io/packages/")
-          ("melpa-stable" . "http://hiddencameras.milkbox.net/packages/")))
+          ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+          ("elpy"         . "http://jorgenschaefer.github.io/packages/")))
 
   (when (boundp 'package-pinned-packages)
     ;; this is Emacs 24.4+
     (setq-default package-pinned-packages
-                  '((diminish       . "marmalade")
-                    (flymake-cursor . "marmalade")
-                    (idomenu        . "marmalade")
-                    (json-mode      . "marmalade"))))
+                  '()))
 
   ;; initialise package.el
   (package-initialize)
