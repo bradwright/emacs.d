@@ -150,7 +150,7 @@
     (diminish 'auto-revert-mode)))
 
 (require 'setup-javascript)
-(require 'setup-eproject)
+
 ;;; paredit - tools for editing sexps
 ;;; http://melpa.milkbox.net/#/paredit
 (require-package 'paredit)
