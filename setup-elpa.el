@@ -380,6 +380,10 @@ much much faster"
     ad-do-it))
 
 (after-load 'projectile
- (define-key projectile-mode-map [remap projectile-grep] 'ag-project))
+  (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag)
+  (define-key projectile-mode-map [remap magit-find-file-completing-read] 'projectile-find-file)
+  (define-key projectile-mode-map [remap ag-project] 'projectile-ag)
+  (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
+  (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window))
 
 (provide 'setup-elpa)
