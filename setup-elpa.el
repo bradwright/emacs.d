@@ -297,11 +297,6 @@
   (global-set-key (kbd "s-J") 'ace-jump-line-mode))
 
 
-;;; rust-mode - Major mode for editing Rust files
-;;; https://github.com/mozilla/rust/blob/master/src/etc/emacs/rust-mode.el
-(require-package 'rust-mode)
-
-
 ;;; web-mode - Major mode for editing various templates and HTML
 ;;; https://github.com/fxbois/web-mode
 (require-package 'web-mode)
