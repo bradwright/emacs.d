@@ -381,4 +381,11 @@ much much faster"
   (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
   (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window))
 
+
+;;; ace-window - ace jump for moving windows
+;;; https://github.com/abo-abo/ace-window
+(require-package 'ace-window)
+(define-key (current-global-map) [remap other-window] 'ace-window)
+
+
 (provide 'setup-elpa)
