@@ -388,4 +388,10 @@ much much faster"
 (define-key (current-global-map) [remap other-window] 'ace-window)
 
 
+;;; know-your-http-well - HTTP documentation in emacs
+;;; https://github.com/for-GET/know-your-http-well
+(require-package 'know-your-http-well)
+(require 'know-your-http-well)
+
+
 (provide 'setup-elpa)
