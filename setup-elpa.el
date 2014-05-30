@@ -358,6 +358,8 @@
 ;; automatically star packages I install on GitHub
 (setq paradox-automatically-star t)
 (setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
+(after-load 'fullframe
+  (fullframe paradox-list-packages paradox-quit-and-close nil))
 
 
 ;;; Projectile - Project management
@@ -392,6 +394,11 @@ much much faster"
 ;;; https://github.com/for-GET/know-your-http-well
 (require-package 'know-your-http-well)
 (require 'know-your-http-well)
+
+
+;;; fullframe - programatically fullscreen things
+;;; https://github.com/tomterl/fullframe
+(require-package 'fullframe)
 
 
 (provide 'setup-elpa)

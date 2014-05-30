@@ -43,9 +43,7 @@
 
 (require-package 'magit)
 
-;;; fullframe - programatically fullscreen things
-;;; https://github.com/tomterl/fullframe
-(require-package 'fullframe)
-(fullframe magit-status magit-mode-quit-window nil)
+(after-load 'fullframe
+  (fullframe magit-status magit-mode-quit-window nil))
 
 (provide 'setup-magit)
