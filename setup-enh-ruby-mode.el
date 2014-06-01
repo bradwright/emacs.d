@@ -29,4 +29,4 @@
 (add-hook 'enh-ruby-mode-hook 'bw/turn-on-subword-mode)
 (add-hook 'enh-ruby-mode-hook 'bw/enh-ruby-mode-faces)
 
-(provide 'setup-ruby)
+(provide 'setup-enh-ruby-mode)

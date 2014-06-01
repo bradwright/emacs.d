@@ -173,7 +173,6 @@
 (global-set-key (kbd "C-c i") 'idomenu)
 (setq imenu-auto-rescan t)
 
-(require 'setup-ruby)
 (require 'setup-evil)
 
 ;;; markdown-mode - for editing markdown
