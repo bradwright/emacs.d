@@ -41,6 +41,10 @@
 ;; ... and show the column number
 (column-number-mode 1)
 
+;; I don't type double-space sentences. This also affects fill-paragraph's
+;; behaviour, so worth getting it right.
+(set-default 'sentence-end-double-space nil)
+
 ;; wrap at 80 columns - 70 is mad
 (setq-default fill-column 80)
 
