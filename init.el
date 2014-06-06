@@ -384,6 +384,10 @@ keyboard-quit"
 
 (global-set-key (kbd "C-c C-t e") 'eshell)
 
+;;; ruby-mode
+(after-load 'ruby-mode
+  ;; why subword-mode isn't on by default for ruby-mode I don't understand
+  (add-hook 'ruby-mode-hook 'bw/turn-on-subword-mode))
 
 ;;; ELPA customisation and installation
 (require 'setup-elpa)
