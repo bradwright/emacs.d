@@ -36,6 +36,8 @@
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)
 
+(setq-default cursor-type 'bar)
+
 ;; Always show line number in the mode line
 (line-number-mode 1)
 ;; ... and show the column number

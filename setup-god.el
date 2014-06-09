@@ -6,8 +6,8 @@
 (defun bw/god-mode-change-cursor ()
   "Changes cursor type if god-mode is enabled"
   (setq cursor-type (if (or god-local-mode buffer-read-only)
-                        'hollow
-                      t)))
+                        'box
+                      original-cursor-type)))
 
 (after-load 'god-mode
   ;; (global-set-key (kbd "<escape>") 'god-local-mode)
@@ -16,7 +16,7 @@
 
   ;; don't enable god-mode in terminals
   (add-to-list 'god-exempt-major-modes 'term-mode)
-
+  (setq original-cursor-type cursor-type)
   (add-hook 'god-mode-enabled-hook 'bw/god-mode-change-cursor)
   (add-hook 'god-mode-disabled-hook 'bw/god-mode-change-cursor))
 
