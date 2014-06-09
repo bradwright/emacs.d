@@ -13,6 +13,9 @@
   ;; Make sure emacs does the right thing with completion command
   (define-key (current-local-map) [remap hippie-expand] 'company-complete))
 
+;; shorten company lighter
+(setq company-default-lighter " com")
+
 (after-load 'company
   (add-hook 'prog-mode-hook 'bw/enable-company-mode)
   (add-hook 'enh-ruby-mode-hook 'bw/enable-company-mode)

@@ -375,6 +375,8 @@ much much faster"
       (setq ad-return-value (magit-find-file-files (projectile-project-root)))
     ad-do-it))
 
+(setq projectile-mode-line-lighter "P")
+
 (after-load 'projectile
   (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag)
   (define-key projectile-mode-map [remap magit-find-file-completing-read] 'projectile-find-file)
