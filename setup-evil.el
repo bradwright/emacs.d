@@ -73,6 +73,17 @@
   (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
   (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 
+
+  ;; evil integration for indirect regions
+  ;; from: http://demonastery.org/2013/04/emacs-evil-narrow-region/
+  (evil-define-operator evil-narrow-indirect (beg end type)
+    "Indirectly narrow the region from BEG to END."
+    (interactive "<R>")
+    (evil-normal-state)
+    (narrow-to-region-indirect beg end))
+  (define-key evil-normal-state-map "m" 'evil-narrow-indirect)
+  (define-key evil-visual-state-map "m" 'evil-narrow-indirect)
+
   ;; advanced ace-jump-mode integration.
   ;; keybindings and advice gotten from:
   ;; https://gist.github.com/cofi/4963125

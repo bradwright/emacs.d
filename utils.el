@@ -201,4 +201,14 @@ by using nxml's indentation rules."
      '(defadvice ,mode (after rename-modeline activate)
         (setq mode-name ,new-name))))
 
+;; http://demonastery.org/2013/04/emacs-narrow-to-region-indirect/
+(defun narrow-to-region-indirect (start end)
+  "Restrict editing in this buffer to the current region, indirectly."
+  (interactive "r")
+  (deactivate-mark)
+  (let ((buf (clone-indirect-buffer nil nil)))
+    (with-current-buffer buf
+      (narrow-to-region start end))
+      (switch-to-buffer buf)))
+
 (provide 'utils)
