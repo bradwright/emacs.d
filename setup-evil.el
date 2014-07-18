@@ -166,8 +166,8 @@
 
 ;; evil-surround - Emacs version of surround.vim
 ;; https://github.com/timcharper/evil-surround
-(require-package 'surround)
-(require 'surround)
+(require-package 'evil-surround)
+(require 'evil-surround)
 
 
 ;; evil-god-state - One-shot god-mode from a leader key in evil
