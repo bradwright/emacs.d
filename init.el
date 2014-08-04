@@ -29,8 +29,8 @@
 (make-directory (setq tmp-local-dir (bw/join-dirs dotfiles-dir ".tmp")) t)
 
 ;; My font
-(when (display-graphic-p)
-  (set-face-attribute 'default nil :height 180 :family "Inconsolata"))
+(when (and (display-graphic-p) (find-font (font-spec :name "Inconsolata")))
+  (set-frame-font "Inconsolata-18" t t))
 
 ;; always highlight syntax
 (global-font-lock-mode t)
