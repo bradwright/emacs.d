@@ -69,6 +69,21 @@ This directory is created if it doesn't exist.
          (bw/join-dirs bw/dotfiles-dir ".tmp")) t)
 #+end_src
 
+* Client/server
+
+Emacs has a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server][client/server]] model for editing. The client is invoked via [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Invoking-emacsclient.html][the
+=emacsclient= command]]. More information on configuration is available on the
+[[http://www.emacswiki.org/emacs/EmacsClient][EmacsWiki EmacsClient page]].
+
+We make sure the server is running, additionally guarded to check if the version
+of Emacs we're using supports the server package:
+
+#+begin_src emacs-lisp
+  (when (require 'server nil t)
+    (unless (server-running-p)
+      (server-start)))
+#+end_src
+
 * Editing defaults
 
 Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
