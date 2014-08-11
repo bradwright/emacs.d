@@ -7,7 +7,7 @@ initials and a slash =bw/= to namespace them.
 
 * Setup
 
-Emacs looks in =load-path= for Emacs lisp files. =require= and other loading
+Emacs looks in [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Loading-Files.html][load-path]] for Emacs lisp files. =require= and other loading
 constructs use this when looking for implicit names.
 
 First we define a convenience function =bw/add-to-load-path= that adds the
