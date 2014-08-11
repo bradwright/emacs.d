@@ -498,3 +498,69 @@ As of Emacs 24.4, [[http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg007
 If you're not using Emacs 24.4 this variable setting will have no effect. See
 [[https://github.com/Homebrew/homebrew/blob/7446162e59fe548a0fde735d25b9913f8fa2ad4a/Library/Formula/emacs.rb#L10][Homebrew's Emacs recipe]] for details of how to get this behaviour in earlier
 Emacs versions.
+
+* Other modes
+
+Emacs comes with hundreds of major and minor modes to do many many things. These
+are the ones I commonly use and have configured.
+
+First let's define a convenient macro that wraps typical =eval-after-load= in
+such a way that we don't need to use =progn= to contain the callback logic. This
+macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612c4fea6e638d81d8ebbfecdf8/init-utils.el#L1-L5][Steve Purcell's emacs.d repo]]:
+
+#+begin_src emacs-lisp
+  (defmacro after-load (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body)))
+#+end_src
+
+** ido-mode
+
+[[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido-mode]] is a mode for narrowing candidates as you type. It has excellent
+integration with buffer switching and finding files. [[http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/][Mastering Emacs has a good
+guide to Ido]].
+
+First we enable =ido-mode= globally and enable =ido-everywhere=, which enables
+Ido for buffer and file reading:
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (ido-mode t)
+    (ido-everywhere t))
+#+end_src
+
+Force Ido to [[http://stackoverflow.com/a/11341239/61435][ignore Dropbox cruft]]:
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (add-to-list 'ido-ignore-files "Icon\n"))
+#+end_src
+
+Configure Ido (see comments for more information):
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (setq
+     ;; Speed up ido by using less candidates
+     ido-max-prospects 10
+     ;; Match arbitrary points in strings
+     ido-enable-prefix nil
+     ;; Match across entire string
+     ido-enable-flex-matching t
+     ;; Create a new buffer if there's no match candidate
+     ido-create-new-buffer 'always
+     ;; Don't try and guess if the string under point is a file
+     ido-use-filename-at-point nil
+     ;; case-insensitive matching
+     ido-case-fold t
+     ;; don't store old files as virtual buffers
+     ido-use-virtual-buffers nil))
+#+end_src
+
+Finally load Ido:
+
+#+begin_src emacs-lisp
+  (require 'ido)
+#+end_src
