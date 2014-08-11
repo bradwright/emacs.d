@@ -149,6 +149,29 @@ govern encoding]], so we should set them all at once:
   (prefer-coding-system 'utf-8)
 #+end_src
 
+** Smart =beginning-of-line=
+
+=C-a= is mapped to =beginning-of-line= by default, which moves point to position
+0 on the current line. [[http://irreal.org/blog/?p=1946][The irreal blog suggests a smarter alternative]] that moves
+the point to the first non-whitespace character first, and then position 0, with
+extra presses toggling the position:
+
+#+begin_src emacs-lisp
+  (defadvice move-beginning-of-line (around smarter-bol activate)
+    ;; Move to requested line if needed.
+    (let ((arg (or (ad-get-arg 0) 1)))
+      (when (/= arg 1)
+        (forward-line (1- arg))))
+    ;; Move to indentation on first call, then to actual BOL on second.
+    (let ((pos (point)))
+      (back-to-indentation)
+      (when (= pos (point))
+        ad-do-it)))
+#+end_src
+
+This functionality uses the Emacs concept of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html][advice]], which is a way of modifying
+existing functions in-place without redefining the entire thing.
+
 * Keyboard
 
 - =C-= means =Control= in combination with another key, eg =C-x= means =Ctrl + x=
