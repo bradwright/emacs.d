@@ -249,15 +249,17 @@ Emacs convention is to show help and other inline documentation in the [[https:/
 area]]. Show help there instead of using an OS tooltip:
 
 #+begin_src emacs-lisp
-  (tooltip-mode -1)
+  (when (display-graphic-p)
+    (tooltip-mode -1))
 #+end_src
 
-** Dialogue boxes
+** Dialogue boxes and windows
 
 Just don't show them. Use native Emacs controls:
 
 #+begin_src emacs-lisp
-  (setq use-dialog-box nil)
+  (when (display-graphic-p)
+    (setq use-dialog-box nil))
 #+end_src
 
 ** Cursor
@@ -265,7 +267,8 @@ Just don't show them. Use native Emacs controls:
 On modern operating systems, a vertical bar is used as a cursor:
 
 #+begin_src emacs-lisp
-  (setq-default cursor-type 'bar)
+  (when (display-graphic-p)
+    (setq-default cursor-type 'bar))
 #+end_src
 
 Make the cursor blink (interestingly in Emacs 24.4+ the [[https://lists.gnu.org/archive/html/emacs-diffs/2013-07/msg00208.html][cursor automatically
@@ -274,8 +277,9 @@ stops blinking after a period to conserve CPU]]).
 Make the cursor blink every second:
 
 #+begin_src emacs-lisp
-  (setq blink-cursor-interval 1.0)
-  (blink-cursor-mode 1)
+  (when (display-graphic-p)
+    (setq blink-cursor-interval 1.0)
+    (blink-cursor-mode 1))
 #+end_src
 
 ** Typing
