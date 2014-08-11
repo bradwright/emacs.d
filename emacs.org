@@ -313,3 +313,18 @@ will only ring when there's actually an error raised somehow:
                         '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
             (ding))))
 #+end_src
+
+** Buffer naming
+
+By default Emacs resolves conflicting buffer names by appending a number to
+them. For instace, if I open =~/src/thing/init.el= and
+=~/src/other-thing/init.el= they'll be named =init.el= and =init.el<2>=
+respectively.
+
+We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][Uniquify]] library to name them =thing/init.el= and
+=other-thing/init.el=, which is much easier to make sense of.
+
+#+begin_src emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+end_src
