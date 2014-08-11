@@ -345,3 +345,49 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
   (require 'uniquify)
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
+
+* OS X specific configuration
+
+Besides the keyboard configuration above, there are some other specific things I
+do on OS X. On OS X =system-type= is the symbol =darwin=.
+
+** Host name mangling
+
+Typically OS X hosts are called things like =hostname.localconfig= or
+=hostname.local=. Make Emacs report that without the extra suffix:
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq system-name (car (split-string system-name "\\."))))
+#+end_src
+
+** Spelling correction
+
+[[https://www.gnu.org/software/ispell/][ispell]] isn't generally available on OS X. [[http://aspell.net][aspell]] is available via [[https://github.com/Homebrew/homebrew/blob/master/Library/Formula/aspell.rb][Homebrew]], so
+let's use that if we can find it:
+
+#+begin_src emacs-lisp
+  (when (and (eq system-type 'darwin) (executable-find "aspell"))
+      (setq ispell-program-name (executable-find "aspell")))
+#+end_src
+
+** dired fixes
+
+OS X's bundled version of =ls= isn't the GNU one, so it doesn't support the
+=--dired= flag. Emacs caters for that use case:
+
+#+begin_src emacs-lisp
+  (setq dired-use-ls-dired nil)
+#+end_src
+
+** sRGB display fixes
+
+As of Emacs 24.4, [[http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg00741.html][Emacs natively supports proper sRGB]] values on OS X:
+
+#+begin_src emacs-lisp
+  (setq ns-use-srgb-colorspace t)
+#+end_src
+
+If you're not using Emacs 24.4 this variable setting will have no effect. See
+[[https://github.com/Homebrew/homebrew/blob/7446162e59fe548a0fde735d25b9913f8fa2ad4a/Library/Formula/emacs.rb#L10][Homebrew's Emacs recipe]] for details of how to get this behaviour in earlier
+Emacs versions.
