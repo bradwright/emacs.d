@@ -199,6 +199,8 @@ existing functions in-place without redefining the entire thing.
 
 * Keyboard
 
+** Modifier keys
+
 - =C-= means =Control= in combination with another key, eg =C-x= means =Ctrl + x=
 - =M-= means =Meta= in combination with another key. This is usually =Alt=, or
   =⌘= on OS X (by default). =Esc= also serves as =Meta= if it's not separately
@@ -223,6 +225,63 @@ existing functions in-place without redefining the entire thing.
   (when (and (eq system-type 'darwin) (display-graphic-p))
     (setq ns-function-modifier 'hyper))
 #+END_SRC
+
+** Basic remappings
+
+The below are some remappings I got from [[https://sites.google.com/site/steveyegge2/effective-emacs][Steve Yegge's Effective Emacs]] article.
+They're designed to map some slightly difficult but very common mappings to
+things that are easier to type.
+
+*** Invoke =M-x= without the Alt key
+
+As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item2][Yegge's Item 2]]. This unmaps the difficult =M-x= (usually =Alt+x=) to =C-x
+m=, and then add a fat-finger combination of =C-x C-m=:
+
+#+begin_src emacs-lisp
+  (global-unset-key (kbd "C-x m"))
+  (global-unset-key (kbd "M-x"))
+  (global-set-key (kbd "C-x m") 'execute-extended-command)
+  (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+#+end_src
+
+*** Prefer =backward-kill-word= over Backspace
+
+As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item3][Yegge's Item 3]]. This copies readline's =C-w= command to
+=backward-kill-word=, remaps the command that used to live there
+(=kill-region=), and then enables a fat-finger version of the new =kill=region=
+mapping:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+  (global-set-key (kbd "C-c C-k") 'kill-region)
+#+end_src
+
+*** Quick window switching
+
+Usually one must type =C-x o= to switch between windows - make that quicker by
+also mapping =M-o=:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-o") 'other-window)
+#+end_src
+
+*** Buffer management
+
+Burying a buffer (removing it from the current window and sending it to the
+bottom of the stack) is very common for dismissing buffers. Add a mapping for
+it:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c y") 'bury-buffer)
+#+end_src
+
+Add a key combination to revert the current buffer (re-read the contents from
+disk):
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+#+end_src
 
 * Interface
 
