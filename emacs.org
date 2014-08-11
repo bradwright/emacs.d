@@ -29,17 +29,18 @@ and a convenience function for making a proper path out of two strings:
 
 ** Base load path
 
-Define a base directory =dotfiles-dir= that's relative to the currently loading
-file (this file). This means if I deliberately start Emacs with a file loaded:
+Define a base directory =bw/dotfiles-dir= that's relative to the currently
+loading file (this file). This means if I deliberately start Emacs with a file
+loaded:
 
 #+BEGIN_SRC
 $ emacs -q -l ~/src/emacs/init.el
 #+END_SRC
 
-then =dotfiles-dir= will be =~/src/emacs=.
+then =bw/dotfiles-dir= will be =~/src/emacs=.
 
 #+BEGIN_SRC emacs-lisp
-  (defconst dotfiles-dir
+  (defconst bw/dotfiles-dir
     (file-name-directory
      (or (buffer-file-name) load-file-name))
     "Base path for customised Emacs configuration")
@@ -48,7 +49,7 @@ then =dotfiles-dir= will be =~/src/emacs=.
 We also add it to =load-path=:
 
 #+BEGIN_SRC emacs-lisp
-  (bw/add-to-load-path dotfiles-dir)
+  (bw/add-to-load-path bw/dotfiles-dir)
 #+END_SRC
 
 This variable is important because all other directories I load things from are
@@ -59,13 +60,13 @@ relative to it, which means my Emacs config doesn't need to live in
 
 Emacs has many packages which need to store state in files. Generally these are
 in =~= or =user-emacs-directory= - since my entire =~/.emacs.d= is versioned,
-I'd rather all temporary files were stored in a known place, =tmp-local-dir=.
+I'd rather all temporary files were stored in a known place, =bw/tmp-local-dir=.
 This directory is created if it doesn't exist.
 
 #+begin_src emacs-lisp
   (make-directory
-   (setq tmp-local-dir
-         (bw/join-dirs dotfiles-dir ".tmp")) t)
+   (setq bw/tmp-local-dir
+         (bw/join-dirs bw/dotfiles-dir ".tmp")) t)
 #+end_src
 
 * Editing defaults
