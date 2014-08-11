@@ -291,3 +291,25 @@ Don't make me type =yes= or =no= to boolean interface questions:
 #+begin_src emacs-lisp
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
+
+** Bells
+
+Don't make a sound when [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Beeping.html][ringing a bell]] - flash a visual bell instead:
+
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
+
+Override the =ring-bell-function= to conditionally ring the bell only when it's
+not a valid quit case like hitting =esc= or =C-g=. Generally this means the bell
+will only ring when there's actually an error raised somehow:
+
+#+begin_src emacs-lisp
+  (setq ring-bell-function
+        (lambda ()
+          "Only rings the bell if it's not a valid quit case, e.g
+  keyboard-quit"
+          (unless (memq this-command
+                        '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
+            (ding))))
+#+end_src
