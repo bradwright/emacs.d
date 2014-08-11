@@ -1,4 +1,5 @@
 #+TITLE: Bradley Wright's Emacs Configuration
+#+OPTIONS: toc:2
 
 * Conventions
 
