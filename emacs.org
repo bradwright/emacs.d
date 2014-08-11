@@ -1,0 +1,209 @@
+#+TITLE: Bradley Wright's Emacs Configuration
+
+* Conventions
+
+Functions and variables defined exclusively for my use are prefixed with my
+initials and a slash =bw/= to namespace them.
+
+* Setup
+
+Emacs looks in =load-path= for Emacs lisp files. =require= and other loading
+constructs use this when looking for implicit names.
+
+First we define a convenience function =bw/add-to-load-path= that adds the
+passed in directory to =load-path=:
+
+#+BEGIN_SRC emacs-lisp
+  (defun bw/add-to-load-path (dir)
+    "Adds `dir` to load-path"
+    (add-to-list 'load-path dir))
+#+END_SRC
+
+and a convenience function for making a proper path out of two strings:
+
+#+begin_src emacs-lisp
+  (defun bw/join-dirs (prefix suffix)
+    "Joins `prefix` and `suffix` into a directory"
+    (file-name-as-directory (concat prefix suffix)))
+#+end_src
+
+** Base load path
+
+Define a base directory =dotfiles-dir= that's relative to the currently loading
+file (this file). This means if I deliberately start Emacs with a file loaded:
+
+#+BEGIN_SRC
+$ emacs -q -l ~/src/emacs/init.el
+#+END_SRC
+
+then =dotfiles-dir= will be =~/src/emacs=.
+
+#+BEGIN_SRC emacs-lisp
+  (defconst dotfiles-dir
+    (file-name-directory
+     (or (buffer-file-name) load-file-name))
+    "Base path for customised Emacs configuration")
+#+END_SRC
+
+We also add it to =load-path=:
+
+#+BEGIN_SRC emacs-lisp
+  (bw/add-to-load-path dotfiles-dir)
+#+END_SRC
+
+This variable is important because all other directories I load things from are
+relative to it, which means my Emacs config doesn't need to live in
+=user-emacs-directory=.
+
+** Temporary directory
+
+Emacs has many packages which need to store state in files. Generally these are
+in =~= or =user-emacs-directory= - since my entire =~/.emacs.d= is versioned,
+I'd rather all temporary files were stored in a known place, =tmp-local-dir=.
+This directory is created if it doesn't exist.
+
+#+begin_src emacs-lisp
+  (make-directory
+   (setq tmp-local-dir
+         (bw/join-dirs dotfiles-dir ".tmp")) t)
+#+end_src
+
+* Editing defaults
+
+Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
+=sane-defaults.el= file]] for some commentary.
+
+The default wrap width (known as [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Filling.html][filling]]) for Emacs is 70 characters. Modern
+conventions state that 80 characters is the standard:
+
+#+begin_src emacs-lisp
+  (setq-default fill-column 80)
+#+end_src
+
+I don't type double-space sentences, so make sure that Emacs doesn't look for
+double-spaces after periods to fill paragraphs correctly:
+
+#+begin_src emacs-lisp
+  (setq-default sentence-end-double-space nil)
+#+end_src
+
+Most UNIX tools work best when there's a trailing newline on all files. Enable
+that option:
+
+#+begin_src emacs-lisp
+  (setq require-final-newline t)
+#+end_src
+
+I don't use tabstops in files, and my default tab width is 4 characters.
+
+It's worth noting that Emacs can override either of those on a per-file/mode
+basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
+
+#+begin_src emacs-lisp
+  (setq-default
+   indent-tabs-mode nil
+   tab-width 4)
+#+end_src
+
+I want to have [[http://en.wikipedia.org/wiki/UTF-8][UTF-8]] by default. [[http://www.masteringemacs.org/articles/2012/08/09/working-coding-systems-unicode-emacs/][Emacs unfortunately has a few settings that
+govern encoding]], so we should set them all at once:
+
+#+begin_src emacs-lisp
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+end_src
+
+* Keyboard
+
+- =C-= means =Control= in combination with another key, eg =C-x= means =Ctrl + x=
+- =M-= means =Meta= in combination with another key. This is usually =Alt=, or
+  =⌘= on OS X (by default). =Esc= also serves as =Meta= if it's not separately
+  bound. On OS X I want to use left =⌥= for =Meta=, and leave right =⌥= alone:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-alternate-modifier 'meta)
+    (setq ns-right-alternate-modifier nil))
+#+END_SRC
+
+- =s-= means [[http://en.wikipedia.org/wiki/Super_key_(keyboard_button)][super key]]. On OS X I want this to be =⌘=:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-command-modifier 'super))
+#+END_SRC
+
+- =H-= means [[http://en.wikipedia.org/wiki/Hyper_key][hyper key]]. On OS X I want this to be =fn=:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-function-modifier 'hyper))
+#+END_SRC
+
+* Interface
+
+** Remove chrome
+
+To ensure that all scrollbars, toolbars etc. are turned off, we run this as
+early as possible.
+
+#+NAME: turn-off-chrome
+#+BEGIN_SRC emacs-lisp
+  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+    (when (fboundp mode) (funcall mode -1)))
+#+END_SRC
+
+** Startup buffers
+
+Turn off the startup screen, and always show =*scratch*=.
+
+#+NAME: turn-off-startup
+#+BEGIN_SRC emacs-lisp
+  ;; inhibit startup screen
+  (setq inhibit-startup-screen t
+        ;; Show *scratch* on start
+        initial-buffer-choice t)
+#+END_SRC
+
+** Font
+
+I use [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] as my default coding font. It's set to render at 18pt:
+
+#+begin_src emacs-lisp
+  (when (and
+         (display-graphic-p)
+         (find-font (font-spec :name "Inconsolata")))
+    (set-frame-font "Inconsolata-18" t t))
+#+end_src
+
+** Syntax highlighting
+
+Syntax highlighting in Emacs is called [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html][font locking]]. It's enabled by
+=font-lock-mode=. This turned on by default in modern Emacs systems, but it's
+worth keeping around:
+
+#+begin_src emacs-lisp
+  (global-font-lock-mode t)
+#+end_src
+
+Emacs also supports multiple levels of complexity for highlighting. Setting this
+value to =t= forces it to pick the maximum available (also the default):
+
+#+begin_src emacs-lisp
+  (setq font-lock-maximum-decoration t)
+#+end_src
+
+** Line and column numbers
+
+Emacs doesn't display line numbers by the code by default. For that you want
+[[http://www.emacswiki.org/emacs/LineNumbers#toc1][Linum mode]].
+
+I want to display the current line number in the
+[[http://www.emacswiki.org/emacs/ModeLine][mode line]], and also the current
+column number:
+
+#+begin_src emacs-lisp
+  (line-number-mode 1)
+  (column-number-mode 1)
+#+end_src
