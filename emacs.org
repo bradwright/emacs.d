@@ -138,6 +138,31 @@ basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
    tab-width 4)
 #+end_src
 
+*** Auto-indentation
+
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indent-Convenience.html][Electric indent mode]] was added in Emacs 24.1, and it enables automatic indentation when typing a newline. [[http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation][More about electric indent mode on Emacs Redux]].
+
+First we define convenience toggling functions we can use in a hook (or interactively):
+
+#+begin_src emacs-lisp
+  (defun bw/turn-on-electric-indent-mode ()
+    "Turns on electric-indent-mode"
+    (interactive)
+    (electric-indent-mode 1))
+
+  (defun bw/turn-off-electric-indent-mode ()
+    "Turns off electric-indent-mode"
+    (interactive)
+    (electric-indent-mode -1))
+#+end_src
+
+then we enable it for [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Program-Modes.html][the generic abstract programming mode =prog-mode=,
+introduced in Emacs 24.1]] ([[http://emacsredux.com/blog/2013/04/05/prog-mode-the-parent-of-all-programming-modes/][more about =prog-mode= on Emacs Redux]]):
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
+#+end_src
+
 ** Encoding
 
 I want to have [[http://en.wikipedia.org/wiki/UTF-8][UTF-8]] by default. [[http://www.masteringemacs.org/articles/2012/08/09/working-coding-systems-unicode-emacs/][Emacs unfortunately has a few settings that
