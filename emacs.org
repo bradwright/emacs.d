@@ -262,6 +262,19 @@ Just don't show them. Use native Emacs controls:
     (setq use-dialog-box nil))
 #+end_src
 
+Make the window title display the full path of the file I'm currently editing:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq frame-title-format
+          '((:eval (if (buffer-file-name)
+                       (abbreviate-file-name (buffer-file-name))
+                     "%b")))))
+#+end_src
+
+Aside: Emacs calls OS windows [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames][frames]] and divisions within frames [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Windows.html#Windows][windows]]. [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Titles.html][More
+information on frame titles]].
+
 ** Cursor
 
 On modern operating systems, a vertical bar is used as a cursor:
