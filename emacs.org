@@ -241,3 +241,20 @@ column number:
   (line-number-mode 1)
   (column-number-mode 1)
 #+end_src
+
+** Tooltips
+
+Emacs convention is to show help and other inline documentation in the [[https://www.gnu.org/software/emacs/manual/html_node/eintr/message.html][message
+area]]. Show help there instead of using an OS tooltip:
+
+#+begin_src emacs-lisp
+  (tooltip-mode -1)
+#+end_src
+
+** Dialogue boxes
+
+Just don't show them. Use native Emacs controls:
+
+#+begin_src emacs-lisp
+  (setq use-dialog-box nil)
+#+end_src
