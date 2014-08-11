@@ -89,6 +89,8 @@ of Emacs we're using supports the server package:
 Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
 =sane-defaults.el= file]] for some commentary.
 
+** Line widths and wrapping
+
 The default wrap width (known as [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Filling.html][filling]]) for Emacs is 70 characters. Modern
 conventions state that 80 characters is the standard:
 
@@ -103,12 +105,26 @@ double-spaces after periods to fill paragraphs correctly:
   (setq-default sentence-end-double-space nil)
 #+end_src
 
+** Trailing whitespace
+
 Most UNIX tools work best when there's a trailing newline on all files. Enable
 that option:
 
 #+begin_src emacs-lisp
   (setq require-final-newline t)
 #+end_src
+
+I don't want to leave trailing whitespace in files I touch, so set up a hook
+that automatically deletes trailing whitespace after every line when saving a
+file:
+
+#+begin_src emacs-lisp
+  (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+#+end_src
+
+Emacs has lots of other options for [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html][managing superfluous whitespace]].
+
+** Indentation
 
 I don't use tabstops in files, and my default tab width is 4 characters.
 
@@ -120,6 +136,8 @@ basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
    indent-tabs-mode nil
    tab-width 4)
 #+end_src
+
+** Encoding
 
 I want to have [[http://en.wikipedia.org/wiki/UTF-8][UTF-8]] by default. [[http://www.masteringemacs.org/articles/2012/08/09/working-coding-systems-unicode-emacs/][Emacs unfortunately has a few settings that
 govern encoding]], so we should set them all at once:
