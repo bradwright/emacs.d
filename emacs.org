@@ -564,3 +564,23 @@ Finally load Ido:
 #+begin_src emacs-lisp
   (require 'ido)
 #+end_src
+
+** bookmarks
+
+Emacs has robust [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Bookmarks.html][bookmarking functionality]]. It uses a file to persit the list of
+bookmarks, so make sure that file is in my custom temporary directory:
+
+#+begin_src emacs-lisp
+  (after-load 'bookmark
+    (setq bookmark-default-file (expand-file-name ".emacs.bmk" bw/tmp-local-dir)))
+#+end_src
+
+** eldoc-mode
+
+[[http://www.emacswiki.org/emacs/ElDoc][eldoc-mode]] is a minor mode that displays context-sensitive help when editing
+Emacs lisp (eg information about arity of functions). Enable that for
+=emacs-lisp-mode=:
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+end_src
