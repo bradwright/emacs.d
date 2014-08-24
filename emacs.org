@@ -441,7 +441,7 @@ will only ring when there's actually an error raised somehow:
 ** Buffer naming
 
 By default Emacs resolves conflicting buffer names by appending a number to
-them. For instace, if I open =~/src/thing/init.el= and
+them. For instance, if I open =~/src/thing/init.el= and
 =~/src/other-thing/init.el= they'll be named =init.el= and =init.el<2>=
 respectively.
 
