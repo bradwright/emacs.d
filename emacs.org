@@ -584,3 +584,24 @@ Emacs lisp (eg information about arity of functions). Enable that for
 #+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+end_src
+
+** python-mode
+
+As of 24.2, Emacs ships with a [[http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc1][robust Python mode]]. However, when navigating
+=SnakeCase= words (eg class names), =forward-word= etc don't work correctly.
+
+We can work around that using [[https://www.gnu.org/software/emacs/manual/html_node/ccmode/Subword-Movement.html#Subword-Movement][subword-mode]]:
+
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook (lambda () (subword-mode 1)))
+#+end_src
+
+** ruby-mode
+
+As of 24.4, Emacs comes with a much better [[http://www.masteringemacs.org/articles/2013/12/29/whats-new-in-emacs-24-4/][Ruby mode]]. However it doesn't come
+with =subword-mode= enabled by default:
+
+#+begin_src emacs-lisp
+  (after-load 'ruby-mode
+    (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
+#+end_src
