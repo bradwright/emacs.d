@@ -633,3 +633,47 @@ Then we override =dabbrev-expand='s keybinding to use =hippie-expand= instead
 #+begin_src emacs-lisp
   (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand)
 #+end_src
+
+** tramp mode
+
+=tramp-mode= is a package that provides [[https://www.gnu.org/software/emacs/manual/html_node/tramp/index.html#Top][remote file editing]], eg =find-file
+/user@host:file=. This allows one to edit files on other servers using your
+local Emacs (rather than the Vim user's equivalent of editing the file on the
+server).
+
+All of the below are wrapped in an =after-load= construct because =tramp-mode=
+isn't loaded by default on older versions of Emacs.
+
+First we set the default mode to be =ssh= (it's normally =scp=). There are two
+reasons for this choice:
+
+- =ssh= takes a port number as an argument, whereas =scp= doesn't
+- It's [[http://www.gnu.org/software/tramp/#Default-Method][apparently faster]] for smaller files
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (setq tramp-default-method "ssh"))
+#+end_src
+
+We also want to alter the list of allowed proxies (tramp uses a whitelist for
+patterns that it can remotely access) so I can edit remote files as sudo, eg
+=find-file /sudo:example.com/etc/something-owned-by-root=.
+
+I got this code from the [[http://www.gnu.org/software/tramp/#Multi_002dhops][Multi-hops section of the tramp manual]].
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (add-to-list 'tramp-default-proxies-alist
+                 '(nil "\\`root\\'" "/ssh:%h:")))
+#+end_src
+
+Also make sure we can edit local files as sudo - this is normally disallowed for
+security reasons:
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (add-to-list 'tramp-default-proxies-alist
+                 '((regexp-quote (system-name)) nil nil)))
+#+end_src
+
+More on the last two incantations at [[http://emacs-fu.blogspot.co.uk/2009/10/editing-files-owned-by-root.html][emacs-fu's guide to editing files owned by root]].
