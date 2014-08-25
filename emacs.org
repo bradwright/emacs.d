@@ -609,7 +609,9 @@ with =subword-mode= enabled by default:
 ** Hippie expand
 
 [[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
-[[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine.
+[[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine. The main feature I use over =dabbrev= is that it supports a wide
+range of backends for finding completions - =dabbrev= only looks at currently
+open buffers.
 
 First we customise the types of things it looks for:
 
