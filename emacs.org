@@ -1,12 +1,13 @@
-#+TITLE: Bradley Wright's Emacs Configuration
 #+OPTIONS: toc:2
 
-* Conventions
+* Bradley Wright's Emacs Configuration
+
+** Conventions
 
 Functions and variables defined exclusively for my use are prefixed with my
 initials and a slash =bw/= to namespace them.
 
-* Setup
+** Setup
 
 Emacs looks in [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Loading-Files.html][load-path]] for Emacs lisp files. =require= and other loading
 constructs use this when looking for implicit names.
@@ -28,7 +29,7 @@ and a convenience function for making a proper path out of two strings:
     (file-name-as-directory (concat prefix suffix)))
 #+end_src
 
-** Base load path
+*** Base load path
 
 Define a base directory =bw/dotfiles-dir= that's relative to the currently
 loading file (this file). This means if I deliberately start Emacs with a file
@@ -57,7 +58,7 @@ This variable is important because all other directories I load things from are
 relative to it, which means my Emacs config doesn't need to live in
 =user-emacs-directory=.
 
-** Temporary directory
+*** Temporary directory
 
 Emacs has many packages which need to store state in files. Generally these are
 in =~= or =user-emacs-directory= - since my entire =~/.emacs.d= is versioned,
@@ -70,7 +71,7 @@ This directory is created if it doesn't exist.
          (bw/join-dirs bw/dotfiles-dir ".tmp")) t)
 #+end_src
 
-* Client/server
+** Client/server
 
 Emacs has a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server][client/server]] model for editing. The client is invoked via [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Invoking-emacsclient.html][the
 =emacsclient= command]]. More information on configuration is available on the
@@ -85,12 +86,12 @@ of Emacs we're using supports the server package:
       (server-start)))
 #+end_src
 
-* Editing defaults
+** Editing defaults
 
 Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
 =sane-defaults.el= file]] for some commentary.
 
-** Line widths and wrapping
+*** Line widths and wrapping
 
 The default wrap width (known as [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Filling.html][filling]]) for Emacs is 70 characters. Modern
 conventions state that 80 characters is the standard:
@@ -106,7 +107,7 @@ double-spaces after periods to fill paragraphs correctly:
   (setq-default sentence-end-double-space nil)
 #+end_src
 
-** Trailing whitespace
+*** Trailing whitespace
 
 Most UNIX tools work best when there's a trailing newline on all files. Enable
 that option:
@@ -125,7 +126,7 @@ file:
 
 Emacs has lots of other options for [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html][managing superfluous whitespace]].
 
-** Indentation
+*** Indentation
 
 I don't use tabstops in files, and my default tab width is 4 characters.
 
@@ -138,7 +139,7 @@ basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
    tab-width 4)
 #+end_src
 
-*** Auto-indentation
+**** Auto-indentation
 
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indent-Convenience.html][Electric indent mode]] was added in Emacs 24.1, and it enables automatic indentation when typing a newline. [[http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation][More about electric indent mode on Emacs Redux]].
 
@@ -163,7 +164,7 @@ introduced in Emacs 24.1]] ([[http://emacsredux.com/blog/2013/04/05/prog-mode-th
   (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
 #+end_src
 
-** Encoding
+*** Encoding
 
 I want to have [[http://en.wikipedia.org/wiki/UTF-8][UTF-8]] by default. [[http://www.masteringemacs.org/articles/2012/08/09/working-coding-systems-unicode-emacs/][Emacs unfortunately has a few settings that
 govern encoding]], so we should set them all at once:
@@ -174,7 +175,7 @@ govern encoding]], so we should set them all at once:
   (prefer-coding-system 'utf-8)
 #+end_src
 
-** Smart =beginning-of-line=
+*** Smart =beginning-of-line=
 
 =C-a= is mapped to =beginning-of-line= by default, which moves point to position
 0 on the current line. [[http://irreal.org/blog/?p=1946][The irreal blog suggests a smarter alternative]] that moves
@@ -197,9 +198,9 @@ extra presses toggling the position:
 This functionality uses the Emacs concept of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html][advice]], which is a way of modifying
 existing functions in-place without redefining the entire thing.
 
-* Keyboard
+** Keyboard
 
-** Modifier keys
+*** Modifier keys
 
 - =C-= means =Control= in combination with another key, eg =C-x= means =Ctrl + x=
 - =M-= means =Meta= in combination with another key. This is usually =Alt=, or
@@ -226,13 +227,13 @@ existing functions in-place without redefining the entire thing.
     (setq ns-function-modifier 'hyper))
 #+END_SRC
 
-** Basic remappings
+*** Basic remappings
 
 The below are some remappings I got from [[https://sites.google.com/site/steveyegge2/effective-emacs][Steve Yegge's Effective Emacs]] article.
 They're designed to map some slightly difficult but very common mappings to
 things that are easier to type.
 
-*** Invoke =M-x= without the Alt key
+**** Invoke =M-x= without the Alt key
 
 As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item2][Yegge's Item 2]]. This unmaps the difficult =M-x= (usually =Alt+x=) to =C-x
 m=, and then add a fat-finger combination of =C-x C-m=:
@@ -244,7 +245,7 @@ m=, and then add a fat-finger combination of =C-x C-m=:
   (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 #+end_src
 
-*** Prefer =backward-kill-word= over Backspace
+**** Prefer =backward-kill-word= over Backspace
 
 As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item3][Yegge's Item 3]]. This copies readline's =C-w= command to
 =backward-kill-word=, remaps the command that used to live there
@@ -257,7 +258,7 @@ mapping:
   (global-set-key (kbd "C-c C-k") 'kill-region)
 #+end_src
 
-*** Quick window switching
+**** Quick window switching
 
 Usually one must type =C-x o= to switch between windows - make that quicker by
 also mapping =M-o=:
@@ -266,7 +267,7 @@ also mapping =M-o=:
   (global-set-key (kbd "M-o") 'other-window)
 #+end_src
 
-*** Buffer management
+**** Buffer management
 
 Burying a buffer (removing it from the current window and sending it to the
 bottom of the stack) is very common for dismissing buffers. Add a mapping for
@@ -283,9 +284,9 @@ disk):
   (global-set-key (kbd "C-c r") 'revert-buffer)
 #+end_src
 
-* Interface
+** Interface
 
-** Remove chrome
+*** Remove chrome
 
 To ensure that all scrollbars, toolbars etc. are turned off, we run this as
 early as possible.
@@ -296,7 +297,7 @@ early as possible.
     (when (fboundp mode) (funcall mode -1)))
 #+END_SRC
 
-** Startup buffers
+*** Startup buffers
 
 Turn off the startup screen, and always show =*scratch*=.
 
@@ -308,7 +309,7 @@ Turn off the startup screen, and always show =*scratch*=.
         initial-buffer-choice t)
 #+END_SRC
 
-** Font
+*** Font
 
 I use [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] as my default coding font. It's set to render at 18pt:
 
@@ -319,7 +320,7 @@ I use [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] as my def
     (set-frame-font "Inconsolata-18" t t))
 #+end_src
 
-** Syntax highlighting
+*** Syntax highlighting
 
 Syntax highlighting in Emacs is called [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html][font locking]]. It's enabled by
 =font-lock-mode=. This turned on by default in modern Emacs systems, but it's
@@ -336,7 +337,7 @@ value to =t= forces it to pick the maximum available (also the default):
   (setq font-lock-maximum-decoration t)
 #+end_src
 
-** Line and column numbers
+*** Line and column numbers
 
 Emacs doesn't display line numbers by the code by default. For that you want
 [[http://www.emacswiki.org/emacs/LineNumbers#toc1][Linum mode]].
@@ -350,7 +351,7 @@ column number:
   (column-number-mode 1)
 #+end_src
 
-** Tooltips
+*** Tooltips
 
 Emacs convention is to show help and other inline documentation in the [[https://www.gnu.org/software/emacs/manual/html_node/eintr/message.html][message
 area]]. Show help there instead of using an OS tooltip:
@@ -360,7 +361,7 @@ area]]. Show help there instead of using an OS tooltip:
     (tooltip-mode -1))
 #+end_src
 
-** Dialogue boxes and windows
+*** Dialogue boxes and windows
 
 Just don't show them. Use native Emacs controls:
 
@@ -382,7 +383,7 @@ Make the window title display the full path of the file I'm currently editing:
 Aside: Emacs calls OS windows [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames][frames]] and divisions within frames [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Windows.html#Windows][windows]]. [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Titles.html][More
 information on frame titles]].
 
-** Cursor
+*** Cursor
 
 On modern operating systems, a vertical bar is used as a cursor:
 
@@ -402,7 +403,7 @@ Make the cursor blink every second:
     (blink-cursor-mode 1))
 #+end_src
 
-** Typing
+*** Typing
 
 Show the modifier combinations I just typed almost immediately:
 
@@ -416,7 +417,7 @@ Don't make me type =yes= or =no= to boolean interface questions:
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
-** Bells
+*** Bells
 
 Don't make a sound when [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Beeping.html][ringing a bell]] - flash a visual bell instead:
 
@@ -438,7 +439,7 @@ will only ring when there's actually an error raised somehow:
             (ding))))
 #+end_src
 
-** Buffer naming
+*** Buffer naming
 
 By default Emacs resolves conflicting buffer names by appending a number to
 them. For instance, if I open =~/src/thing/init.el= and
@@ -453,12 +454,12 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
 
-* OS X specific configuration
+** OS X specific configuration
 
 Besides the keyboard configuration above, there are some other specific things I
 do on OS X. On OS X =system-type= is the symbol =darwin=.
 
-** Host name mangling
+*** Host name mangling
 
 Typically OS X hosts are called things like =hostname.localconfig= or
 =hostname.local=. Make Emacs report that without the extra suffix:
@@ -468,7 +469,7 @@ Typically OS X hosts are called things like =hostname.localconfig= or
     (setq system-name (car (split-string system-name "\\."))))
 #+end_src
 
-** Spelling correction
+*** Spelling correction
 
 [[https://www.gnu.org/software/ispell/][ispell]] isn't generally available on OS X. [[http://aspell.net][aspell]] is available via [[https://github.com/Homebrew/homebrew/blob/master/Library/Formula/aspell.rb][Homebrew]], so
 let's use that if we can find it:
@@ -478,7 +479,7 @@ let's use that if we can find it:
       (setq ispell-program-name (executable-find "aspell")))
 #+end_src
 
-** dired fixes
+*** dired fixes
 
 OS X's bundled version of =ls= isn't the GNU one, so it doesn't support the
 =--dired= flag. Emacs caters for that use case:
@@ -487,7 +488,7 @@ OS X's bundled version of =ls= isn't the GNU one, so it doesn't support the
   (setq dired-use-ls-dired nil)
 #+end_src
 
-** sRGB display fixes
+*** sRGB display fixes
 
 As of Emacs 24.4, [[http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg00741.html][Emacs natively supports proper sRGB]] values on OS X:
 
@@ -499,7 +500,7 @@ If you're not using Emacs 24.4 this variable setting will have no effect. See
 [[https://github.com/Homebrew/homebrew/blob/7446162e59fe548a0fde735d25b9913f8fa2ad4a/Library/Formula/emacs.rb#L10][Homebrew's Emacs recipe]] for details of how to get this behaviour in earlier
 Emacs versions.
 
-* Other modes
+** Other modes
 
 Emacs comes with hundreds of major and minor modes to do many many things. These
 are the ones I commonly use and have configured.
@@ -516,7 +517,7 @@ macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612
        '(progn ,@body)))
 #+end_src
 
-** ido-mode
+*** ido-mode
 
 [[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido-mode]] is a mode for narrowing candidates as you type. It has excellent
 integration with buffer switching and finding files. [[http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/][Mastering Emacs has a good
@@ -565,7 +566,7 @@ Finally load Ido:
   (require 'ido)
 #+end_src
 
-** bookmarks
+*** bookmarks
 
 Emacs has robust [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Bookmarks.html][bookmarking functionality]]. It uses a file to persit the list of
 bookmarks, so make sure that file is in my custom temporary directory:
@@ -575,7 +576,7 @@ bookmarks, so make sure that file is in my custom temporary directory:
     (setq bookmark-default-file (expand-file-name ".emacs.bmk" bw/tmp-local-dir)))
 #+end_src
 
-** eldoc-mode
+*** eldoc-mode
 
 [[http://www.emacswiki.org/emacs/ElDoc][eldoc-mode]] is a minor mode that displays context-sensitive help when editing
 Emacs lisp (eg information about arity of functions). Enable that for
@@ -585,7 +586,7 @@ Emacs lisp (eg information about arity of functions). Enable that for
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 #+end_src
 
-** python-mode
+*** python-mode
 
 As of 24.2, Emacs ships with a [[http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc1][robust Python mode]]. However, when navigating
 =SnakeCase= words (eg class names), =forward-word= etc don't work correctly.
@@ -596,7 +597,7 @@ We can work around that using [[https://www.gnu.org/software/emacs/manual/html_n
   (add-hook 'python-mode-hook (lambda () (subword-mode 1)))
 #+end_src
 
-** ruby-mode
+*** ruby-mode
 
 As of 24.4, Emacs comes with a much better [[http://www.masteringemacs.org/articles/2013/12/29/whats-new-in-emacs-24-4/][Ruby mode]]. However it doesn't come
 with =subword-mode= enabled by default:
@@ -606,7 +607,7 @@ with =subword-mode= enabled by default:
     (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
 #+end_src
 
-** Hippie expand
+*** Hippie expand
 
 [[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
 [[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine. The main feature I use over =dabbrev= is that it supports a wide
@@ -636,7 +637,7 @@ Then we override =dabbrev-expand='s keybinding to use =hippie-expand= instead
   (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand)
 #+end_src
 
-** tramp mode
+*** tramp mode
 
 =tramp-mode= is a package that provides [[https://www.gnu.org/software/emacs/manual/html_node/tramp/index.html#Top][remote file editing]], eg =find-file
 /user@host:file=. This allows one to edit files on other servers using your
