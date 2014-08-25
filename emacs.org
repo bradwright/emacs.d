@@ -605,3 +605,31 @@ with =subword-mode= enabled by default:
   (after-load 'ruby-mode
     (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
 #+end_src
+
+** Hippie expand
+
+[[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
+[[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine.
+
+First we customise the types of things it looks for:
+
+#+begin_src emacs-lisp
+  (setq hippie-expand-try-functions-list
+        '(try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol))
+#+end_src
+
+Then we override =dabbrev-expand='s keybinding to use =hippie-expand= instead
+(normally this is =M-/=):
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand)
+#+end_src
