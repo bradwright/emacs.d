@@ -680,3 +680,36 @@ security reasons:
 #+end_src
 
 More on the last two incantations at [[http://emacs-fu.blogspot.co.uk/2009/10/editing-files-owned-by-root.html][emacs-fu's guide to editing files owned by root]].
+
+*** eshell
+
+[[http://www.gnu.org/software/emacs/manual/html_node/eshell/][eshell]] is a shell-like command interpreter built with Emacs lisp. It integrates
+well with Emacs, and can be a convenient way to get a shell without invoking
+bash or similar (provided you don't want any interactive commands).
+
+There's a great guide to [[http://www.masteringemacs.org/articles/2010/12/13/complete-guide-mastering-eshell/][mastering eshell]] on [[http://www.masteringemacs.org][Mastering Emacs]].
+
+eshell has a directory where it stores bookmarks and other temporary cruft -
+move that out of the way:
+
+#+begin_src emacs-lisp
+  (setq eshell-directory-name (bw/join-dirs bw/tmp-local-dir "eshell"))
+#+end_src
+
+When using the =ssh= command (or =vagrant ssh=, which is really the same thing),
+we'll want to jump into something that's an actual terminal emulator like
+=ansi-term= (eshell won't be able to deal with the login on the remote machine):
+
+#+begin_src emacs-lisp
+    (after-load 'esh-opt
+      (require 'em-term)
+      (add-to-list 'eshell-visual-commands "ssh")
+      (when (fboundp 'eshell-visual-subcommands)
+        (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh"))))
+#+end_src
+
+Define a keybinding to get an =eshell= buffer anywhere:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c C-t e") 'eshell)
+#+end_src
