@@ -713,3 +713,39 @@ Define a keybinding to get an =eshell= buffer anywhere:
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-c C-t e") 'eshell)
 #+end_src
+
+** Local and custom configuration
+
+*** Local overrides
+
+So I can configure my Emacs per computer/user, I attempted to automatically load
+some configuration.
+
+First set up a directory to hold the files:
+
+#+begin_src emacs-lisp
+  (setq bw/local-dotfiles-dir (bw/join-dirs bw/dotfiles-dir "local"))
+#+end_src
+
+Now try to load a file named after the current user:
+
+#+begin_src emacs-lisp
+  (load (concat bw/local-dotfiles-dir user-login-name ".el") t)
+#+end_src
+
+and try to load a file named after the local system:
+
+#+begin_src emacs-lisp
+  (load (concat bw/local-dotfiles-dir system-name ".el") t)
+#+end_src
+
+*** =Customize=-d configuration
+
+Make sure anything saved using =customize= goes into a consistent (and ignored)
+place:
+
+#+begin_src emacs-lisp
+  (load (setq custom-file (concat bw/dotfiles-dir "custom.el")) t)
+#+end_src
+
+(note that this works because =setq= returns the value it's set to)
