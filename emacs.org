@@ -701,11 +701,11 @@ we'll want to jump into something that's an actual terminal emulator like
 =ansi-term= (eshell won't be able to deal with the login on the remote machine):
 
 #+begin_src emacs-lisp
-    (after-load 'esh-opt
-      (require 'em-term)
-      (add-to-list 'eshell-visual-commands "ssh")
-      (when (fboundp 'eshell-visual-subcommands)
-        (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh"))))
+  (after-load 'esh-opt
+    (require 'em-term)
+    (add-to-list 'eshell-visual-commands "ssh")
+    (when (fboundp 'eshell-visual-subcommands)
+      (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh"))))
 #+end_src
 
 Define a keybinding to get an =eshell= buffer anywhere:
