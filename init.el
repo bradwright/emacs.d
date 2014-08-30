@@ -388,7 +388,8 @@ keyboard-quit"
   (require 'em-term)
   (add-to-list 'eshell-visual-commands "ssh")
   ;; vagrant ssh is similar
-  (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh")))
+  (when (fboundp 'eshell-visual-subcommands)
+    (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh"))))
 
 ;; `e` opens a file
 (defun eshell/e (file)
