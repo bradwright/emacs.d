@@ -915,6 +915,31 @@ Finally we can install Magit:
   (require-package 'magit)
 #+end_src
 
+*** gitignore-mode
+
+[[https://github.com/magit/git-modes][gitignore-mode]] is a major mode for editing =gitignore= files:
+
+#+begin_src emacs-lisp
+  (require-package 'gitignore-mode)
+#+end_src
+
+*** gitconfig-mode
+
+[[https://github.com/magit/git-modes][gitconfig-mode]] is a major more for editing =gitconfig= files:
+
+#+begin_src emacs-lisp
+  (require-package 'gitconfig-mode)
+#+end_src
+
+*** ido-ubiquitous
+
+[[https://github.com/DarwinAwardWinner/ido-ubiquitous][ido-ubiquitous]] mode enables ido in many more places than the default ido setup:
+
+#+begin_src emacs-lisp
+  (require-package 'ido-ubiquitous)
+  (ido-ubiquitous-mode 1)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
