@@ -806,6 +806,15 @@ I only want this to be installed and enabled on OS X.
     (exec-path-from-shell-initialize))
 #+end_src
 
+*** fullframe
+
+[[https://github.com/tomterl/fullframe][fullframe]] is a minor mode which allows certain buffers to take over the full
+frame using advice.
+
+#+begin_src emacs-lisp
+  (require-package 'fullframe)
+#+end_src
+
 *** magit
 
 [[https://github.com/magit/magit][Magit]] is an Emacs interface to Git. It's very feature-rich and I find it
