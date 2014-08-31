@@ -896,6 +896,17 @@ When =magit-auto-revert-mode= is enabled, diminish its [[http://www.gnu.org/soft
   (setq magit-auto-revert-mode-lighter "")
 #+end_src
 
+**** Interaction with fullframe
+
+If =fullframe= is installed (see below), use it to make =magit-status= take over
+the entire frame:
+
+#+begin_src emacs-lisp
+  (after-load 'fullframe
+    (fullframe magit-status magit-mode-quit-window nil))
+#+end_src
+
+
 **** Load Magit
 
 Finally we can install Magit:
