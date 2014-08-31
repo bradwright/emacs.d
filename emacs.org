@@ -714,6 +714,79 @@ Define a keybinding to get an =eshell= buffer anywhere:
   (global-set-key (kbd "C-c C-t e") 'eshell)
 #+end_src
 
+** Third-party packages
+
+Emacs has a built-in [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Packaging.html#Packaging][package manager]].
+
+Rather than using Git submodules or similar my Emacs configuration is set up to
+automatically download and install any required packages at load time. This
+makes my configuration fully portable.
+
+First set up convenience function (borrowed from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612c4fea6e638d81d8ebbfecdf8/init-elpa.el#L63-L73][Steve Purcell's emacs config]])
+that installs a package if it's not already installed:
+
+#+begin_src emacs-lisp
+  (defun require-package (package &optional min-version no-refresh)
+    "Install given PACKAGE, optionally requiring MIN-VERSION.
+  If NO-REFRESH is non-nil, the available package lists will not be
+  re-downloaded in order to locate PACKAGE."
+    (if (package-installed-p package min-version)
+        t
+      (if (or (assoc package package-archive-contents) no-refresh)
+          (package-install package)
+        (progn
+          (package-refresh-contents)
+          (require-package package min-version t)))))
+#+end_src
+
+*** Configure package manager
+
+**** Custom package install location
+
+The default value for =package-user-dir= is =~/.emacs.d/elpa= - since these are
+third-party packages that are dynamically installed I'd prefer them to be in a
+[[http://en.wikipedia.org/wiki/Dot-file][hidden directory]].
+
+Packages are also [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation][byte compiled]] upon installation, so namespace the install
+directory to the version of Emacs I'm using.
+
+Final result should be something like =~/.emacs.d/.elpa/24.3.93.1/=.
+
+#+begin_src emacs-lisp
+  (after-load 'package
+    (setq package-user-dir
+          (bw/join-dirs (bw/join-dirs bw/dotfiles-dir ".elpa") emacs-version)))
+#+end_src
+
+**** Customise package repositories to install from
+
+By default Emacs only installs files from [[http://www.gnu.org/software/emacs/manual/html_node/efaq/Packages-that-do-not-come-with-Emacs.html#Packages-that-do-not-come-with-Emacs][ELPA]]. Some of these packages are old
+or out of date, and they don't track GitHub repositories.
+
+I want to also add:
+
+- [[https://github.com/milkypostman/melpa#melpa][MELPA]] (tracks GitHub repositories, is much more comprehensive)
+- [[https://github.com/milkypostman/melpa#stable-packages][MELPA stable]] (like MELPA, but pinned to specific versions)
+- [[https://github.com/jorgenschaefer/elpy#quick-installation][Elpy]] (allows me to install the Elpy Python development environment)
+
+#+begin_src emacs-lisp
+  (after-load 'package
+    (setq package-archives
+          '(("gnu"          . "http://elpa.gnu.org/packages/")
+            ("melpa"        . "http://melpa.milkbox.net/packages/")
+            ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+            ("elpy"         . "http://jorgenschaefer.github.io/packages/"))))
+#+end_src
+
+**** Initialise package manager
+
+Finally we initialise the package manager:
+
+#+begin_src emacs-lisp
+  (package-initialize)
+#+end_src
+
+
 ** Local and custom configuration
 
 *** Local overrides
