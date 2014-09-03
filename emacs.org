@@ -949,6 +949,45 @@ Finally we can install Magit:
   (ido-ubiquitous-mode 1)
 #+end_src
 
+*** ido-vertical
+
+[[https://github.com/gempesaw/ido-vertical-mode.el][ido-vertical]] mode renders the ido prompt vertically instead of horizontally. I
+find this easier to read.
+
+#+begin_src emacs-lisp
+  (require-package 'ido-vertical-mode)
+  (ido-vertical-mode) ;; autoloaded
+#+end_src
+
+Because it's displayed vertically and I want to save screen real estate, I want
+to reduce the maximum number of candidates ido displays:
+
+#+begin_src emacs-lisp
+  (setq ido-max-prospects 5)
+#+end_src
+
+*** flx-ido
+
+[[https://github.com/lewang/flx][flx-ido]] is an advanced flex-matching algorithm that's significantly faster and
+more accurate than the built-in method.
+
+#+begin_src emacs-lisp
+  (require-package 'flx-ido)
+#+end_src
+
+The =flx-ido= documentation suggests upping the threshold at which GC occurs
+within Emacs so that =flx= can cache its candidate lists for longer:
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold 20000000)
+#+end_src
+
+Finally we cause =flx-ido-mode= to take over ido:
+
+#+begin_src emacs-lisp
+  (flx-ido-mode 1)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
