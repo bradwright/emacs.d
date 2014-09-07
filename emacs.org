@@ -1018,6 +1018,58 @@ Load [[popwin]] and configure keyboard shortcuts:
     (global-set-key (kbd "s-P") 'popwin:popup-last-buffer))
 #+end_src
 
+*** projectile
+
+[[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
+grouping of files.
+
+#+begin_src emacs-lisp
+  (require-package 'projectile)
+  (projectile-global-mode)
+#+end_src
+
+I want my keyboard shortcuts to be the same in Projectile as in non-Projectile
+buffers, so do some remapping:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (define-key projectile-mode-map [remap magit-find-file-completing-read] 'projectile-find-file)
+    (define-key projectile-mode-map [remap ag-project] 'projectile-ag))
+#+end_src
+
+Since I use =ag=, always use that instead of =grep=:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag))
+#+end_src
+
+Also define a convenience keyboard shortcut to switch between buffers from the same project:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
+    (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window))
+#+end_src
+
+Provide some advice to =projectile-current-project-files= so it uses the
+=magit-find-file= library when we're in a Git repository - using Magit's process
+manager is significantly faster than Projectile's own Git interaction, which
+creates a new shell process each time:
+
+#+begin_src emacs-lisp
+  (after-load 'magit-find-file
+    (defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
+    "If magit-find-file-completing-read is available use that to
+  call the files instead of Projectile's native caller - this is
+  much much faster"
+    (autoload 'magit-find-file-files "magit-find-file")
+    (if (magit-get-top-dir)
+        (let ((default-directory (projectile-project-root)))
+          (setq ad-return-value (magit-find-file-files)))
+      ad-do-it)))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
