@@ -372,7 +372,8 @@ call the files instead of Projectile's native caller - this is
 much much faster"
   (autoload 'magit-find-file-files "magit-find-file")
   (if (magit-get-top-dir)
-      (setq ad-return-value (magit-find-file-files (projectile-project-root)))
+      (let ((default-directory (projectile-project-root)))
+        (setq ad-return-value (magit-find-file-files)))
     ad-do-it))
 
 (setq projectile-mode-line-lighter "P")
