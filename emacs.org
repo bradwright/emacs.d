@@ -1082,20 +1082,23 @@ Also define a convenience keyboard shortcut to switch between buffers from the s
 Provide some advice to =projectile-current-project-files= so it uses the
 =magit-find-file= library when we're in a Git repository - using Magit's process
 manager is significantly faster than Projectile's own Git interaction, which
-creates a new shell process each time:
+creates a new shell process each time. Since =magit-find-file= might be loaded
+at any time, just make sure this advice runs after everything has finished:
 
 #+begin_src emacs-lisp
-  (after-load 'magit-find-file
-    (defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
-      "If magit-find-file-completing-read is available use that to
+  (add-hook 'after-init-hook
+            (lambda ()
+              (when (fboundp 'magit-find-file-completing-read)
+                (defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
+                  "If magit-find-file-completing-read is available use that to
   call the files instead of Projectile's native caller - this is
   much much faster"
-      (autoload 'magit-find-file-files "magit-find-file")
-      (autoload 'magit-get-top-dir "magit")
-      (if (magit-get-top-dir)
-          (let ((default-directory (projectile-project-root)))
-            (setq ad-return-value (magit-find-file-files)))
-        ad-do-it)))
+                  (autoload 'magit-find-file-files "magit-find-file")
+                  (autoload 'magit-get-top-dir "magit")
+                  (if (magit-get-top-dir)
+                      (let ((default-directory (projectile-project-root)))
+                        (setq ad-return-value (magit-find-file-files)))
+                    ad-do-it)))))
 #+end_src
 
 *** solarized theme
@@ -1119,6 +1122,25 @@ modeline to be high contrast (reversed out):
     (setq solarized-high-contrast-mode-line t)
     (load-theme 'solarized-dark t))
 #+end_src
+
+*** magit-find-file
+
+[[https://github.com/bradleywright/magit-find-file.el][magit-find-file]] is a package that uses Magit's process buffers to emulate
+SublimeText's =Command+p= functionality within Git repositories.
+
+#+begin_src emacs-lisp
+  (require-package 'magit-find-file)
+#+end_src
+
+Set up keybindings for it, particularly the SublimeText equivalent:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c t") 'magit-find-file-completing-read)
+  (global-set-key (kbd "M-p") 'magit-find-file-completing-read)
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
+#+end_src
+
 
 ** Local and custom configuration
 
