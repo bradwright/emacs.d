@@ -542,7 +542,7 @@ me:
         (save-buffers-kill-terminal))))
 #+end_src
 
-Enable this:
+Enable this, and override the default command Emacs assigns to kill itself:
 
 #+begin_src emacs-lisp
   (define-key (current-global-map) [remap save-buffers-kill-terminal] 'bw/kill-emacs)
