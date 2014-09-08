@@ -834,6 +834,30 @@ Finally we initialise the package manager:
   (package-initialize)
 #+end_src
 
+*** paradox
+
+[[https://github.com/Bruce-Connor/paradox][paradox]] is an advanced package.el frontend with GitHub integration.
+
+#+begin_src emacs-lisp
+  (require-package 'paradox)
+#+end_src
+
+Force =paradox= into a [[fullframe]]:
+
+#+begin_src emacs-lisp
+  (after-load 'fullframe
+    (fullframe paradox-list-packages paradox-quit-and-close nil))
+#+end_src
+
+Automatically 'star' packages on GitHub after I install them (so I can easily
+follow changes to them):
+
+#+begin_src emacs-lisp
+  (setq paradox-automatically-star t)
+  (setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
+#+end_src
+
+
 *** exec-path-from-shell
 
 OS X doesn't use the environment variables available in a shell in a GUI
