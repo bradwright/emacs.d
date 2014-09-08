@@ -1071,6 +1071,28 @@ creates a new shell process each time:
         ad-do-it)))
 #+end_src
 
+*** solarized theme
+
+I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. Specifically, I use the
+[[https://github.com/bbatsov/solarized-emacs]] variant as it has the best support
+for the major modes I use, and is the most up to date. Previously I used
+[[https://github.com/sellout/emacs-color-theme-solarized][sellout's variant]] as it has much better terminal support, but it hasn't been
+updated seriously in years and it fell behind for modern modes.
+
+#+begin_src emacs-lisp
+  (require-package 'solarized-theme)
+#+end_src
+
+Since it doesn't work well with my terminal theme (also Solarized Dark), I only
+want to enable it on graphical displays. I also want to make sure I set the
+modeline to be high contrast (reversed out):
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq solarized-high-contrast-mode-line t)
+    (load-theme 'solarized-dark t))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
