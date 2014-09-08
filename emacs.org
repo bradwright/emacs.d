@@ -1060,14 +1060,15 @@ creates a new shell process each time:
 #+begin_src emacs-lisp
   (after-load 'magit-find-file
     (defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
-    "If magit-find-file-completing-read is available use that to
+      "If magit-find-file-completing-read is available use that to
   call the files instead of Projectile's native caller - this is
   much much faster"
-    (autoload 'magit-find-file-files "magit-find-file")
-    (if (magit-get-top-dir)
-        (let ((default-directory (projectile-project-root)))
-          (setq ad-return-value (magit-find-file-files)))
-      ad-do-it)))
+      (autoload 'magit-find-file-files "magit-find-file")
+      (autoload 'magit-get-top-dir "magit")
+      (if (magit-get-top-dir)
+          (let ((default-directory (projectile-project-root)))
+            (setq ad-return-value (magit-find-file-files)))
+        ad-do-it)))
 #+end_src
 
 ** Local and custom configuration
