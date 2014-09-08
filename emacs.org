@@ -500,6 +500,54 @@ If you're not using Emacs 24.4 this variable setting will have no effect. See
 [[https://github.com/Homebrew/homebrew/blob/7446162e59fe548a0fde735d25b9913f8fa2ad4a/Library/Formula/emacs.rb#L10][Homebrew's Emacs recipe]] for details of how to get this behaviour in earlier
 Emacs versions.
 
+** Utility functions
+
+*** Get keychain password
+
+If I'm on OS X, I can fetch passwords etc. from my Keychain. This is much more
+secure than storing them in configuration on disk:
+
+#+begin_src emacs-lisp
+  (defun bw/chomp (str)
+    "Chomp leading and tailing whitespace from STR."
+    (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'" str)
+      (setq str (replace-match "" t t str))) str)
+
+  (defun bw/get-keychain-password (account-name)
+    "Get ACCOUNT-NAME keychain password from OS X Keychain"
+    (interactive "sAccount name: ")
+    (bw/chomp
+     (shell-command-to-string
+      (concat
+       "security find-generic-password -wa "
+       account-name))))
+#+end_src
+
+*** Conditionally kill Emacs
+
+When I'm in an emacsclient, I probably just want the client to die rather than
+the entire server. And, when I kill my server, I want Emacs to confirm this with
+me:
+
+#+begin_src emacs-lisp
+  (defun bw/kill-emacs ()
+    "If this buffer is a client, just kill it, otherwise confirm
+  the quit."
+    (interactive)
+    (if server-buffer-clients
+        (server-edit)
+      (if (= (length (frame-list)) 1)
+          (cond ((y-or-n-p "Quit Emacs? ")
+                 (save-buffers-kill-terminal)))
+        (save-buffers-kill-terminal))))
+#+end_src
+
+Enable this:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap save-buffers-kill-terminal] 'bw/kill-emacs)
+#+end_src
+
 ** Other modes
 
 Emacs comes with hundreds of major and minor modes to do many many things. These
