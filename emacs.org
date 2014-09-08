@@ -565,9 +565,9 @@ macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612
        '(progn ,@body)))
 #+end_src
 
-*** ido-mode
+*** ido
 
-[[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido-mode]] is a mode for narrowing candidates as you type. It has excellent
+[[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido]] is a mode for narrowing candidates as you type. It has excellent
 integration with buffer switching and finding files. [[http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/][Mastering Emacs has a good
 guide to Ido]].
 
