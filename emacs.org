@@ -806,6 +806,33 @@ I only want this to be installed and enabled on OS X.
     (exec-path-from-shell-initialize))
 #+end_src
 
+*** smex
+
+[[https://github.com/nonsequitur/smex][smex]] is an advanced completion mode for =execute-extended-command= (usually
+known as =M-x=).
+
+#+begin_src emacs-lisp
+  (require-package 'smex)
+#+end_src
+
+Replace =execute-extended-command='s keyboard shortcuts:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap execute-extended-command] 'smex)
+#+end_src
+
+Make sure we stop the annoying "click this menubar" advice in the buffer:
+
+#+begin_src emacs-lisp
+  (setq-default smex-key-advice-ignore-menu-bar t)
+#+end_src
+
+Move =smex='s cache file out of the home directory:
+
+#+begin_src emacs-lisp
+  (setq smex-save-file (expand-file-name ".smex-items" bw/tmp-local-dir))
+#+end_src
+
 *** fullframe
 
 [[https://github.com/tomterl/fullframe][fullframe]] is a minor mode which allows certain buffers to take over the full
