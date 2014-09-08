@@ -371,6 +371,7 @@
 call the files instead of Projectile's native caller - this is
 much much faster"
   (autoload 'magit-find-file-files "magit-find-file")
+  (autoload 'magit-get-top-dir "magit")
   (if (magit-get-top-dir)
       (let ((default-directory (projectile-project-root)))
         (setq ad-return-value (magit-find-file-files)))
