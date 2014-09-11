@@ -1117,6 +1117,32 @@ Load [[popwin]] and configure keyboard shortcuts:
     (global-set-key (kbd "s-P") 'popwin:popup-last-buffer))
 #+end_src
 
+*** ag
+
+[[https://github.com/Wilfred/ag.el][ag]] is an Emacs frontend to [[https://github.com/ggreer/the_silver_searcher][the ag command]], a grep-like code-searching tool. It's
+installed via Homebrew on my Mac.
+
+#+begin_src emacs-lisp
+  (require-package 'ag)
+#+end_src
+
+Set up some key bindings:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c f") 'ag-project)
+  (global-set-key (kbd "C-c a") 'ag)
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "s-F") 'ag-project)
+    (global-set-key (kbd "s-A") 'ag))
+#+end_src
+
+Make sure that we re-use the =ag= buffers - without this my buffer list is full
+of buffers named after the project root.
+
+#+begin_src emacs-lisp
+  (setq ag-reuse-buffers t)
+#+end_src
+
 *** projectile
 
 [[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
