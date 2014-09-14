@@ -1239,6 +1239,136 @@ Set up keybindings for it, particularly the SublimeText equivalent:
     (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
 #+end_src
 
+*** evil
+
+[[http://www.emacswiki.org/emacs/Evil][evil]] is a very full-featured Vim emulator for Emacs.
+
+#+begin_src emacs-lisp
+  (require-package 'evil)
+#+end_src
+
+**** evil-leader
+
+[[https://github.com/cofi/evil-leader][evil-leader]] is a way of using Vim's [[http://learnvimscriptthehardway.stevelosh.com/chapters/06.html][leader key]] concept in Emacs. Since Emacs
+already supports nested key bindings, this is really just for convenience.
+
+Install =evil-leader=, and enable it globally:
+
+#+begin_src emacs-lisp
+  (require-package 'evil-leader)
+  (global-evil-leader-mode 1)
+#+end_src
+
+and set it to =,= (the default is =\=):
+
+#+begin_src emacs-lisp
+  (evil-leader/set-leader ",")
+#+end_src
+
+Now set up all the =evil-leader= powered shortcuts I want:
+
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "a" 'ag-project
+    "A" 'ag
+    "b" 'ido-switch-buffer
+    "B" 'ido-switch-buffer-other-window
+    "c" 'mc/mark-next-like-this
+    "C" 'mc/mark-all-like-this
+    "d" 'dired-jump
+    "e" 'er/expand-region
+    "E" 'mc/edit-lines
+    "f" 'ido-find-file
+    "g" 'magit-status
+    "G" 'magit-blame-mode
+    "i" 'idomenu
+    "j" 'ace-jump-mode
+    "J" 'ace-jump-word-mode
+    "k" 'kill-this-buffer
+    "K" 'kill-buffer
+    "l" 'linum-mode
+    "o" 'occur
+    "O" 'browse-url
+    "p" 'magit-find-file-completing-read
+    "P" 'popwin:popup-last-buffer
+    "r" 'bw/recentf-ido-find-file
+    "R" 'bookmark-jump
+    "s" 'ag-project
+    "t" 'bw/open-term
+    "T" 'eshell
+    "w" 'save-buffer
+    "x" 'smex
+    "y" 'bury-buffer)
+#+end_src
+
+**** basic evil configuration
+
+Set up some defaults for [[evil]].
+
+Firstly, stop Evil from making the cursor color invisible sometimes:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-default-cursor t))
+#+end_src
+
+Make sure that sideways motion keys (=h=, =l= etc.) wrap around to the next/previous lines:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-cross-lines t))
+#+end_src
+
+When starting Evil, start in =normal= mode:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-default-state 'normal))
+#+end_src
+
+Include the first and last character when moving to the start or end of lines:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-want-visual-char-semi-exclusive t))
+#+end_src
+
+When exiting =insert= mode, don't move the cursor:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-move-cursor-back nil))
+#+end_src
+
+Use =ido-find-file= when using the =:e= ex-command - but only after typing a
+space (=e= by itself will still reload):
+
+#+begin_src emacs-lisp
+  (define-key evil-ex-map "e " 'ido-find-file)
+#+end_src
+
+**** fix annoying defaults
+
+Evil has some annoying defaults that I don't want to unlearn.
+
+=C-e= is normally =evil-copy-from-below= in =insert= mode - I'd rather it was
+=end-of-line=:
+
+#+begin_src emacs-lisp
+  (define-key evil-insert-state-map "\C-e" 'end-of-line)
+#+end_src
+
+=C-g= is the default 'exit everything' key in Emacs - make it do the same thing
+in Evil (these mappings have been manually copied from [[https://bitbucket.org/lyro/evil/src/4533c35daca4fda72dfaaa40711ad9174b752964/evil-maps.el?at=default][evil-maps.el]]):
+
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map "\C-g" 'evil-force-normal-state)
+  (define-key evil-visual-state-map "\C-g" 'evil-exit-visual-state)
+  (define-key evil-insert-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-replace-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-ex-completion-map "\C-g" 'abort-recursive-edit)
+#+end_src
+
 
 ** Local and custom configuration
 
