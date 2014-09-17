@@ -762,6 +762,74 @@ Define a keybinding to get an =eshell= buffer anywhere:
   (global-set-key (kbd "C-c C-t e") 'eshell)
 #+end_src
 
+*** recentf
+
+[[http://www.emacswiki.org/emacs/RecentFiles][recentf]] stores a list of recently opened files.
+
+Never clean up the list:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-auto-cleanup 'never))
+#+end_src
+
+The list of files contains any files Emacs has read, not just files I've
+explicitly opened. Clean that list to exclude Emacs metafiles, package cruft
+etc.
+
+TODO: refactor to use =recentf-keep=: [[http://www.emacswiki.org/emacs/RecentFiles#toc18]]
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.ido\\.last\\'" "[/\\]\\.git/" ".*\\.gz\\'" ".*-autoloads\\.el\\'" "[/\\]archive-contents\\'" "[/\\]\\.loaddefs\\.el\\'" "url/cookies" ".*\\emacs.bmk\\'")))
+#+end_src
+
+Save the most recent 100 items (this is manily to keep the list low for [[ido]]):
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-max-saved-items 100))
+#+end_src
+
+Customise the place =recentf= persists its list of items:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-save-file (expand-file-name ".recentf" bw/tmp-local-dir)))
+#+end_src
+
+Strip =$HOME= from the front of =recentf= candidate files:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (add-to-list 'recentf-filename-handlers 'abbreviate-file-name))
+#+end_src
+
+I want easy access to my recent files, so define a function that lets me use [[ido]]
+to search over them. Bind this to =C-x C-r= (=C-c C-r= is used in modes like
+=org=mode):
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (after-load 'ido
+      (defun bw/recentf-ido-find-file ()
+        "Find a recent file using ido."
+        (interactive)
+        (let ((file (ido-completing-read "Recently: " recentf-list nil t)))
+          (when file
+            (find-file file))))
+
+      (global-set-key (kbd "C-x C-r") 'bw/recentf-ido-find-file)))
+#+end_src
+
+Now enable =recentf=:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (recentf-mode 1))
+  (require 'recentf)
+#+end_src
+
 ** Third-party packages
 
 Emacs has a built-in [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Packaging.html#Packaging][package manager]].
