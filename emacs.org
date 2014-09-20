@@ -1469,6 +1469,13 @@ space (=e= by itself will still reload):
   (define-key evil-ex-map "e " 'ido-find-file)
 #+end_src
 
+[[diminish]] =abbrev-mode=, which is bundled with evil:
+
+#+begin_src emacs-lisp
+  (after-load 'diminish
+    (diminish 'abbrev-mode))
+#+end_src
+
 Finally, invoke =evil-mode= using my launcher:
 
 #+begin_src emacs-lisp
