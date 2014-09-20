@@ -1248,6 +1248,8 @@ Set up some key bindings:
   (when (eq system-type 'darwin)
     (global-set-key (kbd "s-F") 'ag-project)
     (global-set-key (kbd "s-A") 'ag))
+  (bw/add-launcher "a" 'ag-project)
+  (bw/add-launcher "A" 'ag)
 #+end_src
 
 Make sure that we re-use the =ag= buffers - without this my buffer list is full
