@@ -284,6 +284,25 @@ disk):
   (global-set-key (kbd "C-c r") 'revert-buffer)
 #+end_src
 
+*** Launcher keymap
+
+This trick I got from [[http://endlessparentheses.com/launcher-keymap-for-standalone-features.html][a blog post on launcher keymaps]]. I define my launcher
+combo as =C-x C-l=, which is normally =downcase-region= - a command I use so
+infrequently I didn't even know there was a key binding for it.
+
+#+begin_src emacs-lisp
+  (define-prefix-command 'bw/launcher-map)
+  (define-key ctl-x-map (kbd "C-l") 'bw/launcher-map)
+#+end_src
+
+rather than remembering that it's =bw/launcher-map=, just make a function:
+
+#+begin_src emacs-lisp
+  (defun bw/add-launcher (key function)
+    "Maps FUNCTION to KEY under the `bw/launcher-map' prefix"
+    (define-key bw/launcher-map key function))
+#+end_src
+
 ** Interface
 
 *** Remove chrome
