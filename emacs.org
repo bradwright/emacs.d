@@ -944,6 +944,11 @@ follow changes to them):
   (setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
 #+end_src
 
+Add launch command:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "p" 'paradox-list-packages)
+#+end_src
 
 *** exec-path-from-shell
 
