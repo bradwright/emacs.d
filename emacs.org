@@ -1476,6 +1476,14 @@ space (=e= by itself will still reload):
     (diminish 'abbrev-mode))
 #+end_src
 
+Also diminish [[http://www.dr-qubit.org/undo-tree/undo-tree.el][undo-tree-mode]], a mode which allows one to visualise their
+undo/redo history. This mode is bundled with evil:
+
+#+begin_src emacs-lisp
+  (after-load 'undo-tree
+    (diminish 'undo-tree-mode))
+#+end_src
+
 Finally, invoke =evil-mode= using my launcher:
 
 #+begin_src emacs-lisp
@@ -1504,6 +1512,54 @@ in Evil (these mappings have been manually copied from [[https://bitbucket.org/l
   (define-key evil-ex-completion-map "\C-g" 'abort-recursive-edit)
 #+end_src
 
+On OS X, evil copies every single visual state move to the kill ring, which in
+turns copies it to my system clipboard. I don't want that to happen.
+
+This has been [[https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on][filed as a bug against evil]], and most of the code has come from
+[[http://stackoverflow.com/questions/15873346/elisp-rename-macro][this StackOverflow question]]:
+
+#+begin_src emacs-lisp
+  (defadvice evil-visual-update-x-selection (around clobber-x-select-text activate)
+    (unless (featurep 'ns)
+      ad-do-it))
+#+end_src
+
+**** Fix evil integration with indirect regions
+
+This allows me to perform a motion command that narrows the range to a new
+buffer as an [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indirect-Buffers.html][indirect buffer]] ([[http://demonastery.org/2013/04/emacs-narrow-to-region-indirect/][good explanation of how they might be used]]).
+
+This code has been copied from
+[[http://demonastery.org/2013/04/emacs-evil-narrow-region/]].
+
+#+begin_src emacs-lisp
+  (evil-define-operator evil-narrow-indirect (beg end type)
+    "Indirectly narrow the region from BEG to END."
+    (interactive "<R>")
+    (evil-normal-state)
+    (narrow-to-region-indirect beg end))
+  (define-key evil-normal-state-map "m" 'evil-narrow-indirect)
+  (define-key evil-visual-state-map "m" 'evil-narrow-indirect)
+#+end_src
+
+**** Default mode state for evil
+
+evil supports a default starting state for different major modes. I often want
+evil to start in =emacs-mode=, for example:
+
+#+begin_src emacs-lisp
+  (dolist (mode-map '((ag-mode . emacs)
+                      (cider-repl-mode . emacs)
+                      (comint-mode . emacs)
+                      (eshell-mode . emacs)
+                      (fundamental-mode . emacs)
+                      (git-commit-mode . insert)
+                      (git-rebase-mode . emacs)
+                      (help-mode . emacs)
+                      (paradox-menu-mode . emacs)
+                      (term-mode . emacs)))
+    (evil-set-initial-state `,(car mode-map) `,(cdr mode-map)))
+#+end_src
 
 ** Local and custom configuration
 
