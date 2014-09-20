@@ -1393,6 +1393,15 @@ Now set up all the =evil-leader= powered shortcuts I want:
     "y" 'bury-buffer)
 #+end_src
 
+Now we automatically copy across everything from =bw/launcher-map= to ensure I
+easily retain muscle memory:
+
+#+begin_src emacs-lisp
+  (dolist (entry (cdr bw/launcher-map))
+    (evil-leader/set-key
+      (key-description (vector (car entry))) (cdr entry)))
+#+end_src
+
 **** basic evil configuration
 
 Set up some defaults for [[evil]].
