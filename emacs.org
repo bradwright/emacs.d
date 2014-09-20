@@ -1434,6 +1434,12 @@ space (=e= by itself will still reload):
   (define-key evil-ex-map "e " 'ido-find-file)
 #+end_src
 
+Finally, invoke =evil-mode= using my launcher:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "e" 'evil-mode)
+#+end_src
+
 **** fix annoying defaults
 
 Evil has some annoying defaults that I don't want to unlearn.
