@@ -1385,17 +1385,13 @@ Now set up all the =evil-leader= powered shortcuts I want:
 
 #+begin_src emacs-lisp
   (evil-leader/set-key
-    "a" 'ag-project
-    "A" 'ag
     "b" 'ido-switch-buffer
     "B" 'ido-switch-buffer-other-window
     "c" 'mc/mark-next-like-this
     "C" 'mc/mark-all-like-this
     "d" 'dired-jump
-    "e" 'er/expand-region
     "E" 'mc/edit-lines
     "f" 'ido-find-file
-    "g" 'magit-status
     "G" 'magit-blame-mode
     "i" 'idomenu
     "j" 'ace-jump-mode
