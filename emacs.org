@@ -1572,6 +1572,92 @@ evil to start in =emacs-mode=, for example:
   (show-smartparens-global-mode 1)
 #+end_src
 
+*** company
+
+[[https://github.com/company-mode/company-mode][company-mode]] is a modern and modular completion framework (the other one Emacs
+people use is [[http://www.emacswiki.org/emacs/AutoComplete][autocomplete]]. I chose =company= because it's well-maintained and
+has better code for integrating with).
+
+**** configuration
+
+I don't want =company= to auto-start - it should only pop when I ask for it:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-idle-delay nil))
+#+end_src
+
+I want it to attempt a completion immediately after a =.= character - without
+this I need a few characters before it'll show candidates:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-minimum-prefix-length 0))
+#+end_src
+
+Show candidates immediately rather than waiting:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-echo-delay 0))
+#+end_src
+
+Make the lighter shorter:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (after-load 'diminish
+      (diminish 'company-mode "com")))
+#+end_src
+
+**** enable company mode in programming buffers only
+
+Define a function to enable company-mode and overwrite [[hippie]]'s key binding for
+the local buffer only (this means I can use the same key binding for completion
+no matter which minor mode I'm using):
+
+#+begin_src emacs-lisp
+  (defun bw/enable-company-mode ()
+    "Enables company-mode and overloads hippie-expand's binding"
+    (company-mode 1)
+    (define-key (current-local-map) [remap dabbrev-expand] 'company-complete))
+#+end_src
+
+Add this function to any modes derived from =prog-mode=:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (add-hook 'prog-mode-hook 'bw/enable-company-mode))
+#+end_src
+
+**** evil integration
+
+If I'm using [[evil]], I'll need to create a new function which acts like a lambda
+(and ignores arguments):
+
+#+begin_src emacs-lisp
+  (defun bw/company-complete-lambda (arg)
+    "Ignores passed in arg like a lambda and runs company-complete"
+    (company-complete))
+#+end_src
+
+And then bind that to the functions evil uses to complete:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq
+     evil-complete-next-func 'bw/company-complete-lambda
+     evil-complete-previous-func 'bw/company-complete-lambda))
+#+end_src
+
+**** Install and load company
+
+#+begin_src emacs-lisp
+  (require-package 'company)
+  (require 'company)
+#+end_src
+
+
 *** flycheck
 
 [[https://github.com/flycheck/flycheck][flycheck]] is a modern, more easily customisable version of [[http://www.emacswiki.org/emacs/FlyMake][flymake]]. It's used to
