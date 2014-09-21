@@ -1586,6 +1586,78 @@ perform on-the-fly syntax checking and linting.
   (require 'flycheck)
 #+end_src
 
+*** go
+
+[[http://golang.org][Go]] is an open source language created by Google.
+
+**** go-mode
+
+[[https://github.com/dominikh/go-mode.el][go-mode]] is a major mode for editing =.go= files. It has excellent integration
+with the Go compiler and toolchain/
+
+#+begin_src emacs-lisp
+  (require-package 'go-mode)
+#+end_src
+
+Make sure we run [[http://golang.org/cmd/gofmt/][gofmt]] before saving any Go files:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (add-hook 'before-save-hook 'gofmt-before-save))
+#+end_src
+
+**** flycheck integration
+
+[[flycheck]] has excellent [[http://flycheck.readthedocs.org/en/latest/guide/languages.html#go][golang]] integration, so enable it:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (after-load 'flycheck
+      (add-hook 'go-mode-hook 'flycheck-mode-on-safe)))
+#+end_src
+
+**** eldoc integration
+
+Because Go is a compiled language, we can inspect functions statically and
+[[https://github.com/syohex/emacs-go-eldoc][provide documentation in the editor]] using [[eldoc]]:
+
+#+begin_src emacs-lisp
+  (require-package 'go-eldoc)
+  (after-load 'go-mode
+    (add-hook 'go-mode-hook 'go-eldoc-setup))
+#+end_src
+
+**** company integration
+
+Because of libraries like [[https://github.com/nsf/gocode][gocode]], Go has very good completion. I use [[company]] for
+completion, so let's integrate with that. *Note* this requires =gocode= to be
+installed on the system before it'll work.
+
+First I define a hook lambda that deletes all other company backends - gocode is so accurate
+that I don't need any other suggestions:
+
+#+begin_src emacs-lisp
+  (defun bw/setup-company-go ()
+    "Hook for running on company-go"
+    (set (make-local-variable 'company-backends) '(company-go)))
+#+end_src
+
+Now add the hook:
+
+#+begin_src emacs-lisp
+  (after-load 'company-go
+    (add-hook 'go-mode-hook 'bw/setup-company-go))
+#+end_src
+
+and install and load =company-go=:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (after-load 'company
+      (require-package 'company-go)
+      (require 'company-go)))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
