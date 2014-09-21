@@ -1568,10 +1568,8 @@ evil to start in =emacs-mode=, for example:
 
 #+begin_src emacs-lisp
   (require-package 'smartparens)
-  (after-load 'smartparens
-    (require 'smartparens-config)
-    (show-smartparens-global-mode 1))
-  (require 'smartparens)
+  (require 'smartparens-config)
+  (show-smartparens-global-mode 1)
 #+end_src
 
 *** flycheck
