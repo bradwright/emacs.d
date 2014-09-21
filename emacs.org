@@ -674,7 +674,7 @@ with =subword-mode= enabled by default:
     (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
 #+end_src
 
-*** Hippie expand
+*** hippie
 
 [[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
 [[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine. The main feature I use over =dabbrev= is that it supports a wide
