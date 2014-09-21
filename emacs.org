@@ -473,6 +473,19 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
   (setq uniquify-buffer-name-style 'forward)
 #+end_src
 
+*** Themes
+
+On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
+[[zenburn-theme]]:
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook (lambda ()
+                               (if (window-system)
+                                   (load-theme 'solarized-dark t)
+                                 (load-theme 'zenburn t))))
+#+end_src
+
+
 ** OS X specific configuration
 
 Besides the keyboard configuration above, there are some other specific things I
@@ -1352,7 +1365,7 @@ at any time, just make sure this advice runs after everything has finished:
                     ad-do-it)))))
 #+end_src
 
-*** solarized theme
+*** solarized-theme
 
 I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. Specifically, I use the
 [[https://github.com/bbatsov/solarized-emacs]] variant as it has the best support
@@ -1365,13 +1378,21 @@ updated seriously in years and it fell behind for modern modes.
 #+end_src
 
 Since it doesn't work well with my terminal theme (also Solarized Dark), I only
-want to enable it on graphical displays. I also want to make sure I set the
+want to enable it on graphical displays (see [[Themes]]). I also want to make sure I set the
 modeline to be high contrast (reversed out):
 
 #+begin_src emacs-lisp
-  (when (display-graphic-p)
-    (setq solarized-high-contrast-mode-line t)
-    (load-theme 'solarized-dark t))
+  (after-load 'solarized-theme
+    (setq solarized-high-contrast-mode-line t))
+#+end_src
+
+*** zenburn-theme
+
+I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY Emacs as it has excellent terminal colouring
+(see [[Themes]]):
+
+#+begin_src emacs-lisp
+  (require-package 'zenburn-theme)
 #+end_src
 
 *** magit-find-file
