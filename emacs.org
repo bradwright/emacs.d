@@ -1560,6 +1560,20 @@ evil to start in =emacs-mode=, for example:
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map)))
 #+end_src
 
+*** smartparens
+
+[[https://github.com/Fuco1/smartparens][smartparens]] is a [[paredit]] like minor-mode for many more things than just Lisp.
+
+=show-smartparens-mode= is a replacement mode for =show-paren-mode=.
+
+#+begin_src emacs-lisp
+  (require-package 'smartparens)
+  (after-load 'smartparens
+    (require 'smartparens-config)
+    (show-smartparens-global-mode 1))
+  (require 'smartparens)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
