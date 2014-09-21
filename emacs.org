@@ -1574,6 +1574,20 @@ evil to start in =emacs-mode=, for example:
   (require 'smartparens)
 #+end_src
 
+*** flycheck
+
+[[https://github.com/flycheck/flycheck][flycheck]] is a modern, more easily customisable version of [[http://www.emacswiki.org/emacs/FlyMake][flymake]]. It's used to
+perform on-the-fly syntax checking and linting.
+
+#+begin_src emacs-lisp
+  (require-package 'flycheck)
+  (after-load 'flycheck
+    (setq
+     ;; don't show anything in the left fringe
+     flycheck-indication-mode nil))
+  (require 'flycheck)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
