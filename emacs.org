@@ -198,6 +198,16 @@ extra presses toggling the position:
 This functionality uses the Emacs concept of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html][advice]], which is a way of modifying
 existing functions in-place without redefining the entire thing.
 
+*** Fix minibuffer behaviour
+
+When changing focus to the minibuffer, stop allowing point to move over the
+prompt. Code taken from [[http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html][ergoemacs]].
+
+#+begin_src emacs-lisp
+  (setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'minibuffer-avoid-prompt))
+  (setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'point-entered))
+#+end_src
+
 ** Keyboard
 
 *** Modifier keys
