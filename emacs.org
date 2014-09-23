@@ -17,7 +17,7 @@ passed in directory to =load-path=:
 
 #+BEGIN_SRC emacs-lisp
   (defun bw/add-to-load-path (dir)
-    "Adds `dir` to load-path"
+    "Adds `dir' to load-path"
     (add-to-list 'load-path dir))
 #+END_SRC
 
@@ -25,7 +25,7 @@ and a convenience function for making a proper path out of two strings:
 
 #+begin_src emacs-lisp
   (defun bw/join-dirs (prefix suffix)
-    "Joins `prefix` and `suffix` into a directory"
+    "Joins `prefix' and `suffix' into a directory"
     (file-name-as-directory (concat prefix suffix)))
 #+end_src
 
@@ -541,12 +541,12 @@ secure than storing them in configuration on disk:
 
 #+begin_src emacs-lisp
   (defun bw/chomp (str)
-    "Chomp leading and tailing whitespace from STR."
+    "Chomp leading and tailing whitespace from `str'."
     (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'" str)
       (setq str (replace-match "" t t str))) str)
 
   (defun bw/get-keychain-password (account-name)
-    "Get ACCOUNT-NAME keychain password from OS X Keychain"
+    "Get `account-name' keychain password from OS X Keychain"
     (interactive "sAccount name: ")
     (bw/chomp
      (shell-command-to-string
