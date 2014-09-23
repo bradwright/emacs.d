@@ -495,7 +495,6 @@ On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
                                  (load-theme 'zenburn t))))
 #+end_src
 
-
 ** OS X specific configuration
 
 Besides the keyboard configuration above, there are some other specific things I
@@ -898,6 +897,28 @@ Now enable =recentf=:
   (after-load 'recentf
     (recentf-mode 1))
   (require 'recentf)
+#+end_src
+
+*** ediff
+
+[[https://www.gnu.org/software/emacs/manual/html_mono/ediff.html][ediff]] is a full-featured visual diff and merge tool, built into Emacs.
+
+Make sure that the window split is always side-by-side:
+
+#+begin_src emacs-lisp
+  (setq ediff-split-window-function 'split-window-horizontally)
+#+end_src
+
+Ignore whitespace changes:
+
+#+begin_src emacs-lisp
+  (setq ediff-diff-options "-w")
+#+end_src
+
+Only ever use one set of windows in one frame:
+
+#+begin_src emacs-lisp
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 #+end_src
 
 ** Third-party packages
