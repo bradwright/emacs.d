@@ -1859,6 +1859,14 @@ and install and load =company-go=:
       (require 'company-go)))
 #+end_src
 
+*** puppet-mode
+
+[[https://github.com/lunaryorn/puppet-mode][puppet-mode]] is a major mode for editing =.pp= files.
+
+#+begin_src emacs-lisp
+  (require-package 'puppet-mode)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
