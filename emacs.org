@@ -571,6 +571,17 @@ gotten from [[http://mindlev.wordpress.com/2011/06/13/emacs-in-a-terminal-on-osx
 
 ** Utility functions
 
+*** Rename modeline
+
+Renames the major-mode lighter in the modeline. Lifted from [[http://whattheemacsd.com/appearance.el-01.html][What the emacs.d]].
+
+#+begin_src emacs-lisp
+  (defmacro rename-modeline (package-name mode new-name)
+    `(eval-after-load ,package-name
+       '(defadvice ,mode (after rename-modeline activate)
+          (setq mode-name ,new-name))))
+#+end_src
+
 *** Get keychain password
 
 If I'm on OS X, I can fetch passwords etc. from my Keychain. This is much more
@@ -1785,6 +1796,107 @@ perform on-the-fly syntax checking and linting.
      ;; don't show anything in the left fringe
      flycheck-indication-mode nil))
   (require 'flycheck)
+#+end_src
+
+*** javascript
+
+I use [[https://github.com/mooz/js2-mode][js2-mode]] for editing JavaScript. [[js2-mode]] is a JavaScript major mode that
+includes a full syntax parser written in Emacs Lisp.
+
+**** js2-mode
+
+#+begin_src emacs-lisp
+  (require-package 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+#+end_src
+
+=js2-mode= isn't auto-loaded for =*.js= files, as Emacs ships with a default
+JavaScript major mode, so I need the final line to make sure I use the right
+mode.
+
+**** configure js2-mode
+
+The default lighter for [[js2-mode]] =Javascript-IDE=, which is too long. Rename it:
+
+#+begin_src emacs-lisp
+  (rename-modeline "js2-mode" js2-mode "JS2")
+#+end_src
+
+JavaScript classes are typically written in =CamelCase=, so enabled
+=subword-mode=:
+
+#+begin_src emacs-lisp
+  (add-hook 'js2-mode-hook (lambda () (subword-mode 1)))
+#+end_src
+
+Highlight everything:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-highlight-level 3))
+#+end_src
+
+Always indent by 4 spaces:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-basic-offset 3))
+#+end_src
+
+Make the closing bracket position indent itself idiomatically:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-consistent-level-indent-inner-bracket-p t))
+#+end_src
+
+Allow for multi-line =var= declaration indenting:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-pretty-multiline-decl-indentation-p t))
+#+end_src
+
+**** flycheck integration
+
+I use [[http://jslint.com][jslint]] on the [[https://github.com/reid/node-jslint][command line (via node.js)]] to provide syntax
+checking/linting, and this is integrated with [[flycheck]].
+
+This repository includes an [[https://www.npmjs.org][npm]] manifest that installs a local copy of JSLint.
+Add the =node_modules= binary path to my exec path.
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (add-to-list 'exec-path (concat bw/dotfiles-dir "node_modules/.bin/")))
+#+end_src
+
+Define a custom checker that supports the output of the =--terse= flag to
+JSLint, and enable it only for [[js2-mode]].
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (flycheck-define-checker javascript-jslint-reporter
+        "JSLint based checker"
+        :command ("jslint" "--terse" source)
+        :error-patterns
+        ((warning line-start (1+ nonl) ":" line ":" column ":" blank (message) line-end))
+        :modes js2-mode))
+#+end_src
+
+Finally, enable my custom checker when [[js2-mode]] is enabled. This also
+dynamically disables [[js2-mode]]'s built-in linting functionality so it doesn't
+clash.
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (defun bw/turn-on-flycheck-mode-js2 ()
+      "Turn on and define JS2 mode checker"
+      (set (make-local-variable 'js2-highlight-external-variables) nil)
+      (set (make-local-variable 'js2-strict-missing-semi-warning) nil)
+      (flycheck-select-checker 'javascript-jslint-reporter)
+      (flycheck-mode 1))
+
+    (add-hook 'js2-mode-hook 'bw/turn-on-flycheck-mode-js2))
 #+end_src
 
 *** go
