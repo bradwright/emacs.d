@@ -1867,6 +1867,22 @@ and install and load =company-go=:
   (require-package 'puppet-mode)
 #+end_src
 
+*** markdown-mode
+
+[[http://melpa.milkbox.net/#/markdown-mode][markdown-mode]] is a major mode for editing Markdown files.
+
+#+begin_src emacs-lisp
+  (require-package 'markdown-mode)
+#+end_src
+
+There's no official Markdown file extension, so support all the unofficial ones:
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.ft$" . markdown-mode)) ;; FoldingText
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
