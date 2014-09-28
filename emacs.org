@@ -1410,7 +1410,8 @@ Also define a convenience keyboard shortcut to switch between buffers from the s
 #+begin_src emacs-lisp
   (after-load 'projectile
     (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
-    (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window))
+    (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window)
+    (bw/add-launcher "s" 'projectile-switch-project))
 #+end_src
 
 Provide some advice to =projectile-current-project-files= so it uses the
