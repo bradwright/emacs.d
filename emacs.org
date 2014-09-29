@@ -1453,8 +1453,7 @@ want to enable it on graphical displays (see [[Themes]]). I also want to make su
 modeline to be high contrast (reversed out):
 
 #+begin_src emacs-lisp
-  (after-load 'solarized-theme
-    (setq solarized-high-contrast-mode-line t))
+  (setq solarized-high-contrast-mode-line t)
 #+end_src
 
 *** zenburn-theme
