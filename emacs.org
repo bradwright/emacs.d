@@ -1996,6 +1996,54 @@ There's no official Markdown file extension, so support all the unofficial ones:
   (add-to-list 'auto-mode-alist '("\\.ft$" . markdown-mode)) ;; FoldingText
 #+end_src
 
+*** paredit
+
+[[http://melpa.milkbox.net/#/paredit][paredit]] is a minor mode for editing S-expressions in a balanced way. It's a very
+good way to edit Lisp, Clojure etc. files. [[http://www.emacswiki.org/emacs/ParEdit][More on EmacsWiki]].
+
+#+begin_src emacs-lisp
+  (require-package 'paredit)
+#+end_src
+
+Enable it for Emacs Lisp files:
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+#+end_src
+
+Conditionally enable it in the minibuffer when entering an expression:
+
+#+begin_src emacs-lisp
+  (defun bw/conditionally-enable-paredit-mode ()
+    (if (eq this-command 'eval-expression)
+        (enable-paredit-mode)))
+  (add-hook 'minibuffer-setup-hook 'bw/conditionally-enable-paredit-mode)
+#+end_src
+
+*** cider
+
+[[https://github.com/clojure-emacs/cider][CIDER]] (Clojure IDE and REPL) is the best way to develop [[http://clojure.org][Clojure]] in Emacs.
+
+#+begin_src emacs-lisp
+  (require-package 'cider)
+#+end_src
+
+Automatically enable [[eldoc-mode]] and [[paredit]] in CIDER buffers:
+
+#+begin_src emacs-lisp
+  (after-load 'cider-mode
+    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (add-hook 'cider-mode-hook 'enable-paredit-mode)
+    (add-hook 'cider-repl-mode-hook 'enable-paredit-mode))
+#+end_src
+
+Finally enable the CIDER minor mode in Clojure buffers:
+
+#+begin_src emacs-lisp
+  (after-load 'clojure-mode
+    (add-hook 'clojure-mode-hook 'clojure-enable-cider))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
