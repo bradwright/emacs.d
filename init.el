@@ -1,4 +1,4 @@
-;;; emacs.el - Load Emacs
+;;; init.el - Load Emacs
 
 ;;; Commentary:
 
