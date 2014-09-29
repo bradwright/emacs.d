@@ -6,6 +6,13 @@ that it'll install basically anywhere.
 This configuration is designed to run in shells as well as on
 desktops. There are some platform specific optimisations as well.
 
+** Where is it?
+
+It's built using [[http://orgmode.org][Org mode]]'s [[http://orgmode.org/manual/Extracting-source-code.html#Extracting-source-code][tangling functionality]].
+
+My entire Emacs configuration is thus written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style,
+and can be seen [[emacs.org][in this repo as =emacs.org=]].
+
 ** Old version
 
    The previous version can be found at [[https://www.github.com/bradleywright/emacs-d][bradleywright/emacs-d]]. This
