@@ -2044,6 +2044,35 @@ Finally enable the CIDER minor mode in Clojure buffers:
     (add-hook 'clojure-mode-hook 'clojure-enable-cider))
 #+end_src
 
+*** web-mode
+
+[[https://github.com/fxbois/web-mode][web-mode]] is a major mode for editing templates and HTML. It supports a very
+broad range of template languages and is highly configurable.
+
+#+begin_src emacs-lisp
+  (require-package 'web-mode)
+#+end_src
+
+[[http://jinja.pocoo.org/docs/][Jinja]] templates are mostly like [[https://docs.djangoproject.com/en/dev/topics/templates/][Django templates]], so just force them to behave
+like that:
+
+#+begin_src emacs-lisp
+  (after-load 'web-mode
+    (setq web-mode-engines-alist
+          '(("\\.jinja\\'" . "django"))))
+#+end_src
+
+Enable [[web-mode]] by default for several common file extensions:
+
+#+begin_src emacs-lisp
+  (dolist (alist '(("\\.html$'" . web-mode)
+                   ("\\.html\\.erb$" . web-mode)
+                   ("\\.mustache$" . web-mode)
+                   ("\\.jinja$" . web-mode)
+                   ("\\.php$" . web-mode)))
+    (add-to-list 'auto-mode-alist alist))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
