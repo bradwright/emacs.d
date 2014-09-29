@@ -2073,6 +2073,27 @@ Enable [[web-mode]] by default for several common file extensions:
     (add-to-list 'auto-mode-alist alist))
 #+end_src
 
+*** idomenu
+
+[[http://melpa.milkbox.net/#/idomenu][idomenu]] offers [[ido]] completion over [[http://www.emacswiki.org/emacs/ImenuMode][imenu]] candidates. It allows me to navigate
+through classes etc. using completion for methods.
+
+#+begin_src emacs-lisp
+  (require-package 'idomenu)
+#+end_src
+
+Add it to my launcher:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "i" 'idomenu)
+#+end_src
+
+Automatically rescan the current file so =imenu= is up to date:
+
+#+begin_src emacs-lisp
+  (setq imenu-auto-rescan t)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
