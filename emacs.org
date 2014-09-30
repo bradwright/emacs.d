@@ -2084,6 +2084,7 @@ Enable it for Emacs Lisp files:
 
 #+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
 #+end_src
 
 Conditionally enable it in the minibuffer when entering an expression:
