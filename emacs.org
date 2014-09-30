@@ -71,6 +71,49 @@ This directory is created if it doesn't exist.
          (bw/join-dirs bw/dotfiles-dir ".tmp")) t)
 #+end_src
 
+*** Backups
+
+Emacs automatically [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Backup.html][backs up files]] while you're editing them. The default
+configuration isn't great though.
+
+First, set up some directories to keep backups:
+
+#+begin_src emacs-lisp
+  (make-directory
+   (setq bw/tmp-backups-dir
+         (bw/join-dirs bw/tmp-local-dir "backups")) t)
+  (make-directory
+   (setq bw/tmp-autosaves-dir
+         (bw/join-dirs bw/tmp-local-dir "autosaves")) t)
+#+end_src
+
+Now use those directories for backups and autosave files:
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `((".*" . ,bw/tmp-backups-dir))
+        auto-save-file-name-transforms `((".*" ,bw/tmp-autosaves-dir)))
+#+end_src
+
+Always copy files when backing up to avoid breaking symlinks:
+
+#+begin_src emacs-lisp
+  (setq backup-by-copying t)
+#+end_src
+
+Delete old versions automatically, and keep a limited number around:
+
+#+begin_src emacs-lisp
+  (setq delete-old-versions t
+        kept-new-versions 2
+        kept-old-versions 2)
+#+end_src
+
+Finally, use version numbers in the filenames:
+
+#+begin_src emacs-lisp
+  (setq version-control t)
+#+end_src
+
 ** Client/server
 
 Emacs has a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server][client/server]] model for editing. The client is invoked via [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Invoking-emacsclient.html][the
