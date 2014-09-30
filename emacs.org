@@ -787,6 +787,7 @@ Emacs lisp (eg information about arity of functions). Enable that for
 
 #+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 #+end_src
 
 *** python-mode
