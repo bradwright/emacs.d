@@ -645,6 +645,38 @@ macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612
        '(progn ,@body)))
 #+end_src
 
+*** org
+
+[[http://orgmode.org][org-mode]] is a plain text system for organising information and notes.
+
+Don't auto-fold my documents:
+
+#+begin_src emacs-lisp
+  (setq org-startup-folded nil)
+#+end_src
+
+When editing [[http://orgmode.org/manual/Working-With-Source-Code.html#Working-With-Source-Code][nested source code]], always accept Emacs Lisp:
+
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)))
+#+end_src
+
+and automatically apply syntax highlighting:
+
+#+begin_src emacs-lisp
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+#+end_src
+
+When using [[http://www.emacswiki.org/emacs/ImenuMode][imenu]], make sure I can follow the outline to the full available
+depth:
+
+#+begin_src emacs-lisp
+  (setq org-imenu-depth 6)
+#+end_src
+
 *** ido
 
 [[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido]] is a mode for narrowing candidates as you type. It has excellent
