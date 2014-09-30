@@ -917,6 +917,30 @@ Define a keybinding to get an =eshell= buffer anywhere:
   (global-set-key (kbd "C-c C-t e") 'eshell)
 #+end_src
 
+*** ansi-term
+
+[[http://www.emacswiki.org/emacs/AnsiTerm][ansi-term]] is a terminal emulator written in Emacs Lisp. It's more like a
+traditional terminal emulator than [[eshell]].
+
+Force ansi-term to be UTF-8 after it launches:
+
+#+begin_src emacs-lisp
+  (defadvice ansi-term (after bw/advise-ansi-term-coding-system activate)
+    (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+#+end_src
+
+When exiting a terminal buffer (either with =exit= or =EOF=), automatically kill
+the buffer:
+
+#+begin_src emacs-lisp
+  (defadvice term-sentinel (around bw/advice-term-sentinel (proc msg) activate)
+    (if (memq (process-status proc) '(signal exit))
+        (let ((buffer (process-buffer proc)))
+          ad-do-it
+          (kill-buffer buffer))
+      ad-do-it))
+#+end_src
+
 *** recentf
 
 [[http://www.emacswiki.org/emacs/RecentFiles][recentf]] stores a list of recently opened files.
