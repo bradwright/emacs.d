@@ -612,6 +612,16 @@ gotten from [[http://mindlev.wordpress.com/2011/06/13/emacs-in-a-terminal-on-osx
     (setq interprogram-paste-function 'bw/copy-from-osx))
 #+end_src
 
+*** Fullscreen support
+
+On Emacs 24.4 and above, Lion-style fullscreen display is supported. Bind it to
+=⌘-<return>=.
+
+#+begin_src emacs-lisp
+  (when (and (eq system-type 'darwin) (fboundp 'toggle-frame-fullscreen))
+    (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen))
+#+end_src
+
 ** Utility functions
 
 *** Rename modeline
