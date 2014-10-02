@@ -691,6 +691,13 @@ On Emacs 24.4 and above, Lion-style fullscreen display is supported. Bind it to
     (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen))
 #+end_src
 
+On the Yosemite beta, =ns-use-native-fullscreen= is =nil=.
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq ns-use-native-fullscreen t))
+#+end_src
+
 ** Utility functions
 
 *** Rename modeline
