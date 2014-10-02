@@ -117,12 +117,6 @@ then =bw/dotfiles-dir= will be =~/src/emacs=.
     "Base path for customised Emacs configuration")
 #+END_SRC
 
-We also add it to =load-path=:
-
-#+BEGIN_SRC emacs-lisp
-  (bw/add-to-load-path bw/dotfiles-dir)
-#+END_SRC
-
 This variable is important because all other directories I load things from are
 relative to it, which means my Emacs config doesn't need to live in
 =user-emacs-directory=.
