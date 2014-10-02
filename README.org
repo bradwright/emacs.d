@@ -1,4 +1,8 @@
-* My emacs.d configuration
+#+OPTIONS: toc:2
+
+* Bradley Wright's Emacs Configuration
+
+** Preamble
 
 As my editor of choice I run Emacs. One of the benefits of Emacs is
 that it'll install basically anywhere.
@@ -6,36 +10,36 @@ that it'll install basically anywhere.
 This configuration is designed to run in shells as well as on
 desktops. There are some platform specific optimisations as well.
 
-** Where is it?
+*** What is this?
 
 It's built using [[http://orgmode.org][Org mode]]'s [[http://orgmode.org/manual/Extracting-source-code.html#Extracting-source-code][tangling functionality]].
 
 My entire Emacs configuration is thus written in a [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] style,
 and can be seen [[emacs.org][in this repo as =emacs.org=]].
 
-** Old version
+*** Old version
 
    The previous version can be found at [[https://www.github.com/bradleywright/emacs-d][bradleywright/emacs-d]]. This
    version has been refactored to use traditional Emacs loading
    techniques and macros for installing packages.
 
-** Installing
+*** Installing
 
 Just check it out straight to the right directory, and use Make to
 install it:
 
 : cd ~/Projects/emacs.d && make
 
-** Platform specific configuration
+*** Platform specific configuration
 
-*** OS X desktop (Emacs.app)
+**** OS X desktop (Emacs.app)
 
 - Left =option= key is remapped to =M-=
 - =M-3= prints a literal =#= (UK Mac keyboards being weird)
 - We use the [[https://github.com/bbatsov/solarized-emacs][Solarized Dark]] theme
 - Font is [[http://www.levien.com/type/myfonts/inconsolata.html][Inconsolata]]
 
-*** OS X CLI in iTerm2
+**** OS X CLI in iTerm2
 
 - When the [[https://github.com/altercation/solarized/blob/master/iterm2-colors-solarized/Solarized%20Dark.itermcolors][Solarized Dark iTerm2 theme]] is installed, we use the
   =solarized-dark= color theme
@@ -43,12 +47,12 @@ install it:
   and =pbpaste=)
 - Mouse highlighting works via xTerm capabilities
 
-**** Required iTerm 2 Configuration
+***** Required iTerm 2 Configuration
 
      - Re-map left =option= key to =+Esc=
      - Untick =Smart cursor color=
 
-** Included libraries
+*** Included libraries
 
 The following libraries are included in non-attributable ways, i.e not
 via package install or via a Git submodule:
@@ -56,9 +60,9 @@ via package install or via a Git submodule:
 - [[https://github.com/technomancy/emacs-starter-kit][Emacs Starter Kit]] was a very big early influence, and continues to
   be helpful.
 
-** License and copyright
+*** License and copyright
 
-Copyright 2010-2013 Bradley Wright.
+Copyright 2010-2014 Bradley Wright.
 
 Files are licensed under the same license as Emacs (GPL) unless
 otherwise specified. See the =COPYING= file for more information.
@@ -66,3 +70,2242 @@ otherwise specified. See the =COPYING= file for more information.
 Any external/third party works included in this work are licensed under
 their own licenses - refer to the submodules or packages for more
 information.
+
+** Conventions
+
+Functions and variables defined exclusively for my use are prefixed with my
+initials and a slash =bw/= to namespace them.
+
+** Setup
+
+Emacs looks in [[https://www.gnu.org/software/emacs/manual/html_node/eintr/Loading-Files.html][load-path]] for Emacs lisp files. =require= and other loading
+constructs use this when looking for implicit names.
+
+First we define a convenience function =bw/add-to-load-path= that adds the
+passed in directory to =load-path=:
+
+#+BEGIN_SRC emacs-lisp
+  (defun bw/add-to-load-path (dir)
+    "Adds `dir' to load-path"
+    (add-to-list 'load-path dir))
+#+END_SRC
+
+and a convenience function for making a proper path out of two strings:
+
+#+begin_src emacs-lisp
+  (defun bw/join-dirs (prefix suffix)
+    "Joins `prefix' and `suffix' into a directory"
+    (file-name-as-directory (concat prefix suffix)))
+#+end_src
+
+*** Base load path
+
+Define a base directory =bw/dotfiles-dir= that's relative to the currently
+loading file (this file). This means if I deliberately start Emacs with a file
+loaded:
+
+#+BEGIN_SRC
+$ emacs -q -l ~/src/emacs/init.el
+#+END_SRC
+
+then =bw/dotfiles-dir= will be =~/src/emacs=.
+
+#+BEGIN_SRC emacs-lisp
+  (defconst bw/dotfiles-dir
+    (file-name-directory
+     (or (buffer-file-name) load-file-name))
+    "Base path for customised Emacs configuration")
+#+END_SRC
+
+We also add it to =load-path=:
+
+#+BEGIN_SRC emacs-lisp
+  (bw/add-to-load-path bw/dotfiles-dir)
+#+END_SRC
+
+This variable is important because all other directories I load things from are
+relative to it, which means my Emacs config doesn't need to live in
+=user-emacs-directory=.
+
+*** Temporary directory
+
+Emacs has many packages which need to store state in files. Generally these are
+in =~= or =user-emacs-directory= - since my entire =~/.emacs.d= is versioned,
+I'd rather all temporary files were stored in a known place, =bw/tmp-local-dir=.
+This directory is created if it doesn't exist.
+
+#+begin_src emacs-lisp
+  (make-directory
+   (setq bw/tmp-local-dir
+         (bw/join-dirs bw/dotfiles-dir ".tmp")) t)
+#+end_src
+
+*** Backups
+
+Emacs automatically [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Backup.html][backs up files]] while you're editing them. The default
+configuration isn't great though.
+
+First, set up some directories to keep backups:
+
+#+begin_src emacs-lisp
+  (make-directory
+   (setq bw/tmp-backups-dir
+         (bw/join-dirs bw/tmp-local-dir "backups")) t)
+  (make-directory
+   (setq bw/tmp-autosaves-dir
+         (bw/join-dirs bw/tmp-local-dir "autosaves")) t)
+#+end_src
+
+Now use those directories for backups and autosave files:
+
+#+begin_src emacs-lisp
+  (setq backup-directory-alist `((".*" . ,bw/tmp-backups-dir))
+        auto-save-file-name-transforms `((".*" ,bw/tmp-autosaves-dir)))
+#+end_src
+
+Always copy files when backing up to avoid breaking symlinks:
+
+#+begin_src emacs-lisp
+  (setq backup-by-copying t)
+#+end_src
+
+Delete old versions automatically, and keep a limited number around:
+
+#+begin_src emacs-lisp
+  (setq delete-old-versions t
+        kept-new-versions 2
+        kept-old-versions 2)
+#+end_src
+
+Finally, use version numbers in the filenames:
+
+#+begin_src emacs-lisp
+  (setq version-control t)
+#+end_src
+
+** Client/server
+
+Emacs has a [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html#Emacs-Server][client/server]] model for editing. The client is invoked via [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Invoking-emacsclient.html][the
+=emacsclient= command]]. More information on configuration is available on the
+[[http://www.emacswiki.org/emacs/EmacsClient][EmacsWiki EmacsClient page]].
+
+We make sure the server is running, additionally guarded to check if the version
+of Emacs we're using supports the server package:
+
+#+begin_src emacs-lisp
+  (when (require 'server nil t)
+    (unless (server-running-p)
+      (server-start)))
+#+end_src
+
+** Editing defaults
+
+Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
+=sane-defaults.el= file]] for some commentary.
+
+*** Line widths and wrapping
+
+The default wrap width (known as [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Filling.html][filling]]) for Emacs is 70 characters. Modern
+conventions state that 80 characters is the standard:
+
+#+begin_src emacs-lisp
+  (setq-default fill-column 80)
+#+end_src
+
+I don't type double-space sentences, so make sure that Emacs doesn't look for
+double-spaces after periods to fill paragraphs correctly:
+
+#+begin_src emacs-lisp
+  (setq-default sentence-end-double-space nil)
+#+end_src
+
+*** Trailing whitespace
+
+Most UNIX tools work best when there's a trailing newline on all files. Enable
+that option:
+
+#+begin_src emacs-lisp
+  (setq require-final-newline t)
+#+end_src
+
+I don't want to leave trailing whitespace in files I touch, so set up a hook
+that automatically deletes trailing whitespace after every line when saving a
+file:
+
+#+begin_src emacs-lisp
+  (add-hook 'write-file-hooks 'delete-trailing-whitespace)
+#+end_src
+
+Emacs has lots of other options for [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Useless-Whitespace.html][managing superfluous whitespace]].
+
+*** Indentation
+
+I don't use tabstops in files, and my default tab width is 4 characters.
+
+It's worth noting that Emacs can override either of those on a per-file/mode
+basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
+
+#+begin_src emacs-lisp
+  (setq-default
+   indent-tabs-mode nil
+   tab-width 4)
+#+end_src
+
+**** Auto-indentation
+
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indent-Convenience.html][Electric indent mode]] was added in Emacs 24.1, and it enables automatic indentation when typing a newline. [[http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation][More about electric indent mode on Emacs Redux]].
+
+First we define convenience toggling functions we can use in a hook (or interactively):
+
+#+begin_src emacs-lisp
+  (defun bw/turn-on-electric-indent-mode ()
+    "Turns on electric-indent-mode"
+    (interactive)
+    (electric-indent-mode 1))
+
+  (defun bw/turn-off-electric-indent-mode ()
+    "Turns off electric-indent-mode"
+    (interactive)
+    (electric-indent-mode -1))
+#+end_src
+
+then we enable it for [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Program-Modes.html][the generic abstract programming mode =prog-mode=,
+introduced in Emacs 24.1]] ([[http://emacsredux.com/blog/2013/04/05/prog-mode-the-parent-of-all-programming-modes/][more about =prog-mode= on Emacs Redux]]):
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook 'bw/turn-on-electric-indent-mode)
+#+end_src
+
+*** Encoding
+
+I want to have [[http://en.wikipedia.org/wiki/UTF-8][UTF-8]] by default. [[http://www.masteringemacs.org/articles/2012/08/09/working-coding-systems-unicode-emacs/][Emacs unfortunately has a few settings that
+govern encoding]], so we should set them all at once:
+
+#+begin_src emacs-lisp
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+end_src
+
+*** Smart =beginning-of-line=
+
+=C-a= is mapped to =beginning-of-line= by default, which moves point to position
+0 on the current line. [[http://irreal.org/blog/?p=1946][The irreal blog suggests a smarter alternative]] that moves
+the point to the first non-whitespace character first, and then position 0, with
+extra presses toggling the position:
+
+#+begin_src emacs-lisp
+  (defadvice move-beginning-of-line (around smarter-bol activate)
+    ;; Move to requested line if needed.
+    (let ((arg (or (ad-get-arg 0) 1)))
+      (when (/= arg 1)
+        (forward-line (1- arg))))
+    ;; Move to indentation on first call, then to actual BOL on second.
+    (let ((pos (point)))
+      (back-to-indentation)
+      (when (= pos (point))
+        ad-do-it)))
+#+end_src
+
+This functionality uses the Emacs concept of [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html][advice]], which is a way of modifying
+existing functions in-place without redefining the entire thing.
+
+*** Fix minibuffer behaviour
+
+When changing focus to the minibuffer, stop allowing point to move over the
+prompt. Code taken from [[http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html][ergoemacs]].
+
+#+begin_src emacs-lisp
+  (setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'minibuffer-avoid-prompt))
+  (setq minibuffer-prompt-properties (add-to-list 'minibuffer-prompt-properties 'point-entered))
+#+end_src
+
+** Keyboard
+
+*** Modifier keys
+
+- =C-= means =Control= in combination with another key, eg =C-x= means =Ctrl + x=
+- =M-= means =Meta= in combination with another key. This is usually =Alt=, or
+  =⌘= on OS X (by default). =Esc= also serves as =Meta= if it's not separately
+  bound. On OS X I want to use left =⌥= for =Meta=, and leave right =⌥= alone:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-alternate-modifier 'meta)
+    (setq ns-right-alternate-modifier nil))
+#+END_SRC
+
+- =s-= means [[http://en.wikipedia.org/wiki/Super_key_(keyboard_button)][super key]]. On OS X I want this to be =⌘=:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-command-modifier 'super))
+#+END_SRC
+
+- =H-= means [[http://en.wikipedia.org/wiki/Hyper_key][hyper key]]. On OS X I want this to be =fn=:
+
+#+BEGIN_SRC emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (setq ns-function-modifier 'hyper))
+#+END_SRC
+
+*** Basic remappings
+
+The below are some remappings I got from [[https://sites.google.com/site/steveyegge2/effective-emacs][Steve Yegge's Effective Emacs]] article.
+They're designed to map some slightly difficult but very common mappings to
+things that are easier to type.
+
+**** Invoke =M-x= without the Alt key
+
+As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item2][Yegge's Item 2]]. This unmaps the difficult =M-x= (usually =Alt+x=) to =C-x
+m=, and then add a fat-finger combination of =C-x C-m=:
+
+#+begin_src emacs-lisp
+  (global-unset-key (kbd "C-x m"))
+  (global-unset-key (kbd "M-x"))
+  (global-set-key (kbd "C-x m") 'execute-extended-command)
+  (global-set-key (kbd "C-x C-m") 'execute-extended-command)
+#+end_src
+
+**** Prefer =backward-kill-word= over Backspace
+
+As per [[https://sites.google.com/site/steveyegge2/effective-emacs#item3][Yegge's Item 3]]. This copies readline's =C-w= command to
+=backward-kill-word=, remaps the command that used to live there
+(=kill-region=), and then enables a fat-finger version of the new =kill=region=
+mapping:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+  (global-set-key (kbd "C-c C-k") 'kill-region)
+#+end_src
+
+**** Quick window switching
+
+Usually one must type =C-x o= to switch between windows - make that quicker by
+also mapping =M-o=:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-o") 'other-window)
+#+end_src
+
+**** Buffer management
+
+Burying a buffer (removing it from the current window and sending it to the
+bottom of the stack) is very common for dismissing buffers. Add a mapping for
+it:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c y") 'bury-buffer)
+#+end_src
+
+Add a key combination to revert the current buffer (re-read the contents from
+disk):
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+#+end_src
+
+*** Launcher keymap
+
+This trick I got from [[http://endlessparentheses.com/launcher-keymap-for-standalone-features.html][a blog post on launcher keymaps]]. I define my launcher
+combo as =C-x C-l=, which is normally =downcase-region= - a command I use so
+infrequently I didn't even know there was a key binding for it.
+
+#+begin_src emacs-lisp
+  (define-prefix-command 'bw/launcher-map)
+  (define-key ctl-x-map (kbd "C-l") 'bw/launcher-map)
+#+end_src
+
+rather than remembering that it's =bw/launcher-map=, just make a function:
+
+#+begin_src emacs-lisp
+  (defun bw/add-launcher (key function)
+    "Maps FUNCTION to KEY under the `bw/launcher-map' prefix"
+    (define-key bw/launcher-map key function))
+#+end_src
+
+** Interface
+
+*** Remove chrome
+
+To ensure that all scrollbars, toolbars etc. are turned off, we run this as
+early as possible.
+
+#+NAME: turn-off-chrome
+#+BEGIN_SRC emacs-lisp
+  (dolist (mode '(menu-bar-mode tool-bar-mode scroll-bar-mode))
+    (when (fboundp mode) (funcall mode -1)))
+#+END_SRC
+
+*** Startup buffers
+
+Turn off the startup screen, and always show =*scratch*=.
+
+#+NAME: turn-off-startup
+#+BEGIN_SRC emacs-lisp
+  ;; inhibit startup screen
+  (setq inhibit-startup-screen t
+        ;; Show *scratch* on start
+        initial-buffer-choice t)
+#+END_SRC
+
+*** Font
+
+I use [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] as my default coding font. It's set to render at 18pt:
+
+#+begin_src emacs-lisp
+  (when (and
+         (display-graphic-p)
+         (find-font (font-spec :name "Inconsolata")))
+    (set-frame-font "Inconsolata-18" t t))
+#+end_src
+
+*** Syntax highlighting
+
+Syntax highlighting in Emacs is called [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Font-Lock.html][font locking]]. It's enabled by
+=font-lock-mode=. This turned on by default in modern Emacs systems, but it's
+worth keeping around:
+
+#+begin_src emacs-lisp
+  (global-font-lock-mode t)
+#+end_src
+
+Emacs also supports multiple levels of complexity for highlighting. Setting this
+value to =t= forces it to pick the maximum available (also the default):
+
+#+begin_src emacs-lisp
+  (setq font-lock-maximum-decoration t)
+#+end_src
+
+*** Line and column numbers
+
+Emacs doesn't display line numbers by the code by default. For that you want
+[[http://www.emacswiki.org/emacs/LineNumbers#toc1][Linum mode]].
+
+I want to display the current line number in the
+[[http://www.emacswiki.org/emacs/ModeLine][mode line]], and also the current
+column number:
+
+#+begin_src emacs-lisp
+  (line-number-mode 1)
+  (column-number-mode 1)
+#+end_src
+
+*** Tooltips
+
+Emacs convention is to show help and other inline documentation in the [[https://www.gnu.org/software/emacs/manual/html_node/eintr/message.html][message
+area]]. Show help there instead of using an OS tooltip:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (tooltip-mode -1))
+#+end_src
+
+*** Dialogue boxes and windows
+
+Just don't show them. Use native Emacs controls:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq use-dialog-box nil))
+#+end_src
+
+Make the window title display the full path of the file I'm currently editing:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq frame-title-format
+          '((:eval (if (buffer-file-name)
+                       (abbreviate-file-name (buffer-file-name))
+                     "%b")))))
+#+end_src
+
+Aside: Emacs calls OS windows [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#Frames][frames]] and divisions within frames [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Windows.html#Windows][windows]]. [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Frame-Titles.html][More
+information on frame titles]].
+
+*** Cursor
+
+On modern operating systems, a vertical bar is used as a cursor:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq-default cursor-type 'bar))
+#+end_src
+
+Make the cursor blink (interestingly in Emacs 24.4+ the [[https://lists.gnu.org/archive/html/emacs-diffs/2013-07/msg00208.html][cursor automatically
+stops blinking after a period to conserve CPU]]).
+
+Make the cursor blink every second:
+
+#+begin_src emacs-lisp
+  (when (display-graphic-p)
+    (setq blink-cursor-interval 1.0)
+    (blink-cursor-mode 1))
+#+end_src
+
+*** Typing
+
+Show the modifier combinations I just typed almost immediately:
+
+#+begin_src emacs-lisp
+  (setq echo-keystrokes 0.1)
+#+end_src
+
+Don't make me type =yes= or =no= to boolean interface questions:
+
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+*** Bells
+
+Don't make a sound when [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Beeping.html][ringing a bell]] - flash a visual bell instead:
+
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+#+end_src
+
+Override the =ring-bell-function= to conditionally ring the bell only when it's
+not a valid quit case like hitting =esc= or =C-g=. Generally this means the bell
+will only ring when there's actually an error raised somehow:
+
+#+begin_src emacs-lisp
+  (setq ring-bell-function
+        (lambda ()
+          "Only rings the bell if it's not a valid quit case, e.g
+  keyboard-quit"
+          (unless (memq this-command
+                        '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
+            (ding))))
+#+end_src
+
+*** Buffer naming
+
+By default Emacs resolves conflicting buffer names by appending a number to
+them. For instance, if I open =~/src/thing/init.el= and
+=~/src/other-thing/init.el= they'll be named =init.el= and =init.el<2>=
+respectively.
+
+We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.html][Uniquify]] library to name them =thing/init.el= and
+=other-thing/init.el=, which is much easier to make sense of.
+
+#+begin_src emacs-lisp
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+#+end_src
+
+*** Themes
+
+On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
+[[zenburn-theme]]:
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook (lambda ()
+                               (if (window-system)
+                                   (load-theme 'solarized-dark t)
+                                 (load-theme 'zenburn t))))
+#+end_src
+
+** OS X specific configuration
+
+Besides the keyboard configuration above, there are some other specific things I
+do on OS X. On OS X =system-type= is the symbol =darwin=.
+
+*** Host name mangling
+
+Typically OS X hosts are called things like =hostname.localconfig= or
+=hostname.local=. Make Emacs report that without the extra suffix:
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq system-name (car (split-string system-name "\\."))))
+#+end_src
+
+*** Spelling correction
+
+[[https://www.gnu.org/software/ispell/][ispell]] isn't generally available on OS X. [[http://aspell.net][aspell]] is available via [[https://github.com/Homebrew/homebrew/blob/master/Library/Formula/aspell.rb][Homebrew]], so
+let's use that if we can find it:
+
+#+begin_src emacs-lisp
+  (when (and (eq system-type 'darwin) (executable-find "aspell"))
+      (setq ispell-program-name (executable-find "aspell")))
+#+end_src
+
+*** dired fixes
+
+OS X's bundled version of =ls= isn't the GNU one, so it doesn't support the
+=--dired= flag. Emacs caters for that use case:
+
+#+begin_src emacs-lisp
+  (setq dired-use-ls-dired nil)
+#+end_src
+
+*** sRGB display fixes
+
+As of Emacs 24.4, [[http://lists.gnu.org/archive/html/emacs-devel/2013-12/msg00741.html][Emacs natively supports proper sRGB]] values on OS X:
+
+#+begin_src emacs-lisp
+  (setq ns-use-srgb-colorspace t)
+#+end_src
+
+If you're not using Emacs 24.4 this variable setting will have no effect. See
+[[https://github.com/Homebrew/homebrew/blob/7446162e59fe548a0fde735d25b9913f8fa2ad4a/Library/Formula/emacs.rb#L10][Homebrew's Emacs recipe]] for details of how to get this behaviour in earlier
+Emacs versions.
+
+*** Terminal integration
+
+Using this configuration, Emacs runs best in [[http://iterm2.com][iTerm2]].
+
+On the desktop, Emacs integrates with the OS X clipboard, so =kill= etc. copy to
+the clipboard, and =yank= copies from the clipboard.
+
+Obviously this doesn't work in the terminal, so we need to use the
+=interprogram-(cut|paste)-function= variables to copy/paste. Most of this code
+gotten from [[http://mindlev.wordpress.com/2011/06/13/emacs-in-a-terminal-on-osx/#comment-20][this blog comment]].
+
+#+begin_src emacs-lisp
+  (unless (display-graphic-p)
+    (defun bw/copy-from-osx ()
+      "Copies the current clipboard content using the `pbcopy` command"
+      (shell-command-to-string "pbpaste"))
+
+    (defun bw/paste-to-osx (text &optional push)
+      "Copies the top of the kill ring stack to the OSX clipboard"
+      (let ((process-connection-type nil))
+        (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+          (process-send-string proc text)
+          (process-send-eof proc))))
+
+    (setq interprogram-cut-function 'bw/paste-to-osx)
+    (setq interprogram-paste-function 'bw/copy-from-osx))
+#+end_src
+
+*** Fullscreen support
+
+On Emacs 24.4 and above, Lion-style fullscreen display is supported. Bind it to
+=⌘-<return>=.
+
+#+begin_src emacs-lisp
+  (when (and (eq system-type 'darwin) (fboundp 'toggle-frame-fullscreen))
+    (global-set-key (kbd "s-<return>") 'toggle-frame-fullscreen))
+#+end_src
+
+** Utility functions
+
+*** Rename modeline
+
+Renames the major-mode lighter in the modeline. Lifted from [[http://whattheemacsd.com/appearance.el-01.html][What the emacs.d]].
+
+#+begin_src emacs-lisp
+  (defmacro rename-modeline (package-name mode new-name)
+    `(eval-after-load ,package-name
+       '(defadvice ,mode (after rename-modeline activate)
+          (setq mode-name ,new-name))))
+#+end_src
+
+*** Get keychain password
+
+If I'm on OS X, I can fetch passwords etc. from my Keychain. This is much more
+secure than storing them in configuration on disk:
+
+#+begin_src emacs-lisp
+  (defun bw/chomp (str)
+    "Chomp leading and tailing whitespace from `str'."
+    (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'" str)
+      (setq str (replace-match "" t t str))) str)
+
+  (defun bw/get-keychain-password (account-name)
+    "Get `account-name' keychain password from OS X Keychain"
+    (interactive "sAccount name: ")
+    (bw/chomp
+     (shell-command-to-string
+      (concat
+       "security find-generic-password -wa "
+       account-name))))
+#+end_src
+
+*** Conditionally kill Emacs
+
+When I'm in an emacsclient, I probably just want the client to die rather than
+the entire server. And, when I kill my server, I want Emacs to confirm this with
+me:
+
+#+begin_src emacs-lisp
+  (defun bw/kill-emacs ()
+    "If this buffer is a client, just kill it, otherwise confirm
+  the quit."
+    (interactive)
+    (if server-buffer-clients
+        (server-edit)
+      (if (= (length (frame-list)) 1)
+          (cond ((y-or-n-p "Quit Emacs? ")
+                 (save-buffers-kill-terminal)))
+        (save-buffers-kill-terminal))))
+#+end_src
+
+Enable this, and override the default command Emacs assigns to kill itself:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap save-buffers-kill-terminal] 'bw/kill-emacs)
+#+end_src
+
+** Other modes
+
+Emacs comes with hundreds of major and minor modes to do many many things. These
+are the ones I commonly use and have configured.
+
+First let's define a convenient macro that wraps typical =eval-after-load= in
+such a way that we don't need to use =progn= to contain the callback logic. This
+macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612c4fea6e638d81d8ebbfecdf8/init-utils.el#L1-L5][Steve Purcell's emacs.d repo]]:
+
+#+begin_src emacs-lisp
+  (defmacro after-load (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body)))
+#+end_src
+
+*** org
+
+[[http://orgmode.org][org-mode]] is a plain text system for organising information and notes.
+
+Don't auto-fold my documents:
+
+#+begin_src emacs-lisp
+  (setq org-startup-folded nil)
+#+end_src
+
+When editing [[http://orgmode.org/manual/Working-With-Source-Code.html#Working-With-Source-Code][nested source code]], always accept Emacs Lisp:
+
+#+begin_src emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)))
+#+end_src
+
+and automatically apply syntax highlighting:
+
+#+begin_src emacs-lisp
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+#+end_src
+
+When using [[http://www.emacswiki.org/emacs/ImenuMode][imenu]], make sure I can follow the outline to the full available
+depth:
+
+#+begin_src emacs-lisp
+  (setq org-imenu-depth 6)
+#+end_src
+
+*** ido
+
+[[http://www.emacswiki.org/emacs/InteractivelyDoThings][ido]] is a mode for narrowing candidates as you type. It has excellent
+integration with buffer switching and finding files. [[http://www.masteringemacs.org/articles/2010/10/10/introduction-to-ido-mode/][Mastering Emacs has a good
+guide to Ido]].
+
+First we enable =ido-mode= globally and enable =ido-everywhere=, which enables
+Ido for buffer and file reading:
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (ido-mode t)
+    (ido-everywhere t))
+#+end_src
+
+Force Ido to [[http://stackoverflow.com/a/11341239/61435][ignore Dropbox cruft]]:
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (add-to-list 'ido-ignore-files "Icon\n"))
+#+end_src
+
+Configure Ido (see comments for more information):
+
+#+begin_src emacs-lisp
+  (after-load 'ido
+    (setq
+     ;; Speed up ido by using less candidates
+     ido-max-prospects 10
+     ;; Match arbitrary points in strings
+     ido-enable-prefix nil
+     ;; Match across entire string
+     ido-enable-flex-matching t
+     ;; Create a new buffer if there's no match candidate
+     ido-create-new-buffer 'always
+     ;; Don't try and guess if the string under point is a file
+     ido-use-filename-at-point nil
+     ;; case-insensitive matching
+     ido-case-fold t
+     ;; don't store old files as virtual buffers
+     ido-use-virtual-buffers nil))
+#+end_src
+
+Finally load Ido:
+
+#+begin_src emacs-lisp
+  (require 'ido)
+#+end_src
+
+*** bookmarks
+
+Emacs has robust [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Bookmarks.html][bookmarking functionality]]. It uses a file to persit the list of
+bookmarks, so make sure that file is in my custom temporary directory:
+
+#+begin_src emacs-lisp
+  (after-load 'bookmark
+    (setq bookmark-default-file (expand-file-name ".emacs.bmk" bw/tmp-local-dir)))
+#+end_src
+
+*** eldoc-mode
+
+[[http://www.emacswiki.org/emacs/ElDoc][eldoc-mode]] is a minor mode that displays context-sensitive help when editing
+Emacs lisp (eg information about arity of functions). Enable that for
+=emacs-lisp-mode=:
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+#+end_src
+
+*** python-mode
+
+As of 24.2, Emacs ships with a [[http://www.emacswiki.org/emacs/PythonProgrammingInEmacs#toc1][robust Python mode]]. However, when navigating
+=SnakeCase= words (eg class names), =forward-word= etc don't work correctly.
+
+We can work around that using [[https://www.gnu.org/software/emacs/manual/html_node/ccmode/Subword-Movement.html#Subword-Movement][subword-mode]]:
+
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook (lambda () (subword-mode 1)))
+#+end_src
+
+*** ruby-mode
+
+As of 24.4, Emacs comes with a much better [[http://www.masteringemacs.org/articles/2013/12/29/whats-new-in-emacs-24-4/][Ruby mode]]. However it doesn't come
+with =subword-mode= enabled by default:
+
+#+begin_src emacs-lisp
+  (after-load 'ruby-mode
+    (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
+#+end_src
+
+*** hippie
+
+[[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
+[[http://www.emacswiki.org/emacs/DynamicAbbreviations][dabbrev]] engine. The main feature I use over =dabbrev= is that it supports a wide
+range of backends for finding completions - =dabbrev= only looks at currently
+open buffers.
+
+First we customise the types of things it looks for:
+
+#+begin_src emacs-lisp
+  (setq hippie-expand-try-functions-list
+        '(try-expand-dabbrev
+          try-expand-dabbrev-all-buffers
+          try-expand-dabbrev-from-kill
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol))
+#+end_src
+
+Then we override =dabbrev-expand='s keybinding to use =hippie-expand= instead
+(normally this is =M-/=):
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap dabbrev-expand] 'hippie-expand)
+#+end_src
+
+*** tramp mode
+
+=tramp-mode= is a package that provides [[https://www.gnu.org/software/emacs/manual/html_node/tramp/index.html#Top][remote file editing]], eg =find-file
+/user@host:file=. This allows one to edit files on other servers using your
+local Emacs (rather than the Vim user's equivalent of editing the file on the
+server).
+
+All of the below are wrapped in an =after-load= construct because =tramp-mode=
+isn't loaded by default on older versions of Emacs.
+
+First we set the default mode to be =ssh= (it's normally =scp=). There are two
+reasons for this choice:
+
+- =ssh= takes a port number as an argument, whereas =scp= doesn't
+- It's [[http://www.gnu.org/software/tramp/#Default-Method][apparently faster]] for smaller files
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (setq tramp-default-method "ssh"))
+#+end_src
+
+We also want to alter the list of allowed proxies (tramp uses a whitelist for
+patterns that it can remotely access) so I can edit remote files as sudo, eg
+=find-file /sudo:example.com/etc/something-owned-by-root=.
+
+I got this code from the [[http://www.gnu.org/software/tramp/#Multi_002dhops][Multi-hops section of the tramp manual]].
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (add-to-list 'tramp-default-proxies-alist
+                 '(nil "\\`root\\'" "/ssh:%h:")))
+#+end_src
+
+Also make sure we can edit local files as sudo - this is normally disallowed for
+security reasons:
+
+#+begin_src emacs-lisp
+  (after-load 'tramp
+    (add-to-list 'tramp-default-proxies-alist
+                 '((regexp-quote (system-name)) nil nil)))
+#+end_src
+
+More on the last two incantations at [[http://emacs-fu.blogspot.co.uk/2009/10/editing-files-owned-by-root.html][emacs-fu's guide to editing files owned by root]].
+
+*** eshell
+
+[[http://www.gnu.org/software/emacs/manual/html_node/eshell/][eshell]] is a shell-like command interpreter built with Emacs lisp. It integrates
+well with Emacs, and can be a convenient way to get a shell without invoking
+bash or similar (provided you don't want any interactive commands).
+
+There's a great guide to [[http://www.masteringemacs.org/articles/2010/12/13/complete-guide-mastering-eshell/][mastering eshell]] on [[http://www.masteringemacs.org][Mastering Emacs]].
+
+eshell has a directory where it stores bookmarks and other temporary cruft -
+move that out of the way:
+
+#+begin_src emacs-lisp
+  (setq eshell-directory-name (bw/join-dirs bw/tmp-local-dir "eshell"))
+#+end_src
+
+When using the =ssh= command (or =vagrant ssh=, which is really the same thing),
+we'll want to jump into something that's an actual terminal emulator like
+=ansi-term= (eshell won't be able to deal with the login on the remote machine):
+
+#+begin_src emacs-lisp
+  (after-load 'esh-opt
+    (require 'em-term)
+    (add-to-list 'eshell-visual-commands "ssh")
+    (when (fboundp 'eshell-visual-subcommands)
+      (add-to-list 'eshell-visual-subcommands '("vagrant" "ssh"))))
+#+end_src
+
+Define a keybinding to get an =eshell= buffer anywhere:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c C-t e") 'eshell)
+#+end_src
+
+*** ansi-term
+
+[[http://www.emacswiki.org/emacs/AnsiTerm][ansi-term]] is a terminal emulator written in Emacs Lisp. It's more like a
+traditional terminal emulator than [[eshell]].
+
+Force ansi-term to be UTF-8 after it launches:
+
+#+begin_src emacs-lisp
+  (defadvice ansi-term (after bw/advise-ansi-term-coding-system activate)
+    (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+#+end_src
+
+When exiting a terminal buffer (either with =exit= or =EOF=), automatically kill
+the buffer:
+
+#+begin_src emacs-lisp
+  (defadvice term-sentinel (around bw/advice-term-sentinel (proc msg) activate)
+    (if (memq (process-status proc) '(signal exit))
+        (let ((buffer (process-buffer proc)))
+          ad-do-it
+          (kill-buffer buffer))
+      ad-do-it))
+#+end_src
+
+*** recentf
+
+[[http://www.emacswiki.org/emacs/RecentFiles][recentf]] stores a list of recently opened files.
+
+Never clean up the list:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-auto-cleanup 'never))
+#+end_src
+
+The list of files contains any files Emacs has read, not just files I've
+explicitly opened. Clean that list to exclude Emacs metafiles, package cruft
+etc.
+
+TODO: refactor to use =recentf-keep=: [[http://www.emacswiki.org/emacs/RecentFiles#toc18]]
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-exclude '("[/\\]\\.elpa/" "[/\\]\\.ido\\.last\\'" "[/\\]\\.git/" ".*\\.gz\\'" ".*-autoloads\\.el\\'" "[/\\]archive-contents\\'" "[/\\]\\.loaddefs\\.el\\'" "url/cookies" ".*\\emacs.bmk\\'")))
+#+end_src
+
+Save the most recent 100 items (this is manily to keep the list low for [[ido]]):
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-max-saved-items 100))
+#+end_src
+
+Customise the place =recentf= persists its list of items:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (setq recentf-save-file (expand-file-name ".recentf" bw/tmp-local-dir)))
+#+end_src
+
+Strip =$HOME= from the front of =recentf= candidate files:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (add-to-list 'recentf-filename-handlers 'abbreviate-file-name))
+#+end_src
+
+I want easy access to my recent files, so define a function that lets me use [[ido]]
+to search over them. Bind this to =C-x C-r= (=C-c C-r= is used in modes like
+=org=mode):
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (after-load 'ido
+      (defun bw/recentf-ido-find-file ()
+        "Find a recent file using ido."
+        (interactive)
+        (let ((file (ido-completing-read "Recently: " recentf-list nil t)))
+          (when file
+            (find-file file))))
+
+      (global-set-key (kbd "C-x C-r") 'bw/recentf-ido-find-file)))
+#+end_src
+
+Now enable =recentf=:
+
+#+begin_src emacs-lisp
+  (after-load 'recentf
+    (recentf-mode 1))
+  (require 'recentf)
+#+end_src
+
+*** ediff
+
+[[https://www.gnu.org/software/emacs/manual/html_mono/ediff.html][ediff]] is a full-featured visual diff and merge tool, built into Emacs.
+
+Make sure that the window split is always side-by-side:
+
+#+begin_src emacs-lisp
+  (setq ediff-split-window-function 'split-window-horizontally)
+#+end_src
+
+Ignore whitespace changes:
+
+#+begin_src emacs-lisp
+  (setq ediff-diff-options "-w")
+#+end_src
+
+Only ever use one set of windows in one frame:
+
+#+begin_src emacs-lisp
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+#+end_src
+
+** Third-party packages
+
+Emacs has a built-in [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Packaging.html#Packaging][package manager]].
+
+Rather than using Git submodules or similar my Emacs configuration is set up to
+automatically download and install any required packages at load time. This
+makes my configuration fully portable.
+
+First set up convenience function (borrowed from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612c4fea6e638d81d8ebbfecdf8/init-elpa.el#L63-L73][Steve Purcell's emacs config]])
+that installs a package if it's not already installed:
+
+#+begin_src emacs-lisp
+  (defun require-package (package &optional min-version no-refresh)
+    "Install given PACKAGE, optionally requiring MIN-VERSION.
+  If NO-REFRESH is non-nil, the available package lists will not be
+  re-downloaded in order to locate PACKAGE."
+    (if (package-installed-p package min-version)
+        t
+      (if (or (assoc package package-archive-contents) no-refresh)
+          (package-install package)
+        (progn
+          (package-refresh-contents)
+          (require-package package min-version t)))))
+#+end_src
+
+*** Configure package manager
+
+**** Custom package install location
+
+The default value for =package-user-dir= is =~/.emacs.d/elpa= - since these are
+third-party packages that are dynamically installed I'd prefer them to be in a
+[[http://en.wikipedia.org/wiki/Dot-file][hidden directory]].
+
+Packages are also [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Byte-Compilation.html#Byte-Compilation][byte compiled]] upon installation, so namespace the install
+directory to the version of Emacs I'm using.
+
+Final result should be something like =~/.emacs.d/.elpa/24.3.93.1/=.
+
+#+begin_src emacs-lisp
+  (after-load 'package
+    (setq package-user-dir
+          (bw/join-dirs (bw/join-dirs bw/dotfiles-dir ".elpa") emacs-version)))
+#+end_src
+
+**** Customise package repositories to install from
+
+By default Emacs only installs files from [[http://www.gnu.org/software/emacs/manual/html_node/efaq/Packages-that-do-not-come-with-Emacs.html#Packages-that-do-not-come-with-Emacs][ELPA]]. Some of these packages are old
+or out of date, and they don't track GitHub repositories.
+
+I want to also add:
+
+- [[https://github.com/milkypostman/melpa#melpa][MELPA]] (tracks GitHub repositories, is much more comprehensive)
+- [[https://github.com/milkypostman/melpa#stable-packages][MELPA stable]] (like MELPA, but pinned to specific versions)
+- [[https://github.com/jorgenschaefer/elpy#quick-installation][Elpy]] (allows me to install the Elpy Python development environment)
+
+#+begin_src emacs-lisp
+  (after-load 'package
+    (setq package-archives
+          '(("gnu"          . "http://elpa.gnu.org/packages/")
+            ("melpa"        . "http://melpa.milkbox.net/packages/")
+            ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")
+            ("elpy"         . "http://jorgenschaefer.github.io/packages/"))))
+#+end_src
+
+**** Initialise package manager
+
+Finally we initialise the package manager:
+
+#+begin_src emacs-lisp
+  (package-initialize)
+#+end_src
+
+*** diminish
+
+[[http://www.emacswiki.org/emacs/DiminishedModes][diminish]] removes or abbreviates the minor mode indicators that can clutter up
+one's modeline.
+
+#+begin_src emacs-lisp
+  (require-package 'diminish)
+#+end_src
+
+Diminish =subword-mode=, =eldoc-mode=, and =auto-revert-mode=:
+
+#+begin_src emacs-lisp
+  (after-load 'diminish
+    (after-load 'subword
+      (diminish 'subword-mode))
+    (after-load 'eldoc
+      (diminish 'eldoc-mode))
+    (after-load 'autorevert
+      (diminish 'auto-revert-mode)))
+#+end_src
+
+*** paradox
+
+[[https://github.com/Bruce-Connor/paradox][paradox]] is an advanced package.el frontend with GitHub integration.
+
+#+begin_src emacs-lisp
+  (require-package 'paradox)
+#+end_src
+
+Force =paradox= into a [[fullframe]]:
+
+#+begin_src emacs-lisp
+  (after-load 'fullframe
+    (fullframe paradox-list-packages paradox-quit-and-close nil))
+#+end_src
+
+Automatically 'star' packages on GitHub after I install them (so I can easily
+follow changes to them):
+
+#+begin_src emacs-lisp
+  (setq paradox-automatically-star t)
+  (setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
+#+end_src
+
+Add launch command:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "p" 'paradox-list-packages)
+#+end_src
+
+*** exec-path-from-shell
+
+OS X doesn't use the environment variables available in a shell in a GUI
+environment ([[https://developer.apple.com/library/mac/documentation/MacOSX/Conceptual/BPRuntimeConfig/Articles/EnvironmentVars.html][more here]]).
+
+Since Emacs runs shell commands regularly it's important that the same =PATH= is
+available to my editor as [[http://brew.sh][Homebrew]] etc. set and use.
+
+[[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]] is a package that copies across =PATH= and other variables
+to the Emacs environment.
+
+I only want this to be installed and enabled on OS X.
+
+#+begin_src emacs-lisp
+  (when (and (eq system-type 'darwin) (display-graphic-p))
+    (require-package 'exec-path-from-shell)
+    (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
+    (exec-path-from-shell-initialize))
+#+end_src
+
+*** smex
+
+[[https://github.com/nonsequitur/smex][smex]] is an advanced completion mode for =execute-extended-command= (usually
+known as =M-x=).
+
+#+begin_src emacs-lisp
+  (require-package 'smex)
+#+end_src
+
+Replace =execute-extended-command='s keyboard shortcuts:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap execute-extended-command] 'smex)
+#+end_src
+
+Make sure we stop the annoying "click this menubar" advice in the buffer:
+
+#+begin_src emacs-lisp
+  (setq-default smex-key-advice-ignore-menu-bar t)
+#+end_src
+
+Move =smex='s cache file out of the home directory:
+
+#+begin_src emacs-lisp
+  (setq smex-save-file (expand-file-name ".smex-items" bw/tmp-local-dir))
+#+end_src
+
+*** fullframe
+
+[[https://github.com/tomterl/fullframe][fullframe]] is a minor mode which allows certain buffers to take over the full
+frame using advice.
+
+#+begin_src emacs-lisp
+  (require-package 'fullframe)
+#+end_src
+
+*** magit
+
+[[https://github.com/magit/magit][Magit]] is an Emacs interface to Git. It's very feature-rich and I find it
+intuitive.
+
+**** Keyboard shortcuts
+
+=magit-status= is the main command to launch Magit. It's =autoloaded= so I don't
+need to load Magit first.
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c g") 'magit-status)
+  (bw/add-launcher "g" 'magit-status)
+#+end_src
+
+=magit-grep= isn't =autoloaded=, so I need to explicitly load it before binding
+it:
+
+#+begin_src emacs-lisp
+  (autoload 'magit-grep "magit" "Grep for files" t)
+  (global-set-key (kbd "C-c f") 'magit-grep)
+#+end_src
+
+**** VC-mode integration
+
+Since I use Magit I don't need to use Emacs's native [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Version-Control.html][vc-mode]]:
+
+#+begin_src emacs-lisp
+  (delete 'Git vc-handled-backends)
+#+end_src
+
+**** Configuration
+
+When performing a [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Minibuffer-Completion.html][completing-read]] within Magit, I'd like to use IDO:
+
+#+begin_src emacs-lisp
+  (setq magit-completing-read-function 'magit-ido-completing-read)
+#+end_src
+
+When I create a new local branch from remote, by default I want it to be named
+the same as the remote branch (default is =$(remotename)-$(branchname)=, eg
+=origin-my-branch=):
+
+#+begin_src emacs-lisp
+  (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
+#+end_src
+
+Open the =magit-status= buffer in the same window as the current buffer:
+
+#+begin_src emacs-lisp
+  (setq magit-status-buffer-switch-function 'switch-to-buffer)
+#+end_src
+
+Highlight individual word and letter changes when showing hunk diff overlays:
+
+#+begin_src emacs-lisp
+  (setq magit-diff-refine-hunk t)
+#+end_src
+
+When [[http://magit.github.io/master/magit.html#Rewriting][rewriting]], always ask me if I want to include the revision at point in the
+rewrite:
+
+#+begin_src emacs-lisp
+  (setq magit-rewrite-inclusive 'ask)
+#+end_src
+
+When Magit asks me to save modified buffers, ask me about them:
+
+#+begin_src emacs-lisp
+  (setq magit-save-some-buffers t)
+#+end_src
+
+When Magit takes a while to call out to Git, pop the process buffer after 10
+seconds so I can look for issues:
+
+#+begin_src emacs-lisp
+  (setq magit-process-popup-time 10)
+#+end_src
+
+When pushing a branch without a remote, ask me which remote to set it to:
+
+#+begin_src emacs-lisp
+  (setq magit-set-upstream-on-push t)
+#+end_src
+
+When =magit-auto-revert-mode= is enabled, diminish its [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html][lighter]] in the modeline:
+
+#+begin_src emacs-lisp
+  (setq magit-auto-revert-mode-lighter "")
+#+end_src
+
+**** Interaction with fullframe
+
+If =fullframe= is installed (see below), use it to make =magit-status= take over
+the entire frame:
+
+#+begin_src emacs-lisp
+  (after-load 'fullframe
+    (fullframe magit-status magit-mode-quit-window nil))
+#+end_src
+
+
+**** Load Magit
+
+Finally we can install Magit:
+
+#+begin_src emacs-lisp
+  (require-package 'magit)
+#+end_src
+
+*** gitignore-mode
+
+[[https://github.com/magit/git-modes][gitignore-mode]] is a major mode for editing =gitignore= files:
+
+#+begin_src emacs-lisp
+  (require-package 'gitignore-mode)
+#+end_src
+
+*** gitconfig-mode
+
+[[https://github.com/magit/git-modes][gitconfig-mode]] is a major more for editing =gitconfig= files:
+
+#+begin_src emacs-lisp
+  (require-package 'gitconfig-mode)
+#+end_src
+
+*** ido-ubiquitous
+
+[[https://github.com/DarwinAwardWinner/ido-ubiquitous][ido-ubiquitous]] mode enables ido in many more places than the default ido setup:
+
+#+begin_src emacs-lisp
+  (require-package 'ido-ubiquitous)
+  (ido-ubiquitous-mode 1)
+#+end_src
+
+*** ido-vertical
+
+[[https://github.com/gempesaw/ido-vertical-mode.el][ido-vertical]] mode renders the ido prompt vertically instead of horizontally. I
+find this easier to read.
+
+#+begin_src emacs-lisp
+  (require-package 'ido-vertical-mode)
+  (ido-vertical-mode) ;; autoloaded
+#+end_src
+
+Because it's displayed vertically and I want to save screen real estate, I want
+to reduce the maximum number of candidates ido displays:
+
+#+begin_src emacs-lisp
+  (setq ido-max-prospects 5)
+#+end_src
+
+*** flx-ido
+
+[[https://github.com/lewang/flx][flx-ido]] is an advanced flex-matching algorithm that's significantly faster and
+more accurate than the built-in method.
+
+#+begin_src emacs-lisp
+  (require-package 'flx-ido)
+#+end_src
+
+The =flx-ido= documentation suggests upping the threshold at which GC occurs
+within Emacs so that =flx= can cache its candidate lists for longer:
+
+#+begin_src emacs-lisp
+  (setq gc-cons-threshold 20000000)
+#+end_src
+
+Finally we cause =flx-ido-mode= to take over ido:
+
+#+begin_src emacs-lisp
+  (flx-ido-mode 1)
+#+end_src
+
+*** ace-jump-mode
+
+[[https://github.com/winterTTr/ace-jump-mode][ace-jump-mode]] allows one to jump around the buffer to named characters (it's
+easier to watch the video on that link than explain).
+
+#+begin_src emacs-lisp
+  (require-package 'ace-jump-mode)
+#+end_src
+
+Bind it:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c SPC") 'ace-jump-char-mode)
+  (global-set-key (kbd "C-<return>") 'ace-jump-line-mode)
+  (bw/add-launcher "j" 'ace-jump-char-mode)
+  (bw/add-launcher "J" 'ace-jump-line-mode)
+#+end_src
+
+**** evil integration
+
+Since [[evil]] has excellent [[https://bitbucket.org/lyro/evil/src/0e095224bd52576db82b0355586bb490d08f32f6/evil-integration.el?at=default#cl-339][support for ace-jump-mode]], we should add extra bindings
+for that:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-char-mode)
+    (define-key evil-normal-state-map (kbd "<return>") 'ace-jump-line-mode))
+#+end_src
+
+Also make sure that =SPC= and =<return>= do the right thing:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (define-key evil-motion-state-map (kbd "SPC") 'ace-jump-char-mode)
+    (define-key evil-motion-state-map (kbd "<return>") 'ace-jump-line-mode))
+#+end_src
+
+*** popwin
+
+[[https://github.com/m2ym/popwin-el][popwin]] is a popup window manager that helps make the behaviour of compilation
+buffers, search buffers etc. a bit more sane.
+
+#+begin_src emacs-lisp
+  (require-package 'popwin)
+#+end_src
+
+As well as the defaults, I want [[ag]], [[magit]], [[flycheck]] and [[http://www.emacswiki.org/emacs/OccurMode][occur]] to 'pop'. I don't
+want to auto-select the Magit process buffer as it's for information only.
+
+#+begin_src emacs-lisp
+(after-load 'popwin
+  (add-to-list 'popwin:special-display-config `"*ag search*")
+  (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t))
+  (add-to-list 'popwin:special-display-config `"*Flycheck errors*")
+  (add-to-list 'popwin:special-display-config `"*Occur*"))
+#+end_src
+
+Load [[popwin]] and configure keyboard shortcuts:
+
+#+begin_src emacs-lisp
+  (require 'popwin)
+  (popwin-mode 1)
+  (global-set-key (kbd "C-c P") 'popwin:popup-last-buffer)
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "s-P") 'popwin:popup-last-buffer))
+#+end_src
+
+*** ag
+
+[[https://github.com/Wilfred/ag.el][ag]] is an Emacs frontend to [[https://github.com/ggreer/the_silver_searcher][the ag command]], a grep-like code-searching tool. It's
+installed via Homebrew on my Mac.
+
+#+begin_src emacs-lisp
+  (require-package 'ag)
+#+end_src
+
+Set up some key bindings:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c f") 'ag-project)
+  (global-set-key (kbd "C-c a") 'ag)
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "s-F") 'ag-project)
+    (global-set-key (kbd "s-A") 'ag))
+  (bw/add-launcher "a" 'ag-project)
+  (bw/add-launcher "A" 'ag)
+#+end_src
+
+Make sure that we re-use the =ag= buffers - without this my buffer list is full
+of buffers named after the project root.
+
+#+begin_src emacs-lisp
+  (setq ag-reuse-buffers t)
+#+end_src
+
+*** projectile
+
+[[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
+grouping of files.
+
+#+begin_src emacs-lisp
+  (require-package 'projectile)
+  (projectile-global-mode)
+#+end_src
+
+I want my keyboard shortcuts to be the same in Projectile as in non-Projectile
+buffers, so do some remapping:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (define-key projectile-mode-map [remap magit-find-file-completing-read] 'projectile-find-file)
+    (define-key projectile-mode-map [remap ag-project] 'projectile-ag))
+#+end_src
+
+Since I use =ag=, always use that instead of =grep=:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag))
+#+end_src
+
+Also define a convenience keyboard shortcut to switch between buffers from the same project:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (global-set-key (kbd "s-b") 'projectile-switch-to-buffer)
+    (global-set-key (kbd "C-x 4 s-b") 'projectile-switch-to-buffer-other-window)
+    (bw/add-launcher "s" 'projectile-switch-project))
+#+end_src
+
+Provide some advice to =projectile-current-project-files= so it uses the
+=magit-find-file= library when we're in a Git repository - using Magit's process
+manager is significantly faster than Projectile's own Git interaction, which
+creates a new shell process each time. Since =magit-find-file= might be loaded
+at any time, just make sure this advice runs after everything has finished:
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook
+            (lambda ()
+              (when (fboundp 'magit-find-file-completing-read)
+                (defadvice projectile-current-project-files (around bw/use-magit-find-file activate)
+                  "If magit-find-file-completing-read is available use that to
+  call the files instead of Projectile's native caller - this is
+  much much faster"
+                  (autoload 'magit-find-file-files "magit-find-file")
+                  (autoload 'magit-get-top-dir "magit")
+                  (if (magit-get-top-dir)
+                      (let ((default-directory (projectile-project-root)))
+                        (setq ad-return-value (magit-find-file-files)))
+                    ad-do-it)))))
+#+end_src
+
+*** solarized-theme
+
+I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. Specifically, I use the
+[[https://github.com/bbatsov/solarized-emacs]] variant as it has the best support
+for the major modes I use, and is the most up to date. Previously I used
+[[https://github.com/sellout/emacs-color-theme-solarized][sellout's variant]] as it has much better terminal support, but it hasn't been
+updated seriously in years and it fell behind for modern modes.
+
+#+begin_src emacs-lisp
+  (require-package 'solarized-theme)
+#+end_src
+
+Since it doesn't work well with my terminal theme (also Solarized Dark), I only
+want to enable it on graphical displays (see [[Themes]]). I also want to make sure I set the
+modeline to be high contrast (reversed out):
+
+#+begin_src emacs-lisp
+  (setq solarized-high-contrast-mode-line t)
+#+end_src
+
+*** zenburn-theme
+
+I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY Emacs as it has excellent terminal colouring
+(see [[Themes]]):
+
+#+begin_src emacs-lisp
+  (require-package 'zenburn-theme)
+#+end_src
+
+*** magit-find-file
+
+[[https://github.com/bradleywright/magit-find-file.el][magit-find-file]] is a package that uses Magit's process buffers to emulate
+SublimeText's =Command+p= functionality within Git repositories.
+
+#+begin_src emacs-lisp
+  (require-package 'magit-find-file)
+#+end_src
+
+Set up keybindings for it, particularly the SublimeText equivalent:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c t") 'magit-find-file-completing-read)
+  (global-set-key (kbd "M-p") 'magit-find-file-completing-read)
+  (when (eq system-type 'darwin)
+      (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
+  (bw/add-launcher "f" 'magit-find-file-completing-read)
+#+end_src
+
+*** evil
+
+[[http://www.emacswiki.org/emacs/Evil][evil]] is a very full-featured Vim emulator for Emacs.
+
+#+begin_src emacs-lisp
+  (require-package 'evil)
+#+end_src
+
+**** evil-leader
+
+[[https://github.com/cofi/evil-leader][evil-leader]] is a way of using Vim's [[http://learnvimscriptthehardway.stevelosh.com/chapters/06.html][leader key]] concept in Emacs. Since Emacs
+already supports nested key bindings, this is really just for convenience.
+
+Install =evil-leader=, and enable it globally:
+
+#+begin_src emacs-lisp
+  (require-package 'evil-leader)
+  (global-evil-leader-mode 1)
+#+end_src
+
+and set it to =,= (the default is =\=):
+
+#+begin_src emacs-lisp
+  (evil-leader/set-leader ",")
+#+end_src
+
+Now set up all the =evil-leader= powered shortcuts I want:
+
+#+begin_src emacs-lisp
+  (evil-leader/set-key
+    "b" 'ido-switch-buffer
+    "B" 'ido-switch-buffer-other-window
+    "c" 'mc/mark-next-like-this
+    "C" 'mc/mark-all-like-this
+    "d" 'dired-jump
+    "E" 'mc/edit-lines
+    "f" 'ido-find-file
+    "G" 'magit-blame-mode
+    "i" 'idomenu
+    "k" 'kill-this-buffer
+    "K" 'kill-buffer
+    "l" 'linum-mode
+    "o" 'occur
+    "O" 'browse-url
+    "p" 'magit-find-file-completing-read
+    "P" 'popwin:popup-last-buffer
+    "r" 'bw/recentf-ido-find-file
+    "R" 'bookmark-jump
+    "s" 'ag-project
+    "t" 'bw/open-term
+    "T" 'eshell
+    "w" 'save-buffer
+    "x" 'smex
+    "y" 'bury-buffer)
+#+end_src
+
+Now we automatically copy across everything from =bw/launcher-map= to ensure I
+easily retain muscle memory:
+
+#+begin_src emacs-lisp
+  (dolist (entry (cdr bw/launcher-map))
+    (evil-leader/set-key
+      (key-description (vector (car entry))) (cdr entry)))
+#+end_src
+
+**** basic evil configuration
+
+Set up some defaults for [[evil]].
+
+Firstly, stop Evil from making the cursor color invisible sometimes:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-default-cursor t))
+#+end_src
+
+Make sure that sideways motion keys (=h=, =l= etc.) wrap around to the next/previous lines:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-cross-lines t))
+#+end_src
+
+When starting Evil, start in =normal= mode:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-default-state 'normal))
+#+end_src
+
+Include the first and last character when moving to the start or end of lines:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-want-visual-char-semi-exclusive t))
+#+end_src
+
+When exiting =insert= mode, don't move the cursor:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq evil-move-cursor-back nil))
+#+end_src
+
+Use =ido-find-file= when using the =:e= ex-command - but only after typing a
+space (=e= by itself will still reload):
+
+#+begin_src emacs-lisp
+  (define-key evil-ex-map "e " 'ido-find-file)
+#+end_src
+
+[[diminish]] =abbrev-mode=, which is bundled with evil:
+
+#+begin_src emacs-lisp
+  (after-load 'diminish
+    (diminish 'abbrev-mode))
+#+end_src
+
+Also diminish [[http://www.dr-qubit.org/undo-tree/undo-tree.el][undo-tree-mode]], a mode which allows one to visualise their
+undo/redo history. This mode is bundled with evil:
+
+#+begin_src emacs-lisp
+  (after-load 'undo-tree
+    (diminish 'undo-tree-mode))
+#+end_src
+
+Finally, invoke =evil-mode= using my launcher:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "e" 'evil-mode)
+#+end_src
+
+**** fix annoying defaults
+
+Evil has some annoying defaults that I don't want to unlearn.
+
+=C-e= is normally =evil-copy-from-below= in =insert= mode - I'd rather it was
+=end-of-line=:
+
+#+begin_src emacs-lisp
+  (define-key evil-insert-state-map "\C-e" 'end-of-line)
+#+end_src
+
+=C-g= is the default 'exit everything' key in Emacs - make it do the same thing
+in Evil (these mappings have been manually copied from [[https://bitbucket.org/lyro/evil/src/4533c35daca4fda72dfaaa40711ad9174b752964/evil-maps.el?at=default][evil-maps.el]]):
+
+#+begin_src emacs-lisp
+  (define-key evil-normal-state-map "\C-g" 'evil-force-normal-state)
+  (define-key evil-visual-state-map "\C-g" 'evil-exit-visual-state)
+  (define-key evil-insert-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-replace-state-map "\C-g" 'evil-normal-state)
+  (define-key evil-ex-completion-map "\C-g" 'abort-recursive-edit)
+#+end_src
+
+On OS X, evil copies every single visual state move to the kill ring, which in
+turns copies it to my system clipboard. I don't want that to happen.
+
+This has been [[https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copies-the-region-on][filed as a bug against evil]], and most of the code has come from
+[[http://stackoverflow.com/questions/15873346/elisp-rename-macro][this StackOverflow question]]:
+
+#+begin_src emacs-lisp
+  (defadvice evil-visual-update-x-selection (around clobber-x-select-text activate)
+    (unless (featurep 'ns)
+      ad-do-it))
+#+end_src
+
+**** Fix evil integration with indirect regions
+
+This allows me to perform a motion command that narrows the range to a new
+buffer as an [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indirect-Buffers.html][indirect buffer]] ([[http://demonastery.org/2013/04/emacs-narrow-to-region-indirect/][good explanation of how they might be used]]).
+
+This code has been copied from
+[[http://demonastery.org/2013/04/emacs-evil-narrow-region/]].
+
+#+begin_src emacs-lisp
+  (evil-define-operator evil-narrow-indirect (beg end type)
+    "Indirectly narrow the region from BEG to END."
+    (interactive "<R>")
+    (evil-normal-state)
+    (narrow-to-region-indirect beg end))
+  (define-key evil-normal-state-map "m" 'evil-narrow-indirect)
+  (define-key evil-visual-state-map "m" 'evil-narrow-indirect)
+#+end_src
+
+**** Default mode state for evil
+
+evil supports a default starting state for different major modes. I often want
+evil to start in =emacs-mode=, for example:
+
+#+begin_src emacs-lisp
+  (dolist (mode-map '((ag-mode . emacs)
+                      (cider-repl-mode . emacs)
+                      (comint-mode . emacs)
+                      (eshell-mode . emacs)
+                      (fundamental-mode . emacs)
+                      (git-commit-mode . insert)
+                      (git-rebase-mode . emacs)
+                      (help-mode . emacs)
+                      (paradox-menu-mode . emacs)
+                      (term-mode . emacs)))
+    (evil-set-initial-state `,(car mode-map) `,(cdr mode-map)))
+#+end_src
+
+*** smartparens
+
+[[https://github.com/Fuco1/smartparens][smartparens]] is a [[paredit]] like minor-mode for many more things than just Lisp.
+
+=show-smartparens-mode= is a replacement mode for =show-paren-mode=.
+
+#+begin_src emacs-lisp
+  (require-package 'smartparens)
+  (require 'smartparens-config)
+  (show-smartparens-global-mode 1)
+#+end_src
+
+*** company
+
+[[https://github.com/company-mode/company-mode][company-mode]] is a modern and modular completion framework (the other one Emacs
+people use is [[http://www.emacswiki.org/emacs/AutoComplete][autocomplete]]. I chose =company= because it's well-maintained and
+has better code for integrating with).
+
+**** configuration
+
+I don't want =company= to auto-start - it should only pop when I ask for it:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-idle-delay nil))
+#+end_src
+
+I want it to attempt a completion immediately after a =.= character - without
+this I need a few characters before it'll show candidates:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-minimum-prefix-length 0))
+#+end_src
+
+Show candidates immediately rather than waiting:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (setq company-echo-delay 0))
+#+end_src
+
+Make the lighter shorter:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (after-load 'diminish
+      (diminish 'company-mode "com")))
+#+end_src
+
+**** enable company mode in programming buffers only
+
+Define a function to enable company-mode and overwrite [[hippie]]'s key binding for
+the local buffer only (this means I can use the same key binding for completion
+no matter which minor mode I'm using):
+
+#+begin_src emacs-lisp
+  (defun bw/enable-company-mode ()
+    "Enables company-mode and overloads hippie-expand's binding"
+    (company-mode 1)
+    (define-key (current-local-map) [remap dabbrev-expand] 'company-complete))
+#+end_src
+
+Add this function to any modes derived from =prog-mode=:
+
+#+begin_src emacs-lisp
+  (after-load 'company
+    (add-hook 'prog-mode-hook 'bw/enable-company-mode))
+#+end_src
+
+**** evil integration
+
+If I'm using [[evil]], I'll need to create a new function which acts like a lambda
+(and ignores arguments):
+
+#+begin_src emacs-lisp
+  (defun bw/company-complete-lambda (arg)
+    "Ignores passed in arg like a lambda and runs company-complete"
+    (company-complete))
+#+end_src
+
+And then bind that to the functions evil uses to complete:
+
+#+begin_src emacs-lisp
+  (after-load 'evil
+    (setq
+     evil-complete-next-func 'bw/company-complete-lambda
+     evil-complete-previous-func 'bw/company-complete-lambda))
+#+end_src
+
+**** Install and load company
+
+#+begin_src emacs-lisp
+  (require-package 'company)
+  (require 'company)
+#+end_src
+
+
+*** flycheck
+
+[[https://github.com/flycheck/flycheck][flycheck]] is a modern, more easily customisable version of [[http://www.emacswiki.org/emacs/FlyMake][flymake]]. It's used to
+perform on-the-fly syntax checking and linting.
+
+#+begin_src emacs-lisp
+  (require-package 'flycheck)
+  (after-load 'flycheck
+    (setq
+     ;; don't show anything in the left fringe
+     flycheck-indication-mode nil))
+  (require 'flycheck)
+#+end_src
+
+*** javascript
+
+I use [[https://github.com/mooz/js2-mode][js2-mode]] for editing JavaScript. [[js2-mode]] is a JavaScript major mode that
+includes a full syntax parser written in Emacs Lisp.
+
+**** js2-mode
+
+#+begin_src emacs-lisp
+  (require-package 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+#+end_src
+
+=js2-mode= isn't auto-loaded for =*.js= files, as Emacs ships with a default
+JavaScript major mode, so I need the final line to make sure I use the right
+mode.
+
+**** configure js2-mode
+
+The default lighter for [[js2-mode]] =Javascript-IDE=, which is too long. Rename it:
+
+#+begin_src emacs-lisp
+  (rename-modeline "js2-mode" js2-mode "JS2")
+#+end_src
+
+JavaScript classes are typically written in =CamelCase=, so enabled
+=subword-mode=:
+
+#+begin_src emacs-lisp
+  (add-hook 'js2-mode-hook (lambda () (subword-mode 1)))
+#+end_src
+
+Highlight everything:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-highlight-level 3))
+#+end_src
+
+Always indent by 4 spaces:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-basic-offset 3))
+#+end_src
+
+Make the closing bracket position indent itself idiomatically:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-consistent-level-indent-inner-bracket-p t))
+#+end_src
+
+Allow for multi-line =var= declaration indenting:
+
+#+begin_src emacs-lisp
+  (after-load 'js2-mode
+    (setq js2-pretty-multiline-decl-indentation-p t))
+#+end_src
+
+**** flycheck integration
+
+I use [[http://jslint.com][jslint]] on the [[https://github.com/reid/node-jslint][command line (via node.js)]] to provide syntax
+checking/linting, and this is integrated with [[flycheck]].
+
+This repository includes an [[https://www.npmjs.org][npm]] manifest that installs a local copy of JSLint.
+Add the =node_modules= binary path to my exec path.
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (add-to-list 'exec-path (concat bw/dotfiles-dir "node_modules/.bin/")))
+#+end_src
+
+Define a custom checker that supports the output of the =--terse= flag to
+JSLint, and enable it only for [[js2-mode]].
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (flycheck-define-checker javascript-jslint-reporter
+        "JSLint based checker"
+        :command ("jslint" "--terse" source)
+        :error-patterns
+        ((warning line-start (1+ nonl) ":" line ":" column ":" blank (message) line-end))
+        :modes js2-mode))
+#+end_src
+
+Finally, enable my custom checker when [[js2-mode]] is enabled. This also
+dynamically disables [[js2-mode]]'s built-in linting functionality so it doesn't
+clash.
+
+#+begin_src emacs-lisp
+  (after-load 'flycheck
+    (defun bw/turn-on-flycheck-mode-js2 ()
+      "Turn on and define JS2 mode checker"
+      (set (make-local-variable 'js2-highlight-external-variables) nil)
+      (set (make-local-variable 'js2-strict-missing-semi-warning) nil)
+      (flycheck-select-checker 'javascript-jslint-reporter)
+      (flycheck-mode 1))
+
+    (add-hook 'js2-mode-hook 'bw/turn-on-flycheck-mode-js2))
+#+end_src
+
+*** go
+
+[[http://golang.org][Go]] is an open source language created by Google.
+
+**** go-mode
+
+[[https://github.com/dominikh/go-mode.el][go-mode]] is a major mode for editing =.go= files. It has excellent integration
+with the Go compiler and toolchain/
+
+#+begin_src emacs-lisp
+  (require-package 'go-mode)
+#+end_src
+
+Make sure we run [[http://golang.org/cmd/gofmt/][gofmt]] before saving any Go files:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (add-hook 'before-save-hook 'gofmt-before-save))
+#+end_src
+
+**** flycheck integration
+
+[[flycheck]] has excellent [[http://flycheck.readthedocs.org/en/latest/guide/languages.html#go][golang]] integration, so enable it:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (after-load 'flycheck
+      (add-hook 'go-mode-hook 'flycheck-mode-on-safe)))
+#+end_src
+
+**** eldoc integration
+
+Because Go is a compiled language, we can inspect functions statically and
+[[https://github.com/syohex/emacs-go-eldoc][provide documentation in the editor]] using [[eldoc]]:
+
+#+begin_src emacs-lisp
+  (require-package 'go-eldoc)
+  (after-load 'go-mode
+    (add-hook 'go-mode-hook 'go-eldoc-setup))
+#+end_src
+
+**** company integration
+
+Because of libraries like [[https://github.com/nsf/gocode][gocode]], Go has very good completion. I use [[company]] for
+completion, so let's integrate with that. *Note* this requires =gocode= to be
+installed on the system before it'll work.
+
+First I define a hook lambda that deletes all other company backends - gocode is so accurate
+that I don't need any other suggestions:
+
+#+begin_src emacs-lisp
+  (defun bw/setup-company-go ()
+    "Hook for running on company-go"
+    (set (make-local-variable 'company-backends) '(company-go)))
+#+end_src
+
+Now add the hook:
+
+#+begin_src emacs-lisp
+  (after-load 'company-go
+    (add-hook 'go-mode-hook 'bw/setup-company-go))
+#+end_src
+
+and install and load =company-go=:
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (after-load 'company
+      (require-package 'company-go)
+      (require 'company-go)))
+#+end_src
+
+*** puppet-mode
+
+[[https://github.com/lunaryorn/puppet-mode][puppet-mode]] is a major mode for editing =.pp= files.
+
+#+begin_src emacs-lisp
+  (require-package 'puppet-mode)
+#+end_src
+
+*** markdown-mode
+
+[[http://melpa.milkbox.net/#/markdown-mode][markdown-mode]] is a major mode for editing Markdown files.
+
+#+begin_src emacs-lisp
+  (require-package 'markdown-mode)
+#+end_src
+
+There's no official Markdown file extension, so support all the unofficial ones:
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.ft$" . markdown-mode)) ;; FoldingText
+#+end_src
+
+*** paredit
+
+[[http://melpa.milkbox.net/#/paredit][paredit]] is a minor mode for editing S-expressions in a balanced way. It's a very
+good way to edit Lisp, Clojure etc. files. [[http://www.emacswiki.org/emacs/ParEdit][More on EmacsWiki]].
+
+#+begin_src emacs-lisp
+  (require-package 'paredit)
+#+end_src
+
+Enable it for Emacs Lisp files:
+
+#+begin_src emacs-lisp
+  (add-hook 'emacs-lisp-mode-hook 'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+#+end_src
+
+Conditionally enable it in the minibuffer when entering an expression:
+
+#+begin_src emacs-lisp
+  (defun bw/conditionally-enable-paredit-mode ()
+    (if (eq this-command 'eval-expression)
+        (enable-paredit-mode)))
+  (add-hook 'minibuffer-setup-hook 'bw/conditionally-enable-paredit-mode)
+#+end_src
+
+*** cider
+
+[[https://github.com/clojure-emacs/cider][CIDER]] (Clojure IDE and REPL) is the best way to develop [[http://clojure.org][Clojure]] in Emacs.
+
+#+begin_src emacs-lisp
+  (require-package 'cider)
+#+end_src
+
+Automatically enable [[eldoc-mode]] and [[paredit]] in CIDER buffers:
+
+#+begin_src emacs-lisp
+  (after-load 'cider-mode
+    (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+    (add-hook 'cider-mode-hook 'enable-paredit-mode)
+    (add-hook 'cider-repl-mode-hook 'enable-paredit-mode))
+#+end_src
+
+Finally enable the CIDER minor mode in Clojure buffers:
+
+#+begin_src emacs-lisp
+  (after-load 'clojure-mode
+    (add-hook 'clojure-mode-hook 'clojure-enable-cider))
+#+end_src
+
+*** web-mode
+
+[[https://github.com/fxbois/web-mode][web-mode]] is a major mode for editing templates and HTML. It supports a very
+broad range of template languages and is highly configurable.
+
+#+begin_src emacs-lisp
+  (require-package 'web-mode)
+#+end_src
+
+[[http://jinja.pocoo.org/docs/][Jinja]] templates are mostly like [[https://docs.djangoproject.com/en/dev/topics/templates/][Django templates]], so just force them to behave
+like that:
+
+#+begin_src emacs-lisp
+  (after-load 'web-mode
+    (setq web-mode-engines-alist
+          '(("\\.jinja\\'" . "django"))))
+#+end_src
+
+Enable [[web-mode]] by default for several common file extensions:
+
+#+begin_src emacs-lisp
+  (dolist (alist '(("\\.html$'" . web-mode)
+                   ("\\.html\\.erb$" . web-mode)
+                   ("\\.mustache$" . web-mode)
+                   ("\\.jinja$" . web-mode)
+                   ("\\.php$" . web-mode)))
+    (add-to-list 'auto-mode-alist alist))
+#+end_src
+
+*** idomenu
+
+[[http://melpa.milkbox.net/#/idomenu][idomenu]] offers [[ido]] completion over [[http://www.emacswiki.org/emacs/ImenuMode][imenu]] candidates. It allows me to navigate
+through classes etc. using completion for methods.
+
+#+begin_src emacs-lisp
+  (require-package 'idomenu)
+#+end_src
+
+Add it to my launcher:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "i" 'idomenu)
+#+end_src
+
+Automatically rescan the current file so =imenu= is up to date:
+
+#+begin_src emacs-lisp
+  (setq imenu-auto-rescan t)
+#+end_src
+
+** Local and custom configuration
+
+*** Local overrides
+
+So I can configure my Emacs per computer/user, I attempted to automatically load
+some configuration.
+
+First set up a directory to hold the files:
+
+#+begin_src emacs-lisp
+  (setq bw/local-dotfiles-dir (bw/join-dirs bw/dotfiles-dir "local"))
+#+end_src
+
+Now try to load a file named after the current user:
+
+#+begin_src emacs-lisp
+  (load (concat bw/local-dotfiles-dir user-login-name ".el") t)
+#+end_src
+
+and try to load a file named after the local system:
+
+#+begin_src emacs-lisp
+  (load (concat bw/local-dotfiles-dir system-name ".el") t)
+#+end_src
+
+*** =Customize=-d configuration
+
+Make sure anything saved using =customize= goes into a consistent (and ignored)
+place:
+
+#+begin_src emacs-lisp
+  (load (setq custom-file (concat bw/dotfiles-dir "custom.el")) t)
+#+end_src
+
+(note that this works because =setq= returns the value it's set to)
