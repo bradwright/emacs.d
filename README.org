@@ -2275,6 +2275,16 @@ Automatically rescan the current file so =imenu= is up to date:
   (setq imenu-auto-rescan t)
 #+end_src
 
+*** know-your-http-well
+
+[[https://github.com/for-GET/know-your-http-well][know-your-http-well]] is a documentation set for HTTP, linked out to all the
+various RFCs and specifications.
+
+#+begin_src emacs-lisp
+  (require-package 'know-your-http-well)
+  (require 'know-your-http-well)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
