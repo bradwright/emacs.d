@@ -888,7 +888,7 @@ with =subword-mode= enabled by default:
 
 #+begin_src emacs-lisp
   (after-load 'ruby-mode
-    (add-hook ruby-mode-hook (lambda () (subword-mode 1))))
+    (add-hook 'ruby-mode-hook (lambda () (subword-mode 1))))
 #+end_src
 
 *** hippie
