@@ -1519,7 +1519,7 @@ want to auto-select the Magit process buffer as it's for information only.
     (add-to-list 'popwin:special-display-config `("*magit-process*" :noselect t))
     (add-to-list 'popwin:special-display-config `"*Flycheck errors*")
     (add-to-list 'popwin:special-display-config `"*Occur*")
-    (add-to-list 'popwin:special-display-config '("*Compile-Log*" :noselect t)))
+    (add-to-list 'popwin:special-display-config `("*Compile-Log*" :noselect t)))
 #+end_src
 
 Load [[popwin]] and configure keyboard shortcuts:
