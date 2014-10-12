@@ -1668,7 +1668,7 @@ Set up keybindings for it, particularly the SublimeText equivalent:
   (global-set-key (kbd "M-p") 'magit-find-file-completing-read)
   (when (eq system-type 'darwin)
       (global-set-key (kbd "s-p") 'magit-find-file-completing-read))
-  (bw/add-launcher "f" 'magit-find-file-completing-read)
+  (bw/add-launcher "t" 'magit-find-file-completing-read)
 #+end_src
 
 *** evil
@@ -1702,26 +1702,14 @@ Now set up all the =evil-leader= powered shortcuts I want:
 #+begin_src emacs-lisp
   (evil-leader/set-key
     "b" 'ido-switch-buffer
-    "B" 'ido-switch-buffer-other-window
-    "c" 'mc/mark-next-like-this
-    "C" 'mc/mark-all-like-this
     "d" 'dired-jump
-    "E" 'mc/edit-lines
-    "f" 'ido-find-file
-    "G" 'magit-blame-mode
-    "i" 'idomenu
     "k" 'kill-this-buffer
     "K" 'kill-buffer
     "l" 'linum-mode
     "o" 'occur
     "O" 'browse-url
-    "p" 'magit-find-file-completing-read
     "P" 'popwin:popup-last-buffer
     "r" 'bw/recentf-ido-find-file
-    "R" 'bookmark-jump
-    "s" 'ag-project
-    "t" 'bw/open-term
-    "T" 'eshell
     "w" 'save-buffer
     "x" 'smex
     "y" 'bury-buffer)
