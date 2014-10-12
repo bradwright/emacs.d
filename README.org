@@ -843,6 +843,12 @@ Configure Ido (see comments for more information):
      ido-use-virtual-buffers nil))
 #+end_src
 
+Store =ido= temporary directory cache elsewhere:
+
+#+begin_src emacs-lisp
+  (setq ido-save-directory-list-file (expand-file-name ".ido.last" bw/tmp-local-dir))
+#+end_src
+
 Finally load Ido:
 
 #+begin_src emacs-lisp
