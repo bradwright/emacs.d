@@ -2280,6 +2280,14 @@ various RFCs and specifications.
   (require 'know-your-http-well)
 #+end_src
 
+*** yaml-mode
+
+Regrettably I need to occasionally edit [[http://www.yaml.org][YAML]].
+
+#+begin_src emacs-lisp
+  (require-package 'yaml-mode)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
