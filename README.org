@@ -1566,6 +1566,14 @@ of buffers named after the project root.
   (setq ag-reuse-buffers t)
 #+end_src
 
+Highlight search results using =isearch= highlight faces (otherwise it just
+copies them from the shell):
+
+#+begin_src emacs-lisp
+  (setq ag-highlight-search t)
+  (copy-face lazy-highlight-face 'ag-match-face)
+#+end_src
+
 *** projectile
 
 [[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
