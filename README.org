@@ -659,7 +659,7 @@ Obviously this doesn't work in the terminal, so we need to use the
 gotten from [[http://mindlev.wordpress.com/2011/06/13/emacs-in-a-terminal-on-osx/#comment-20][this blog comment]].
 
 #+begin_src emacs-lisp
-  (unless (display-graphic-p)
+  (when (and (not (display-graphic-p)) (eq system-type 'darwin))
     (defun bw/copy-from-osx ()
       "Copies the current clipboard content using the `pbcopy` command"
       (shell-command-to-string "pbpaste"))
