@@ -897,6 +897,12 @@ with =subword-mode= enabled by default:
     (add-hook 'ruby-mode-hook (lambda () (subword-mode 1))))
 #+end_src
 
+Add =Puppetfile= files to [[ruby-mode]]:
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("[pP]uppetfile\\'" . ruby-mode))
+#+end_src
+
 *** hippie
 
 [[http://www.emacswiki.org/emacs/HippieExpand][Hippie expand]] is a more feature complete completion engine than the default
