@@ -400,6 +400,12 @@ disk):
   (global-set-key (kbd "C-c r") 'revert-buffer)
 #+end_src
 
+Use =ibuffer= instead of the feature-lacking =list-buffers=:
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+end_src
+
 *** Launcher keymap
 
 This trick I got from [[http://endlessparentheses.com/launcher-keymap-for-standalone-features.html][a blog post on launcher keymaps]]. I define my launcher
