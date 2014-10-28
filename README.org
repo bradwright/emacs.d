@@ -1583,7 +1583,9 @@ copies them from the shell):
 
 #+begin_src emacs-lisp
   (setq ag-highlight-search t)
-  (copy-face lazy-highlight-face 'ag-match-face)
+  (add-hook 'ag-mode-hook
+            (lambda ()
+              (copy-face 'lazy-highlight 'ag-match-face)))
 #+end_src
 
 *** projectile
