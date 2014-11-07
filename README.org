@@ -2117,6 +2117,25 @@ Make sure we run [[http://golang.org/cmd/gofmt/][gofmt]] before saving any Go fi
     (add-hook 'before-save-hook 'gofmt-before-save))
 #+end_src
 
+Deal with [[https://github.com/mattn/gom][gom]] - =gom= puts locally versioned packages into =./_vendor=, so let's
+dynamically add that to our =GOPATH=:
+
+#+begin_src emacs-lisp
+  (defun bw/set-local-go-path ()
+    "Sets a local GOPATH if appropriate"
+    (let* ((local-go-path (concat (projectile-project-root) "_vendor"))
+           (current-go-path (getenv "GOPATH")))
+      (if (not current-go-path)
+          (setenv "GOPATH" local-go-path)
+        (unless (string-match-p local-go-path current-go-path)
+          (setenv "GOPATH" (concat local-go-path ":" current-go-path))))))
+
+  (add-hook 'go-mode-hook 'bw/set-local-go-path)
+#+end_src
+
+*FIXME*: this won't work if I open multiple Go buffers from different =gom=
+projects - the =GOPATH= will clash. [[http://stackoverflow.com/questions/16786831/how-can-i-set-environment-variables-to-a-buffer-local-scope-in-emacs][Potential fix]].
+
 **** flycheck integration
 
 [[flycheck]] has excellent [[http://flycheck.readthedocs.org/en/latest/guide/languages.html#go][golang]] integration, so enable it:
