@@ -604,7 +604,7 @@ On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
   (add-hook 'after-init-hook (lambda ()
                                (if (window-system)
                                    (load-theme 'solarized-dark t)
-                                 (load-theme 'zenburn t))))
+                                 (load-theme 'base16-default t))))
 #+end_src
 
 ** OS X specific configuration
@@ -1672,6 +1672,15 @@ I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY E
 
 #+begin_src emacs-lisp
   (require-package 'zenburn-theme)
+#+end_src
+
+*** base16-theme
+
+The [[https://github.com/neil477/base16-emacs][base16]] themes are very compatible with terminals. I use the [[http://chriskempson.github.io/base16/#default][default]]
+theme.
+
+#+begin_src emacs-lisp
+  (require-package 'base16-theme)
 #+end_src
 
 *** magit-find-file
