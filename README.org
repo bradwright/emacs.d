@@ -2126,6 +2126,14 @@ Make sure we run [[http://golang.org/cmd/gofmt/][gofmt]] before saving any Go fi
     (add-hook 'before-save-hook 'gofmt-before-save))
 #+end_src
 
+Make sure we capture the =GOPATH= environment variable on OS X:
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (after-load 'exec-path-from-shell
+      (exec-path-from-shell-copy-env "GOPATH")))
+#+end_src
+
 Deal with [[https://github.com/mattn/gom][gom]] - =gom= puts locally versioned packages into =./_vendor=, so let's
 dynamically add that to our =GOPATH=:
 
