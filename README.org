@@ -2113,7 +2113,7 @@ clash.
 **** go-mode
 
 [[https://github.com/dominikh/go-mode.el][go-mode]] is a major mode for editing =.go= files. It has excellent integration
-with the Go compiler and toolchain/
+with the Go compiler and toolchain.
 
 #+begin_src emacs-lisp
   (require-package 'go-mode)
