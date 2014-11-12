@@ -2151,6 +2151,15 @@ dynamically add that to our =GOPATH=:
   (add-hook 'go-mode-hook 'bw/set-local-go-path)
 #+end_src
 
+Make sure that if we're using =goenv= or =gom= we can detect that with
+[[projectile]]:
+
+#+begin_src emacs-lisp
+  (after-load 'projectile
+    (add-to-list 'projectile-project-root-files ".go-version")
+    (add-to-list 'projectile-project-root-files "Gomfile"))
+#+end_src
+
 **** flycheck integration
 
 [[flycheck]] has excellent [[http://flycheck.readthedocs.org/en/latest/guide/languages.html#go][golang]] integration, so enable it:
