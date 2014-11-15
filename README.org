@@ -2378,6 +2378,12 @@ and try to load a file named after the local system:
   (load (concat bw/local-dotfiles-dir system-name ".el") t)
 #+end_src
 
+Finally, try loading a default file:
+
+#+begin_src emacs-lisp
+  (load (concat bw/local-dotfiles-dir "local-overrides.el") t)
+#+end_src
+
 *** =Customize=-d configuration
 
 Make sure anything saved using =customize= goes into a consistent (and ignored)
