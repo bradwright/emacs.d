@@ -406,6 +406,15 @@ Use =ibuffer= instead of the feature-lacking =list-buffers=:
   (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
 
+On OS X, make sure M-3 is remapped to hash:
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (fset 'insert-pound "#")
+    (define-key global-map "\M-3" #'insert-pound))
+#+end_src
+
+
 *** Launcher keymap
 
 This trick I got from [[http://endlessparentheses.com/launcher-keymap-for-standalone-features.html][a blog post on launcher keymaps]]. I define my launcher
