@@ -2378,6 +2378,12 @@ Enable it for my [[Launcher keymap]] prefix:
   (guide-key-mode 1)
 #+end_src
 
+[[diminish]] =guide-key-mode=:
+
+#+begin_src emacs-lisp
+  (diminish 'guide-key-mode)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
