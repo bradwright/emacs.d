@@ -2362,6 +2362,22 @@ Regrettably I need to occasionally edit [[http://www.yaml.org][YAML]].
   (require-package 'yaml-mode)
 #+end_src
 
+*** guide-key
+
+[[https://github.com/kai2nenobu/guide-key][guide-key]] shows a popup help window after a pressing defined keys for a short
+delay.
+
+#+begin_src emacs-lisp
+  (require-package 'guide-key)
+#+end_src
+
+Enable it for my [[Launcher keymap]] prefix:
+
+#+begin_src emacs-lisp
+  (setq guide-key/guide-key-sequence '("C-x C-l"))
+  (guide-key-mode 1)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
