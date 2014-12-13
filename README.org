@@ -1764,6 +1764,16 @@ easily retain muscle memory:
       (key-description (vector (car entry))) (cdr entry)))
 #+end_src
 
+***** guide-key integration
+
+If we have [[guide-key]] installed, push the leader key onto that:
+
+#+begin_src emacs-lisp
+  (after-load 'guide-key
+    (add-hook 'evil-leader-mode-hook
+              #'(lambda () (guide-key/add-local-guide-key-sequence evil-leader/leader))))
+#+end_src
+
 **** basic evil configuration
 
 Set up some defaults for [[evil]].
