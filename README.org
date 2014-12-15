@@ -1261,6 +1261,15 @@ Add launch command:
   (bw/add-launcher "p" 'paradox-list-packages)
 #+end_src
 
+**** async mode
+
+Paradox now [[https://github.com/Bruce-Connor/paradox/commit/e341a900609974802ad92d5bb43083fcf83ef432#diff-2d43bf4d9c7b9686d0895974900dfd05R18][supports an asynchronous mode]] which requires the =async= package:
+
+#+begin_src emacs-lisp
+  (require-package 'async)
+  (setq paradox-execute-asynchronously t)
+#+end_src
+
 *** exec-path-from-shell
 
 OS X doesn't use the environment variables available in a shell in a GUI
