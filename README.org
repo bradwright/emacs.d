@@ -1252,8 +1252,9 @@ Automatically 'star' packages on GitHub after I install them (so I can easily
 follow changes to them):
 
 #+begin_src emacs-lisp
-  (setq paradox-automatically-star t)
-  (setq paradox-github-token (bw/get-keychain-password "paradox-github-token"))
+  (let ((github-token (bw/get-keychain-password "paradox-github-token")))
+    (setq paradox-automatically-star github-token)
+    (setq paradox-github-token github-token))
 #+end_src
 
 Add launch command:
