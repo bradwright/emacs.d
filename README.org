@@ -734,11 +734,12 @@ secure than storing them in configuration on disk:
   (defun bw/get-keychain-password (account-name)
     "Get `account-name' keychain password from OS X Keychain"
     (interactive "sAccount name: ")
-    (bw/chomp
-     (shell-command-to-string
-      (concat
-       "security find-generic-password -wa "
-       account-name))))
+    (when (executable-find "security")
+      (bw/chomp
+       (shell-command-to-string
+        (concat
+         "security find-generic-password -wa "
+         account-name)))))
 #+end_src
 
 *** Conditionally kill Emacs
