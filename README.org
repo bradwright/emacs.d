@@ -2405,6 +2405,27 @@ Enable it for my [[Launcher keymap]] prefix:
   (diminish 'guide-key-mode)
 #+end_src
 
+*** browse-kill-ring
+
+[[https://github.com/browse-kill-ring/browse-kill-ring][browse-kill-ring]] allows one to browse the kill ring history when yanking.
+
+#+begin_src emacs-lisp
+  (require-package 'browse-kill-ring)
+#+end_src
+
+remap =yank-pop=:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)
+#+end_src
+
+make =browse-kill-ring= act like =yank-pop= by overwriting the previous yank:
+
+#+begin_src emacs-lisp
+  (after-load 'browse-kill-ring
+    (setq browse-kill-ring-replace-yank t))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
