@@ -613,7 +613,7 @@ On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
   (add-hook 'after-init-hook (lambda ()
                                (if (window-system)
                                    (load-theme 'solarized-dark t)
-                                 (load-theme 'base16-default t))))
+                                 (load-theme 'solarized t))))
 #+end_src
 
 ** OS X specific configuration
@@ -1701,6 +1701,15 @@ theme.
 
 #+begin_src emacs-lisp
   (require-package 'base16-theme)
+#+end_src
+
+*** color-theme-solarized
+
+The [[https://github.com/sellout/emacs-color-theme-solarized][color-theme-solarized]] theme is the 'official' theme for Emacs, and it works
+very well on terminals.
+
+#+begin_src emacs-lisp
+  (require-package 'color-theme-solarized)
 #+end_src
 
 *** magit-find-file
