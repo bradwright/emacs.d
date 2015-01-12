@@ -613,7 +613,10 @@ On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
   (add-hook 'after-init-hook (lambda ()
                                (if (window-system)
                                    (load-theme 'solarized-dark t)
-                                 (load-theme 'solarized t))))
+                                 (progn
+                                   (custom-set-variables
+                                    '(frame-background-mode (quote dark)))
+                                   (load-theme 'solarized t)))))
 #+end_src
 
 ** OS X specific configuration
