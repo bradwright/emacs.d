@@ -2449,6 +2449,21 @@ description of this workflow]]).
   (require-package 'narrow-indirect)
 #+end_src
 
+*** projectile-rails
+
+[[https://github.com/asok/projectile-rails][projectile-rails]] provides some convenience functions and hooks to make working
+with Ruby on Rails projects easier:
+
+#+begin_src emacs-lisp
+  (require-package 'projectile-rails)
+#+end_src
+
+and make sure it's loaded during [[projectile]]'s loading phase:
+
+#+begin_src emacs-lisp
+  (add-hook 'projectile-mode-hook 'projectile-rails-on)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
