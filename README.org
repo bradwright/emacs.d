@@ -1697,15 +1697,6 @@ I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY E
   (require-package 'zenburn-theme)
 #+end_src
 
-*** base16-theme
-
-The [[https://github.com/neil477/base16-emacs][base16]] themes are very compatible with terminals. I use the [[http://chriskempson.github.io/base16/#default][default]]
-theme.
-
-#+begin_src emacs-lisp
-  (require-package 'base16-theme)
-#+end_src
-
 *** color-theme-solarized
 
 The [[https://github.com/sellout/emacs-color-theme-solarized][color-theme-solarized]] theme is the 'official' theme for Emacs, and it works
