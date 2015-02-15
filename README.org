@@ -611,12 +611,8 @@ On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
 
 #+begin_src emacs-lisp
   (add-hook 'after-init-hook (lambda ()
-                               (if (window-system)
-                                   (load-theme 'solarized-dark t)
-                                 (progn
-                                   (custom-set-variables
-                                    '(frame-background-mode (quote dark)))
-                                   (load-theme 'solarized t)))))
+                               (when (window-system)
+                                   (load-theme 'solarized-dark t))))
 #+end_src
 
 ** OS X specific configuration
@@ -1695,15 +1691,6 @@ I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY E
 
 #+begin_src emacs-lisp
   (require-package 'zenburn-theme)
-#+end_src
-
-*** color-theme-solarized
-
-The [[https://github.com/sellout/emacs-color-theme-solarized][color-theme-solarized]] theme is the 'official' theme for Emacs, and it works
-very well on terminals.
-
-#+begin_src emacs-lisp
-  (require-package 'color-theme-solarized)
 #+end_src
 
 *** magit-find-file
