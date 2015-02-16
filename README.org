@@ -1607,6 +1607,15 @@ copies them from the shell):
               (copy-face 'lazy-highlight 'ag-match-face)))
 #+end_src
 
+**** wgrep-ag
+
+[[https://github.com/mhayashi1120/Emacs-wgrep][wgrep-ag]] allows me to edit =ag=
+results directly from the buffer.
+
+#+begin_src emacs-lisp
+  (require-package 'wgrep-ag)
+#+end_src
+
 *** projectile
 
 [[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
