@@ -1693,6 +1693,13 @@ modeline to be high contrast (reversed out):
   (setq solarized-high-contrast-mode-line t)
 #+end_src
 
+Ensure that the [[https://github.com/bbatsov/solarized-emacs#underline-position-setting-for-x][descender in the modeline]] doesn't sit up against the buffer name
+(this only comes into play if =solarized-high-contrast-mode-line= isn't set):
+
+#+begin_src emacs-lisp
+  (setq x-underline-at-descent-line t)
+#+end_src
+
 *** zenburn-theme
 
 I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY Emacs as it has excellent terminal colouring
