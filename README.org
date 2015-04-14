@@ -1926,7 +1926,8 @@ evil to start in =emacs-mode=, for example:
                       (git-rebase-mode . emacs)
                       (help-mode . emacs)
                       (paradox-menu-mode . emacs)
-                      (term-mode . emacs)))
+                      (term-mode . emacs)
+                      (ag-mode . emacs)))
     (evil-set-initial-state `,(car mode-map) `,(cdr mode-map)))
 #+end_src
 
