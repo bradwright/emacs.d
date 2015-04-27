@@ -1192,15 +1192,13 @@ I want to also add:
 
 - [[https://github.com/milkypostman/melpa#melpa][MELPA]] (tracks GitHub repositories, is much more comprehensive)
 - [[https://github.com/milkypostman/melpa#stable-packages][MELPA stable]] (like MELPA, but pinned to specific versions)
-- [[https://github.com/jorgenschaefer/elpy#quick-installation][Elpy]] (allows me to install the Elpy Python development environment)
 
 #+begin_src emacs-lisp
   (after-load 'package
     (setq package-archives
           '(("gnu"          . "http://elpa.gnu.org/packages/")
             ("melpa"        . "http://melpa.org/packages/")
-            ("melpa-stable" . "http://stable.melpa.org/packages/")
-            ("elpy"         . "http://jorgenschaefer.github.io/packages/"))))
+            ("melpa-stable" . "http://stable.melpa.org/packages/"))))
 #+end_src
 
 **** Initialise package manager
