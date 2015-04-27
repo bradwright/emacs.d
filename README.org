@@ -1209,6 +1209,14 @@ Finally we initialise the package manager:
   (package-initialize)
 #+end_src
 
+**** Pin packages
+
+We're pinning [[magit]] because it has a stable release, and I depend on it:
+
+#+begin_src emacs-lisp
+  (add-to-list 'package-pinned-packages '(magit . "melpa-stable"))
+#+end_src
+
 *** diminish
 
 [[http://www.emacswiki.org/emacs/DiminishedModes][diminish]] removes or abbreviates the minor mode indicators that can clutter up
