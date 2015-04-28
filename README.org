@@ -36,7 +36,7 @@ install it:
 
 - Left =option= key is remapped to =M-=
 - =M-3= prints a literal =#= (UK Mac keyboards being weird)
-- We use the [[https://github.com/bbatsov/solarized-emacs][Solarized Dark]] theme
+- We use the [[https://github.com/sellout/emacs-color-theme-solarized][Solarized]] theme
 - Font is [[http://www.levien.com/type/myfonts/inconsolata.html][Inconsolata]]
 
 **** OS X CLI in iTerm2
@@ -608,13 +608,18 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
 
 *** Themes
 
-On a GUI Emacs, I want to use [[solarized-theme]]. On a terminal I want to use
-[[zenburn-theme]]:
+I always use [[solarized-theme]], even in terminals:
 
 #+begin_src emacs-lisp
-  (add-hook 'after-init-hook (lambda ()
-                               (when (window-system)
-                                   (load-theme 'solarized-dark t))))
+  (defun bw/enable-solarized (&optional frame)
+    "Enabled `solarized' in the selected `frame'"
+    (let ((selected-frame (if frame frame (selected-frame))))
+      (set-frame-parameter selected-frame 'background-mode 'dark)
+      (set-terminal-parameter selected-frame 'background-mode 'dark)
+      (enable-theme 'solarized)))
+
+  (add-hook 'after-init-hook #'bw/enable-solarized)
+  (add-hook 'after-make-frame-functions #'bw/enable-solarized)
 #+end_src
 
 ** OS X specific configuration
@@ -1695,29 +1700,14 @@ at any time, just make sure this advice runs after everything has finished:
 
 *** solarized-theme
 
-I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. Specifically, I use the
-[[https://github.com/bbatsov/solarized-emacs]] variant as it has the best support
-for the major modes I use, and is the most up to date. Previously I used
-[[https://github.com/sellout/emacs-color-theme-solarized][sellout's variant]] as it has much better terminal support, but it hasn't been
-updated seriously in years and it fell behind for modern modes.
+I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my
+editor. I use
+[[https://github.com/sellout/emacs-color-theme-solarized][sellout's variant]] as
+it has much better terminal support.
 
 #+begin_src emacs-lisp
-  (require-package 'solarized-theme)
-#+end_src
-
-Since it doesn't work well with my terminal theme (also Solarized Dark), I only
-want to enable it on graphical displays (see [[Themes]]). I also want to make sure I set the
-modeline to be high contrast (reversed out):
-
-#+begin_src emacs-lisp
-  (setq solarized-high-contrast-mode-line t)
-#+end_src
-
-Ensure that the [[https://github.com/bbatsov/solarized-emacs#underline-position-setting-for-x][descender in the modeline]] doesn't sit up against the buffer name
-(this only comes into play if =solarized-high-contrast-mode-line= isn't set):
-
-#+begin_src emacs-lisp
-  (setq x-underline-at-descent-line t)
+  (require-package 'color-theme-solarized)
+  (load-theme 'solarized t t)
 #+end_src
 
 *** zenburn-theme
