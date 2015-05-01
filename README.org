@@ -2061,6 +2061,14 @@ perform on-the-fly syntax checking and linting.
   (require 'flycheck)
 #+end_src
 
+If [[guide-key]] is installed, add it to [[flycheck]]'s prefix:
+
+#+begin_src emacs-lisp
+  (after-load 'guide-key
+    (add-hook 'flycheck-mode-hook
+              #'(lambda () (guide-key/add-local-guide-key-sequence flycheck-keymap-prefix))))
+#+end_src
+
 *** javascript
 
 I use [[https://github.com/mooz/js2-mode][js2-mode]] for editing JavaScript. [[js2-mode]] is a JavaScript major mode that
