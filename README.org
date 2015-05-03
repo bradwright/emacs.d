@@ -464,10 +464,12 @@ Turn off the startup screen, and always show =*scratch*=.
 I use [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] as my default coding font. It's set to render at 18pt:
 
 #+begin_src emacs-lisp
-  (when (and
-         (display-graphic-p)
-         (find-font (font-spec :name "Inconsolata")))
-    (set-frame-font "Inconsolata-18" t t))
+  (when
+    (display-graphic-p)
+    (if (find-font (font-spec :name "Inconsolata for Powerline"))
+        (set-frame-font "Inconsolata for Powerline-18" t t)
+      (when (find-font (font-spec :name "Inconsolata"))
+        (set-frame-font "Inconsolata-18" t t))))
 #+end_src
 
 *** Syntax highlighting
