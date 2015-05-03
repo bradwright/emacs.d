@@ -1729,6 +1729,15 @@ I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY E
   (require-package 'zenburn-theme)
 #+end_src
 
+*** powerline
+
+I use [[https://github.com/milkypostman/powerline][powerline]] to format my modeline.
+
+#+begin_src emacs-lisp
+  (require-package 'powerline)
+  (add-hook 'after-init-hook #'powerline-default-theme)
+#+end_src
+
 *** magit-find-file
 
 [[https://github.com/bradleywright/magit-find-file.el][magit-find-file]] is a package that uses Magit's process buffers to emulate
