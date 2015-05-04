@@ -1735,7 +1735,21 @@ I use [[https://github.com/milkypostman/powerline][powerline]] to format my mode
 
 #+begin_src emacs-lisp
   (require-package 'powerline)
-  (add-hook 'after-init-hook #'powerline-default-theme)
+#+end_src
+
+When using the [[https://github.com/powerline/fonts][hacked fonts for Powerline]], I can force Powerline to display
+using UTF-8, which gives me proper full-height arrows:
+
+#+begin_src emacs-lisp
+  (when (find-font
+         (font-spec :name "Inconsolata for Powerline"))
+    (setq powerline-default-separator "utf-8"))
+#+end_src
+
+Enable Powerline's default mode after Emacs initialises:
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook #powerline-default-theme)
 #+end_src
 
 *** magit-find-file
