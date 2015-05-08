@@ -1749,7 +1749,7 @@ using UTF-8, which gives me proper full-height arrows:
 Enable Powerline's default mode after Emacs initialises:
 
 #+begin_src emacs-lisp
-  (add-hook 'after-init-hook #powerline-default-theme)
+  (add-hook 'after-init-hook #'powerline-default-theme)
 #+end_src
 
 *** magit-find-file
