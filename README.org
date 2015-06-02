@@ -627,7 +627,9 @@ I always use [[solarized-theme]], even in terminals:
   (defun bw/toggle-solarized ()
     "Toggles Solarized tone"
     (interactive)
-    (bw/enable-solarized nil (if (eq (frame-parameter nil 'background-mode) 'dark) 'light 'dark)))
+    (bw/enable-solarized
+     nil
+     (if (eq (frame-parameter nil 'background-mode) 'dark) 'light 'dark)))
 #+end_src
 
 ** OS X specific configuration
