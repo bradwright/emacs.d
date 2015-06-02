@@ -611,11 +611,12 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
 I always use [[solarized-theme]], even in terminals:
 
 #+begin_src emacs-lisp
-  (defun bw/enable-solarized (&optional frame)
+  (defun bw/enable-solarized (&optional frame tone)
     "Enabled `solarized' in the selected `frame'"
-    (let ((selected-frame (if frame frame (selected-frame))))
-      (set-frame-parameter selected-frame 'background-mode 'dark)
-      (set-terminal-parameter selected-frame 'background-mode 'dark)
+    (let ((selected-frame (if frame frame (selected-frame)))
+          (selected-tone (if tone tone 'dark)))
+      (set-frame-parameter selected-frame 'background-mode selected-tone)
+      (set-terminal-parameter selected-frame 'background-mode selected-tone)
       (enable-theme 'solarized)))
 
   (add-hook 'after-init-hook #'bw/enable-solarized)
