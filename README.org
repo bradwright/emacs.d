@@ -623,6 +623,13 @@ I always use [[solarized-theme]], even in terminals:
   (add-hook 'after-make-frame-functions #'bw/enable-solarized)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun bw/toggle-solarized ()
+    "Toggles Solarized tone"
+    (interactive)
+    (bw/enable-solarized nil (if (eq (frame-parameter nil 'background-mode) 'dark) 'light 'dark)))
+#+end_src
+
 ** OS X specific configuration
 
 Besides the keyboard configuration above, there are some other specific things I
