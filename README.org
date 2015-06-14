@@ -1721,15 +1721,6 @@ it has much better terminal support.
   (load-theme 'solarized t t)
 #+end_src
 
-*** zenburn-theme
-
-I use the [[https://github.com/bbatsov/zenburn-emacs][zenburn-theme]] on a TTY Emacs as it has excellent terminal colouring
-(see [[Themes]]):
-
-#+begin_src emacs-lisp
-  (require-package 'zenburn-theme)
-#+end_src
-
 *** powerline
 
 I use [[https://github.com/milkypostman/powerline][powerline]] to format my modeline.
