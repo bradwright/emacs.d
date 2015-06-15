@@ -800,6 +800,15 @@ macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612
        '(progn ,@body)))
 #+end_src
 
+*** occur
+
+[[http://emacswiki.org/emacs/OccurMode][occur-mode]] is a search minor-mode that shows a buffer with all matching results
+in a popup buffer.
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "o" 'occur)
+#+end_src
+
 *** org
 
 [[http://orgmode.org][org-mode]] is a plain text system for organising information and notes.
