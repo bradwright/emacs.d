@@ -1122,8 +1122,7 @@ to search over them. Bind this to =C-x C-r= (=C-c C-r= is used in modes like
         (let ((file (ido-completing-read "Recently: " recentf-list nil t)))
           (when file
             (find-file file))))
-
-      (global-set-key (kbd "C-x C-r") 'bw/recentf-ido-find-file)))
+      (bw/add-launcher "r" 'bw/recentf-ido-find-file)))
 #+end_src
 
 Now enable =recentf=:
@@ -1801,7 +1800,6 @@ Now set up all the =evil-leader= powered shortcuts I want:
     "o" 'occur
     "O" 'browse-url
     "P" 'popwin:popup-last-buffer
-    "r" 'bw/recentf-ido-find-file
     "w" 'save-buffer
     "x" 'smex
     "y" 'bury-buffer)
