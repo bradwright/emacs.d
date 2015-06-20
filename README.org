@@ -1729,6 +1729,12 @@ it has much better terminal support.
   (load-theme 'solarized t t)
 #+end_src
 
+Don't use italics:
+
+#+begin_src emacs-lisp
+  (setq solarized-italic nil)
+#+end_src
+
 *** powerline
 
 I use [[https://github.com/milkypostman/powerline][powerline]] to format my modeline.
