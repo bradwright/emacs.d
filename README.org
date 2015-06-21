@@ -805,8 +805,27 @@ macro was gotten from [[https://github.com/purcell/emacs.d/blob/aa789c9745b13612
 [[http://emacswiki.org/emacs/OccurMode][occur-mode]] is a search minor-mode that shows a buffer with all matching results
 in a popup buffer.
 
+Use the =occur-dwim= (do what I mean) function from [[http://oremacs.com/2015/01/26/occur-dwim/][(or emacs]]:
+
 #+begin_src emacs-lisp
-  (bw/add-launcher "o" 'occur)
+  (defun occur-dwim ()
+    "Call `occur' with a sane default."
+    (interactive)
+    (push (if (region-active-p)
+              (buffer-substring-no-properties
+               (region-beginning)
+               (region-end))
+            (let ((sym (thing-at-point 'symbol)))
+              (when (stringp sym)
+                (regexp-quote sym))))
+          regexp-history)
+    (call-interactively 'occur))
+#+end_src
+
+Bind it to a launcher.
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "o" 'occur-dwim)
 #+end_src
 
 *** org
