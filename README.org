@@ -1729,10 +1729,9 @@ at any time, just make sure this advice runs after everything has finished:
   call the files instead of Projectile's native caller - this is
   much much faster"
                   (autoload 'magit-find-file-files "magit-find-file")
-                  (autoload 'magit-get-top-dir "magit")
-                  (if (magit-get-top-dir)
-                      (let ((default-directory (projectile-project-root)))
-                        (setq ad-return-value (magit-find-file-files)))
+                  (autoload 'magit-git-repo-p "magit-git")
+                  (if (magit-git-repo-p (projectile-project-root))
+                    (setq ad-return-value (magit-find-file-files))
                     ad-do-it)))))
 #+end_src
 
