@@ -2533,6 +2533,27 @@ and make sure it's loaded during [[projectile]]'s loading phase:
   (add-hook 'projectile-mode-hook 'projectile-rails-on)
 #+end_src
 
+*** anzu
+
+[[https://github.com/syohex/emacs-anzu][anzu]] provides enhancements to =isearch= and related tasks, particularly
+providing counts and better replacement visualisation.
+
+#+begin_src emacs-lisp
+  (require-package 'anzu)
+#+end_src
+
+Enable [[anzu]] globally:
+
+#+begin_src emacs-lisp
+  (global-anzu-mode 1)
+#+end_src
+
+Use [[anzu]]'s better =query-replace=:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap query-replace] 'anzu-query-replace)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
