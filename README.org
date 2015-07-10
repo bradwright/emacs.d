@@ -1443,10 +1443,10 @@ rewrite:
   (setq magit-rewrite-inclusive 'ask)
 #+end_src
 
-When Magit asks me to save modified buffers, ask me about them:
+Don't tell me when Magit reverts buffers:
 
 #+begin_src emacs-lisp
-  (setq magit-save-some-buffers t)
+  (setq magit-revert-buffers 'silent)
 #+end_src
 
 When Magit takes a while to call out to Git, pop the process buffer after 10
