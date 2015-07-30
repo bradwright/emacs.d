@@ -1416,14 +1416,6 @@ When performing a [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Min
   (setq magit-completing-read-function 'magit-ido-completing-read)
 #+end_src
 
-When I create a new local branch from remote, by default I want it to be named
-the same as the remote branch (default is =$(remotename)-$(branchname)=, eg
-=origin-my-branch=):
-
-#+begin_src emacs-lisp
-  (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only)
-#+end_src
-
 Open the =magit-status= buffer in the same window as the current buffer:
 
 #+begin_src emacs-lisp
@@ -1434,13 +1426,6 @@ Highlight individual word and letter changes when showing hunk diff overlays:
 
 #+begin_src emacs-lisp
   (setq magit-diff-refine-hunk t)
-#+end_src
-
-When [[http://magit.github.io/master/magit.html#Rewriting][rewriting]], always ask me if I want to include the revision at point in the
-rewrite:
-
-#+begin_src emacs-lisp
-  (setq magit-rewrite-inclusive 'ask)
 #+end_src
 
 Don't tell me when Magit reverts buffers:
@@ -1454,18 +1439,6 @@ seconds so I can look for issues:
 
 #+begin_src emacs-lisp
   (setq magit-process-popup-time 10)
-#+end_src
-
-When pushing a branch without a remote, ask me which remote to set it to:
-
-#+begin_src emacs-lisp
-  (setq magit-set-upstream-on-push t)
-#+end_src
-
-When =magit-auto-revert-mode= is enabled, diminish its [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Minor-Modes.html][lighter]] in the modeline:
-
-#+begin_src emacs-lisp
-  (setq magit-auto-revert-mode-lighter "")
 #+end_src
 
 **** Interaction with fullframe
