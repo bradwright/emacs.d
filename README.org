@@ -1441,6 +1441,18 @@ seconds so I can look for issues:
   (setq magit-process-popup-time 10)
 #+end_src
 
+Always show the =verbose= diff in commit windows:
+
+#+begin_src emacs-lisp
+  (setq magit-commit-arguments '("--verbose"))
+#+end_src
+
+Always set the upstream when pushing:
+
+#+begin_src emacs-lisp
+  (setq magit-push-arguments '("--set-upstream"))
+#+end_src
+
 **** Interaction with fullframe
 
 If =fullframe= is installed (see below), use it to make =magit-status= take over
