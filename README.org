@@ -2518,6 +2518,32 @@ and make sure it's loaded during [[projectile]]'s loading phase:
   (add-hook 'projectile-mode-hook 'projectile-rails-on)
 #+end_src
 
+*** swiper
+
+[[https://github.com/abo-abo/swiper][swiper]] adds inline preview to an isearch like incremental search.
+
+#+begin_src emacs-lisp
+  (require-package 'swiper)
+#+end_src
+
+Remap =isearch= to [[swiper]]:
+
+#+begin_src emacs-lisp
+  (define-key (current-global-map) [remap isearch-forward] 'swiper)
+  (define-key (current-global-map) [remap isearch-backward] 'swiper)
+#+end_src
+
+Add some advice to =recenter= the window when exiting from [[swiper]] (gotten from
+[[http://pragmaticemacs.com/emacs/dont-search-swipe/][Pragmatic Emacs]]):
+
+#+begin_src emacs-lisp
+  (defun bw/recenter (&rest args)
+    "recenter display after"
+    (recenter)
+    )
+  (advice-add 'swiper :after #'bw/recenter)
+#+end_src
+
 *** anzu
 
 [[https://github.com/syohex/emacs-anzu][anzu]] provides enhancements to =isearch= and related tasks, particularly
