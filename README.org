@@ -1548,41 +1548,23 @@ Finally we cause =flx-ido-mode= to take over ido:
   (flx-ido-mode 1)
 #+end_src
 
-*** ace-jump-mode
+*** avy
 
-[[https://github.com/winterTTr/ace-jump-mode][ace-jump-mode]] allows one to jump around the buffer to named characters (it's
-easier to watch the video on that link than explain).
+[[https://github.com/abo-abo/avy][avy]] allows one to jump around the buffer to named characters (it's easier to
+watch the video on that link than explain).
 
 #+begin_src emacs-lisp
-  (require-package 'ace-jump-mode)
+  (require-package 'avy)
 #+end_src
 
 Bind it:
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-c SPC") 'ace-jump-char-mode)
-  (global-set-key (kbd "C-<return>") 'ace-jump-line-mode)
-  (bw/add-launcher "j" 'ace-jump-char-mode)
-  (bw/add-launcher "J" 'ace-jump-line-mode)
-#+end_src
-
-**** evil integration
-
-Since [[evil]] has excellent [[https://bitbucket.org/lyro/evil/src/0e095224bd52576db82b0355586bb490d08f32f6/evil-integration.el?at=default#cl-339][support for ace-jump-mode]], we should add extra bindings
-for that:
-
-#+begin_src emacs-lisp
-  (after-load 'evil
-    (define-key evil-normal-state-map (kbd "SPC") 'ace-jump-char-mode)
-    (define-key evil-normal-state-map (kbd "<return>") 'ace-jump-line-mode))
-#+end_src
-
-Also make sure that =SPC= and =<return>= do the right thing:
-
-#+begin_src emacs-lisp
-  (after-load 'evil
-    (define-key evil-motion-state-map (kbd "SPC") 'ace-jump-char-mode)
-    (define-key evil-motion-state-map (kbd "<return>") 'ace-jump-line-mode))
+  (global-set-key (kbd "C-c SPC") 'avy-goto-word-or-subword-1)
+  (global-set-key (kbd "C-c j") 'avy-goto-word-or-subword-1)
+  (global-set-key (kbd "C-<return>") 'avy-goto-line)
+  (bw/add-launcher "j" 'avy-goto-word-or-subword-1)
+  (bw/add-launcher "J" 'avy-goto-line)
 #+end_src
 
 *** popwin
