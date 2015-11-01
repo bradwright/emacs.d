@@ -2239,6 +2239,15 @@ Make sure that if we're using =goenv= or =gom= we can detect that with
     (add-to-list 'projectile-project-root-files "Gomfile"))
 #+end_src
 
+Because I use =eldoc=, which shows the function signatures in the message area,
+I never actually use =godef-describe= (it's the same info). Instead, let's allow
+me to jump to the =godoc= info for the symbol at point.
+
+#+begin_src emacs-lisp
+  (after-load 'go-mode
+    (define-key go-mode-map [remap godef-describe] 'godoc-at-point))
+#+end_src
+
 **** flycheck integration
 
 [[flycheck]] has excellent [[http://flycheck.readthedocs.org/en/latest/guide/languages.html#go][golang]] integration, so enable it:
