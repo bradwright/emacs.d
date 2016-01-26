@@ -1790,16 +1790,6 @@ easily retain muscle memory:
       (key-description (vector (car entry))) (cdr entry)))
 #+end_src
 
-***** guide-key integration
-
-If we have [[guide-key]] installed, push the leader key onto that:
-
-#+begin_src emacs-lisp
-  (after-load 'guide-key
-    (add-hook 'evil-leader-mode-hook
-              #'(lambda () (guide-key/add-local-guide-key-sequence evil-leader/leader))))
-#+end_src
-
 **** basic evil configuration
 
 Set up some defaults for [[evil]].
@@ -2050,14 +2040,6 @@ perform on-the-fly syntax checking and linting.
      ;; don't show anything in the left fringe
      flycheck-indication-mode nil))
   (require 'flycheck)
-#+end_src
-
-If [[guide-key]] is installed, add it to [[flycheck]]'s prefix:
-
-#+begin_src emacs-lisp
-  (after-load 'guide-key
-    (add-hook 'flycheck-mode-hook
-              #'(lambda () (guide-key/add-local-guide-key-sequence flycheck-keymap-prefix))))
 #+end_src
 
 *** javascript
@@ -2417,26 +2399,19 @@ Regrettably I need to occasionally edit [[http://www.yaml.org][YAML]].
   (require-package 'yaml-mode)
 #+end_src
 
-*** guide-key
+*** which-key
 
-[[https://github.com/kai2nenobu/guide-key][guide-key]] shows a popup help window after a pressing defined keys for a short
-delay.
+[[https://github.com/justbur/emacs-which-key][which-key]] displays key bindings based on your incomplete command entered so far.
 
 #+begin_src emacs-lisp
-  (require-package 'guide-key)
+  (require-package 'which-key)
+  (which-key-mode 1)
 #+end_src
 
-Enable it for my [[Launcher keymap]] prefix:
+[[diminish]] =which-key-mode=:
 
 #+begin_src emacs-lisp
-  (setq guide-key/guide-key-sequence '("C-x C-l" "C-c p"))
-  (guide-key-mode 1)
-#+end_src
-
-[[diminish]] =guide-key-mode=:
-
-#+begin_src emacs-lisp
-  (diminish 'guide-key-mode)
+  (diminish 'which-key-mode)
 #+end_src
 
 *** browse-kill-ring
