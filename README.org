@@ -2485,8 +2485,7 @@ Add some advice to =recenter= the window when exiting from [[swiper]] (gotten fr
 #+begin_src emacs-lisp
   (defun bw/recenter (&rest args)
     "recenter display after"
-    (recenter)
-    )
+    (recenter))
   (advice-add 'swiper :after #'bw/recenter)
 #+end_src
 
