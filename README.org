@@ -421,9 +421,13 @@ This trick I got from [[http://endlessparentheses.com/launcher-keymap-for-standa
 combo as =C-x C-l=, which is normally =downcase-region= - a command I use so
 infrequently I didn't even know there was a key binding for it.
 
+Also use =s-/= (Apple + / on OSX).
+
 #+begin_src emacs-lisp
   (define-prefix-command 'bw/launcher-map)
   (define-key ctl-x-map (kbd "C-l") 'bw/launcher-map)
+  (when (eq system-type 'darwin)
+    (define-key global-map (kbd "s-/") 'bw/launcher-map))
 #+end_src
 
 rather than remembering that it's =bw/launcher-map=, just make a function:
