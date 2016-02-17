@@ -1247,6 +1247,17 @@ I want to also add:
             ("melpa-stable" . "http://stable.melpa.org/packages/"))))
 #+end_src
 
+If we're using Emacs 25.1 or greater, configure the [[http://endlessparentheses.com/new-in-emacs-25-1-archive-priorities-and-downgrading-packages.html][relative priority]] of those
+archives:
+
+#+begin_src emacs-lisp
+  (after-load 'package
+    (setq package-archive-priorities
+        '(("melpa-stable" . 20)
+          ("gnu" . 10)
+          ("melpa" . 0))))
+#+end_src
+
 **** Initialise package manager
 
 Finally we initialise the package manager:
