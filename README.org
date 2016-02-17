@@ -1266,6 +1266,12 @@ Finally we initialise the package manager:
   (package-initialize)
 #+end_src
 
+And if we're on Emacs 25.1 or higher, install my user-selected packages:
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook #'package-install-selected-packages)
+#+end_src
+
 **** Pin packages
 
 We're pinning [[magit]] because it has a stable release, and I depend on it:
