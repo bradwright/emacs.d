@@ -610,28 +610,18 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
 
 *** Themes
 
-I always use [[solarized-theme]], even in terminals:
-
-#+begin_src emacs-lisp
-  (defun bw/enable-solarized (&optional frame tone)
-    "Enabled `solarized' in the selected `frame'"
-    (let ((selected-frame (if frame frame (selected-frame)))
-          (selected-tone (if tone tone 'dark)))
-      (set-frame-parameter selected-frame 'background-mode selected-tone)
-      (set-terminal-parameter selected-frame 'background-mode selected-tone)
-      (enable-theme 'solarized)))
-
-  (add-hook 'after-init-hook #'bw/enable-solarized)
-  (add-hook 'after-make-frame-functions #'bw/enable-solarized)
-#+end_src
-
 #+begin_src emacs-lisp
   (defun bw/toggle-solarized ()
     "Toggles Solarized tone"
     (interactive)
-    (bw/enable-solarized
-     nil
-     (if (eq (frame-parameter nil 'background-mode) 'dark) 'light 'dark)))
+    (when
+        (or (custom-theme-enabled-p 'solarized-dark) (custom-theme-enabled-p 'solarized-light))
+      (cond ((custom-theme-enabled-p 'solarized-dark) (progn
+                                                        (enable-theme 'solarized-light)
+                                                        (disable-theme 'solarized-dark)))
+            ((custom-theme-enabled-p 'solarized-light) (progn
+                                                         (enable-theme 'solarized-dark)
+                                                         (disable-theme 'solarized-light))))))
 #+end_src
 
 ** OS X specific configuration
@@ -1718,20 +1708,15 @@ at any time, just make sure this advice runs after everything has finished:
 
 *** solarized-theme
 
-I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my
-editor. I use
-[[https://github.com/sellout/emacs-color-theme-solarized][sellout's variant]] as
-it has much better terminal support.
+I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. I use [[https://github.com/bbatsov/solarized-emacs][bbatsoz's variant]] as it is
+more up to date and has better compatibility with most Emacs packages.
 
 #+begin_src emacs-lisp
-  (require-package 'color-theme-solarized)
-  (load-theme 'solarized t t)
-#+end_src
-
-Don't use italics:
-
-#+begin_src emacs-lisp
-  (setq solarized-italic nil)
+  (require-package 'solarized-theme)
+  (setq solarized-high-contrast-mode-line t)
+  (setq solarized-use-variable-pitch nil)
+  (load-theme 'solarized-dark t)
+  (load-theme 'solarized-light t t)
 #+end_src
 
 *** magit-find-file
