@@ -1713,7 +1713,8 @@ more up to date and has better compatibility with most Emacs packages.
 
 #+begin_src emacs-lisp
   (require-package 'solarized-theme)
-  (setq solarized-high-contrast-mode-line t)
+;  (setq solarized-high-contrast-mode-line t)
+(setq x-underline-at-descent-line t)
   (setq solarized-use-variable-pitch nil)
   (load-theme 'solarized-dark t)
   (load-theme 'solarized-light t t)
@@ -2554,3 +2555,11 @@ place:
 #+end_src
 
 (note that this works because =setq= returns the value it's set to)
+
+#+begin_src emacs-lisp
+  (require-package 'smart-mode-line)
+  (setq sml/theme 'respectful)
+  (sml/setup)
+  ;; smart-mode-line shows this for us
+  (diminish 'projectile-mode)
+#+end_src
