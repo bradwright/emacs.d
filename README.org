@@ -1713,11 +1713,12 @@ more up to date and has better compatibility with most Emacs packages.
 
 #+begin_src emacs-lisp
   (require-package 'solarized-theme)
-;  (setq solarized-high-contrast-mode-line t)
-(setq x-underline-at-descent-line t)
+  (setq x-underline-at-descent-line t)
   (setq solarized-use-variable-pitch nil)
-  (load-theme 'solarized-dark t)
+  (load-theme 'solarized-dark t t)
   (load-theme 'solarized-light t t)
+  (add-hook 'after-init-hook (lambda ()
+                               (enable-theme 'solarized-dark)))
 #+end_src
 
 *** magit-find-file
@@ -2558,7 +2559,8 @@ place:
 
 #+begin_src emacs-lisp
   (require-package 'smart-mode-line)
-  (setq sml/theme 'respectful)
+  ;; This is required to fall back to Solarized defaults
+  (setq sml/theme nil)
   (sml/setup)
   ;; smart-mode-line shows this for us
   (diminish 'projectile-mode)
