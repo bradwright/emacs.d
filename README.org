@@ -2515,6 +2515,35 @@ Hide [[anzu]]'s lighter:
     (diminish 'anzu-mode))
 #+end_src
 
+*** smart-mode-line
+
+Install [[https://github.com/Malabarba/smart-mode-line][smart-mode-line]], a better mode-line that has a bunch of nice
+functionality.
+
+#+begin_src emacs-lisp
+  (require-package 'smart-mode-line)
+#+end_src
+
+Let the currently set theme override =sml/theme= - since [[solarized-theme]] is
+installed, this provides the theme:
+
+#+begin_src emacs-lisp
+  (setq sml/theme nil)
+#+end_src
+
+Finally, init [[smart-mode-line]]:
+
+#+begin_src emacs-lisp
+  (sml/setup)
+#+end_src
+
+If [[projectile]] is installed, [[diminish]] it:
+
+#+begin_src emacs-lisp
+  (after-load 'diminish
+    (diminish 'projectile-mode))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
@@ -2556,12 +2585,3 @@ place:
 #+end_src
 
 (note that this works because =setq= returns the value it's set to)
-
-#+begin_src emacs-lisp
-  (require-package 'smart-mode-line)
-  ;; This is required to fall back to Solarized defaults
-  (setq sml/theme nil)
-  (sml/setup)
-  ;; smart-mode-line shows this for us
-  (diminish 'projectile-mode)
-#+end_src
