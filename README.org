@@ -1529,6 +1529,12 @@ to reduce the maximum number of candidates ido displays:
   (setq ido-max-prospects 5)
 #+end_src
 
+Make =C-n= and =C-p= work in vertical mode:
+
+#+begin_src emacs-lisp
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+#+end_src
+
 *** flx-ido
 
 [[https://github.com/lewang/flx][flx-ido]] is an advanced flex-matching algorithm that's significantly faster and
