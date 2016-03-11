@@ -19,9 +19,9 @@ and is contained entirely in this file.
 
 *** Old version
 
-   The previous version can be found at [[https://www.github.com/bradleywright/emacs-d][bradleywright/emacs-d]]. This
-   version has been refactored to use traditional Emacs loading
-   techniques and macros for installing packages.
+The previous version can be found at [[https://www.github.com/bradleywright/emacs-d][bradleywright/emacs-d]]. This version has
+been refactored to use traditional Emacs loading techniques and macros for
+installing packages.
 
 *** Installing
 
@@ -247,9 +247,12 @@ basis, so Makefiles, Ruby etc. will still get the correct indentation rules.
 
 **** Auto-indentation
 
-[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indent-Convenience.html][Electric indent mode]] was added in Emacs 24.1, and it enables automatic indentation when typing a newline. [[http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation][More about electric indent mode on Emacs Redux]].
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indent-Convenience.html][Electric indent mode]] was added in Emacs 24.1, and it enables automatic
+indentation when typing a newline. [[http://emacsredux.com/blog/2013/03/29/automatic-electric-indentation][More about electric indent mode on Emacs
+Redux]].
 
-First we define convenience toggling functions we can use in a hook (or interactively):
+First we define convenience toggling functions we can use in a hook (or
+interactively):
 
 #+begin_src emacs-lisp
   (defun bw/turn-on-electric-indent-mode ()
@@ -1830,7 +1833,8 @@ Firstly, stop Evil from making the cursor color invisible sometimes:
     (setq evil-default-cursor t))
 #+end_src
 
-Make sure that sideways motion keys (=h=, =l= etc.) wrap around to the next/previous lines:
+Make sure that sideways motion keys (=h=, =l= etc.) wrap around to the
+next/previous lines:
 
 #+begin_src emacs-lisp
   (after-load 'evil
@@ -2262,8 +2266,8 @@ Because of libraries like [[https://github.com/nsf/gocode][gocode]], Go has very
 completion, so let's integrate with that. *Note* this requires =gocode= to be
 installed on the system before it'll work.
 
-First I define a hook lambda that deletes all other company backends - gocode is so accurate
-that I don't need any other suggestions:
+First I define a hook lambda that deletes all other company backends - gocode is
+so accurate that I don't need any other suggestions:
 
 #+begin_src emacs-lisp
   (defun bw/setup-company-go ()
