@@ -1086,6 +1086,27 @@ the buffer:
       ad-do-it))
 #+end_src
 
+Always pick my default shell, rather than prompting me (from: [[http://echosa.github.io/blog/2012/06/06/improving-ansi-term/][@echosa's
+improving ansi-term]]):
+
+#+begin_src emacs-lisp
+  (defadvice ansi-term (before use-default-shell activate)
+    (interactive (list (getenv "SHELL"))))
+#+end_src
+
+Make sure that =yank= always works in [[ansi-term]]:
+
+#+begin_src emacs-lisp
+  (defun bw/ensure-term-paste (&optional string)
+   (interactive)
+   (process-send-string
+    (get-buffer-process (current-buffer))
+    (if string string (current-kill 0))))
+
+  (add-hook 'term-mode-hook (lambda ()
+                              (define-key term-raw-map [remap yank] #'bw/ensure-term-paste)))
+#+end_src
+
 *** recentf
 
 [[http://www.emacswiki.org/emacs/RecentFiles][recentf]] stores a list of recently opened files.
