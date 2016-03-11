@@ -2571,6 +2571,22 @@ If [[projectile]] is installed, [[diminish]] it:
     (diminish 'projectile-mode))
 #+end_src
 
+*** sane-term
+
+[[https://github.com/adamrt/sane-term][sane-term]] is a simple wrapper around [[ansi-term]] that allows cycling between
+=ansi-term= buffers (instead of =ansi-term='s default, which is to create a new
+buffer):
+
+#+begin_src emacs-lisp
+  (package-install 'sane-term)
+#+end_src
+
+Add a launcher:
+
+#+begin_src emacs-lisp
+  (bw/add-launcher "n" 'sane-term)
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
