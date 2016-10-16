@@ -942,6 +942,12 @@ We can work around that using [[https://www.gnu.org/software/emacs/manual/html_n
   (add-hook 'python-mode-hook (lambda () (subword-mode 1)))
 #+end_src
 
+Google's [[https://www.bazel.io/][Bazel project]] uses =BUILD= files that closely resemble Python:
+
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("BUILD\\'" . python-mode))
+#+end_src
+
 *** ruby-mode
 
 As of 24.4, Emacs comes with a much better [[http://www.masteringemacs.org/articles/2013/12/29/whats-new-in-emacs-24-4/][Ruby mode]]. However it doesn't come
