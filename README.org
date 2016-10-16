@@ -2210,23 +2210,6 @@ Make sure we capture the =GOPATH= environment variable on OS X:
       (exec-path-from-shell-copy-env "GOPATH")))
 #+end_src
 
-Deal with [[https://github.com/mattn/gom][gom]] - =gom= puts locally versioned packages into =./_vendor=, so let's
-dynamically add that to our =GOPATH=:
-
-#+begin_src emacs-lisp
-  (defun bw/set-local-go-path ()
-    "Sets a local GOPATH if appropriate"
-    (make-local-variable 'process-environment)
-    (let* ((local-go-path (concat (projectile-project-root) "_vendor"))
-           (current-go-path (getenv "GOPATH")))
-      (if (not current-go-path)
-          (setenv "GOPATH" local-go-path)
-        (unless (string-match-p local-go-path current-go-path)
-          (setenv "GOPATH" (concat local-go-path ":" current-go-path))))))
-
-  (add-hook 'go-mode-hook 'bw/set-local-go-path)
-#+end_src
-
 Make sure that if we're using =goenv= or =gom= we can detect that with
 [[projectile]]:
 
