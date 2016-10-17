@@ -1294,6 +1294,13 @@ We're pinning [[magit]] because it has a stable release, and I depend on it:
   (add-to-list 'package-pinned-packages '(magit . "melpa-stable"))
 #+end_src
 
+Pin [[https://github.com/ejmr/php-mode][php-mode]] to a more modern version than the 2015 version that comes with
+Emacs:
+
+#+begin_src emacs-lisp
+  (add-to-list 'package-pinned-packages '(php-mode . "melpa"))
+#+end_src
+
 *** diminish
 
 [[http://www.emacswiki.org/emacs/DiminishedModes][diminish]] removes or abbreviates the minor mode indicators that can clutter up
