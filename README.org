@@ -2385,7 +2385,7 @@ Enable [[web-mode]] by default for several common file extensions:
                    ("\\.html\\.erb$" . web-mode)
                    ("\\.mustache$" . web-mode)
                    ("\\.jinja$" . web-mode)
-                   ("\\.php$" . web-mode)))
+                   ("\\.twig$" . web-mode)))
     (add-to-list 'auto-mode-alist alist))
 #+end_src
 
