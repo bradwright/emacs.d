@@ -2587,6 +2587,22 @@ Add a launcher:
   (bw/add-launcher "n" 'sane-term)
 #+end_src
 
+*** php-mode
+
+Use a modern [[https://github.com/ejmr/php-mode][php-mode]].
+
+#+begin_src emacs-lisp
+  (package-install 'php-mode)
+#+end_src
+
+Use [[flycheck]] to check PHP syntax:
+
+#+begin_src emacs-lisp
+  (after-load 'php-mode
+    (after-load 'flycheck
+      (add-hook 'php-mode-hook 'flycheck-mode-on-safe)))
+#+end_src
+
 ** Local and custom configuration
 
 *** Local overrides
