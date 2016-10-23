@@ -2201,7 +2201,10 @@ clash.
 [[https://github.com/dominikh/go-mode.el][go-mode]] is a major mode for editing =.go= files. It has excellent integration
 with the Go compiler and toolchain.
 
+Install [[go-mode]] from latest:
+
 #+begin_src emacs-lisp
+  (add-to-list 'package-pinned-packages '(go-mode . "melpa"))
   (require-package 'go-mode)
 #+end_src
 
