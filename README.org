@@ -1745,6 +1745,15 @@ at any time, just make sure this advice runs after everything has finished:
 I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my editor. I use [[https://github.com/bbatsov/solarized-emacs][bbatsoz's variant]] as it is
 more up to date and has better compatibility with most Emacs packages.
 
+[[solarized-theme]] doesn't seem to follow package versioning, so just pull the
+latest:
+
+#+begin_src emacs-lisp
+  (add-to-list 'package-pinned-packages '(solarized-theme . "melpa"))
+#+end_src
+
+Install and configure [[solarized-theme]]:
+
 #+begin_src emacs-lisp
   (require-package 'solarized-theme)
   (setq x-underline-at-descent-line t)
