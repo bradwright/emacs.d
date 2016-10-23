@@ -49,8 +49,8 @@ install it:
 
 ***** Required iTerm 2 Configuration
 
-     - Re-map left =option= key to =+Esc=
-     - Untick =Smart cursor color=
+- Re-map left =option= key to =+Esc=
+- Untick =Smart cursor color=
 
 *** Included libraries
 
@@ -104,8 +104,8 @@ Define a base directory =bw/dotfiles-dir= that's relative to the currently
 loading file (this file). This means if I deliberately start Emacs with a file
 loaded:
 
-#+BEGIN_SRC
-$ emacs -q -l ~/src/emacs/init.el
+#+BEGIN_SRC sh
+  emacs -q -l ~/src/emacs/init.el
 #+END_SRC
 
 then =bw/dotfiles-dir= will be =~/src/emacs=.
