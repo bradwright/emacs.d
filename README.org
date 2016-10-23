@@ -28,7 +28,9 @@ installing packages.
 Just check it out straight to the right directory, and use Make to
 install it:
 
-: cd ~/Projects/emacs.d && make
+#+begin_src sh
+  cd ~/Projects/emacs.d && make
+#+end_src
 
 *** Platform specific configuration
 
