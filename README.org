@@ -1689,7 +1689,10 @@ results directly from the buffer.
 [[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
 grouping of files.
 
+Install and initialise [[projectile]] from the main repo:
+
 #+begin_src emacs-lisp
+  (add-to-list 'package-pinned-packages '(projectile . "melpa"))
   (require-package 'projectile)
   (projectile-global-mode)
 #+end_src
