@@ -2501,10 +2501,12 @@ and make sure it's loaded during [[projectile]]'s loading phase:
 
 [[https://github.com/abo-abo/swiper][swiper]] adds inline preview to an isearch like incremental search.
 
-Install [[swiper]] from latest code:
+Install [[swiper]] from latest code (and also Ivy, as otherwise I get an old
+version):
 
 #+begin_src emacs-lisp
   (add-to-list 'package-pinned-packages '(swiper . "melpa"))
+  (add-to-list 'package-pinned-packages '(ivy . "melpa"))
   (require-package 'swiper)
 #+end_src
 
