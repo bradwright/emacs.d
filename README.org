@@ -1279,6 +1279,20 @@ archives:
           ("melpa" . 0))))
 #+end_src
 
+**** Pin packages
+
+Some packages need to be pinned to ensure they come from the right place:
+
+#+begin_src emacs-lisp
+  (setq package-pinned-packages '((php-mode . "melpa")
+                                  (ivy . "melpa")
+                                  (swiper . "melpa")
+                                  (go-mode . "melpa")
+                                  (solarized-theme . "melpa")
+                                  (projectile . "melpa")
+                                  (magit . "melpa-stable")))
+#+end_src
+
 **** Initialise package manager
 
 Finally we initialise the package manager:
@@ -1481,12 +1495,6 @@ Always set the upstream when pushing:
 
 **** Load Magit
 
-We're pinning [[magit]] because it has a stable release, and I depend on it:
-
-#+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(magit . "melpa-stable"))
-#+end_src
-
 Finally we can install Magit:
 
 #+begin_src emacs-lisp
@@ -1682,7 +1690,6 @@ grouping of files.
 Install and initialise [[projectile]] from the main repo:
 
 #+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(projectile . "melpa"))
   (require-package 'projectile)
   (projectile-global-mode)
 #+end_src
@@ -1739,11 +1746,7 @@ I use the [[http://ethanschoonover.com/solarized][solarized]] dark theme in my e
 more up to date and has better compatibility with most Emacs packages.
 
 [[solarized-theme]] doesn't seem to follow package versioning, so just pull the
-latest:
-
-#+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(solarized-theme . "melpa"))
-#+end_src
+latest.
 
 Install and configure [[solarized-theme]]:
 
@@ -2194,7 +2197,6 @@ with the Go compiler and toolchain.
 Install [[go-mode]] from latest:
 
 #+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(go-mode . "melpa"))
   (require-package 'go-mode)
 #+end_src
 
@@ -2493,8 +2495,6 @@ Install [[swiper]] from latest code (and also Ivy, as otherwise I get an old
 version):
 
 #+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(swiper . "melpa"))
-  (add-to-list 'package-pinned-packages '(ivy . "melpa"))
   (require-package 'swiper)
 #+end_src
 
@@ -2592,13 +2592,8 @@ Add a launcher:
 
 Use a modern [[https://github.com/ejmr/php-mode][php-mode]].
 
-Pin a more modern version than the 2015 version that comes with Emacs:
-
-#+begin_src emacs-lisp
-  (add-to-list 'package-pinned-packages '(php-mode . "melpa"))
-#+end_src
-
-Install [[php-mode]]:
+Pin a more modern version than the 2015 version that comes with Emacs, and
+install [[php-mode]]:
 
 #+begin_src emacs-lisp
   (package-install 'php-mode)
