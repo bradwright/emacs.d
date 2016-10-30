@@ -1445,7 +1445,7 @@ When performing a [[http://www.gnu.org/software/emacs/manual/html_node/elisp/Min
 Open the =magit-status= buffer in the same window as the current buffer:
 
 #+begin_src emacs-lisp
-  (setq magit-status-buffer-switch-function 'switch-to-buffer)
+  (setq magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
 #+end_src
 
 Highlight individual word and letter changes when showing hunk diff overlays:
@@ -1478,17 +1478,6 @@ Always set the upstream when pushing:
 #+begin_src emacs-lisp
   (setq magit-push-arguments '("--set-upstream"))
 #+end_src
-
-**** Interaction with fullframe
-
-If =fullframe= is installed (see below), use it to make =magit-status= take over
-the entire frame:
-
-#+begin_src emacs-lisp
-  (after-load 'fullframe
-    (fullframe magit-status magit-mode-quit-window nil))
-#+end_src
-
 
 **** Load Magit
 
