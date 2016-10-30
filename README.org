@@ -196,8 +196,7 @@ of Emacs we're using supports the server package:
 
 ** Editing defaults
 
-Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/master/sane-defaults.el][Magnar Sveen's
-=sane-defaults.el= file]] for some commentary.
+Emacs comes with a collection of strange defaults. See [[https://github.com/magnars/.emacs.d/blob/5fb9e3170a80614da4fc7a4b0807d22b3465f538/settings/sane-defaults.el][Magnar Sveen's =sane-defaults.el= file]] for some commentary.
 
 *** Line widths and wrapping
 
