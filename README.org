@@ -628,6 +628,14 @@ We can use [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Uniquify.
                                                          (disable-theme 'solarized-light))))))
 #+end_src
 
+*** Clipboard management
+
+Make sure that [[http://pragmaticemacs.com/emacs/add-the-system-clipboard-to-the-emacs-kill-ring/][out-of-Emacs clipboard gets into the kill ring]]:
+
+#+begin_src emacs-lisp
+  (setq save-interprogram-paste-before-kill t)
+#+end_src
+
 ** OS X specific configuration
 
 Besides the keyboard configuration above, there are some other specific things I
