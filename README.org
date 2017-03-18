@@ -727,6 +727,15 @@ On the Yosemite beta, =ns-use-native-fullscreen= is =nil=.
     (setq ns-use-native-fullscreen t))
 #+end_src
 
+*** Maximise window
+
+Like Iterm2:
+
+#+begin_src emacs-lisp
+  (when (eq system-type 'darwin)
+    (global-set-key (kbd "S-s-<return>") 'delete-other-windows))
+#+end_src
+
 ** Utility functions
 
 *** Rename modeline
