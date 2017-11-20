@@ -2523,8 +2523,8 @@ version):
 Remap =isearch= to [[swiper]]:
 
 #+begin_src emacs-lisp
-  (define-key (current-global-map) [remap isearch-forward] 'swiper)
-  (define-key (current-global-map) [remap isearch-backward] 'swiper)
+  (define-key (current-global-map) [remap isearch-forward-regexp] 'swiper)
+  (define-key (current-global-map) [remap isearch-backward-regexp] 'swiper)
 #+end_src
 
 Add some advice to =recenter= the window when exiting from [[swiper]] (gotten from
