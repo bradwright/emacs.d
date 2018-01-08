@@ -1308,7 +1308,8 @@ Some packages need to be pinned to ensure they come from the right place:
                                   (solarized-theme . "melpa")
                                   (projectile . "melpa")
                                   (editorconfig . "melpa")
-                                  (magit . "melpa-stable")))
+                                  (magit . "melpa-stable")
+                                  (rjsx-mode . "melpa")))
 #+end_src
 
 **** Initialise package manager
@@ -2118,10 +2119,6 @@ includes a full syntax parser written in Emacs Lisp.
 JavaScript major mode, so I need the final line to make sure I use the right
 mode.
 
-#+begin_src emacs-lisp
-  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode))
-#+end_src
-
 **** configure js2-mode
 
 The default lighter for [[js2-mode]] =Javascript-IDE=, which is too long. Rename it:
@@ -2205,6 +2202,14 @@ clash.
       (flycheck-mode 1))
 
     (add-hook 'js2-mode-hook 'bw/turn-on-flycheck-mode-js2))
+#+end_src
+
+**** jsx
+
+Install [[https://github.com/felipeochoa/rjsx-mode][rjsx-mode]]:
+
+#+begin_src emacs-lisp
+  (package-install 'rjsx-mode)
 #+end_src
 
 *** go
