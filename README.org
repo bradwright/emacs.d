@@ -1306,6 +1306,7 @@ Some packages need to be pinned to ensure they come from the right place:
                                   (swiper . "melpa")
                                   (go-mode . "melpa")
                                   (solarized-theme . "melpa")
+                                  (smartparens . "melpa")
                                   (projectile . "melpa")
                                   (editorconfig . "melpa")
                                   (magit . "melpa-stable")
