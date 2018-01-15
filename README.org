@@ -1702,6 +1702,12 @@ results directly from the buffer.
   (require-package 'wgrep-ag)
 #+end_src
 
+Always save the buffers on exit:
+
+#+begin_src emacs-lisp
+  (setq wgrep-auto-save-buffer t)
+#+end_src
+
 *** projectile
 
 [[https://github.com/bbatsov/projectile][projectile]] is a minor mode for performing commands over a single 'project' or
