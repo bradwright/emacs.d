@@ -340,11 +340,11 @@ prompt. Code taken from [[http://ergoemacs.org/emacs/emacs_stop_cursor_enter_pro
     (setq ns-command-modifier 'super))
 #+END_SRC
 
-- =H-= means [[http://en.wikipedia.org/wiki/Hyper_key][hyper key]]. On OS X I want this to be =fn=:
+- =H-= means [[http://en.wikipedia.org/wiki/Hyper_key][hyper key]]. On OS X I want this to be =ctrl= to prevent fat fingers:
 
 #+BEGIN_SRC emacs-lisp
   (when (and (eq system-type 'darwin) (display-graphic-p))
-    (setq ns-function-modifier 'hyper))
+    (setq ns-function-modifier 'ctrl))
 #+END_SRC
 
 *** Basic remappings
