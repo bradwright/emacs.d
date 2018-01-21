@@ -1,5 +1,3 @@
-#+OPTIONS: toc:2
-
 * Bradley Wright's Emacs Configuration
 
 ** Preamble
