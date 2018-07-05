@@ -1552,7 +1552,7 @@ When launching =magit-blame-mode=, we want to switch into =emacs-mode=:
 [[https://github.com/DarwinAwardWinner/ido-ubiquitous][ido-ubiquitous]] mode enables ido in many more places than the default ido setup:
 
 #+begin_src emacs-lisp
-  (require-package 'ido-ubiquitous)
+  (require-package 'ido-completing-read+)
   (ido-ubiquitous-mode 1)
 #+end_src
 
