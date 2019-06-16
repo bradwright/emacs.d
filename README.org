@@ -1395,6 +1395,7 @@ I only want this to be installed and enabled on OS X.
 #+begin_src emacs-lisp
   (when (and (eq system-type 'darwin) (display-graphic-p))
     (require-package 'exec-path-from-shell)
+    (setq exec-path-from-shell-check-startup-files nil)
     (setq exec-path-from-shell-variables '("PATH"  "MANPATH" "SHELL"))
     (exec-path-from-shell-initialize))
 #+end_src
