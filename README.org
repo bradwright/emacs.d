@@ -1958,25 +1958,6 @@ This has been [[https://bitbucket.org/lyro/evil/issue/336/osx-visual-state-copie
       ad-do-it))
 #+end_src
 
-**** Fix evil integration with indirect regions
-
-This allows me to perform a motion command that narrows the range to a new
-buffer as an [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Indirect-Buffers.html][indirect buffer]] ([[http://demonastery.org/2013/04/emacs-narrow-to-region-indirect/][good explanation of how they might be used]]).
-
-This code has been mostly copied from
-[[http://demonastery.org/2013/04/emacs-evil-narrow-region/]].
-
-#+begin_src emacs-lisp
-  (after-load 'narrow-indirect
-    (evil-define-operator evil-narrow-indirect (beg end type)
-      "Indirectly narrow the region from BEG to END."
-      (interactive "<R>")
-      (evil-normal-state)
-      (ni-narrow-to-region-indirect-other-window beg end))
-    (define-key evil-normal-state-map "m" 'evil-narrow-indirect)
-    (define-key evil-visual-state-map "m" 'evil-narrow-indirect))
-#+end_src
-
 **** Default mode state for evil
 
 evil supports a default starting state for different major modes. I often want
@@ -2493,16 +2474,6 @@ make =browse-kill-ring= act like =yank-pop= by overwriting the previous yank:
 #+begin_src emacs-lisp
   (after-load 'browse-kill-ring
     (setq browse-kill-ring-replace-yank t))
-#+end_src
-
-*** narrow-indirect
-
-[[http://www.emacswiki.org/emacs/narrow-indirect.el][narrow-indirect]] allows one to focus a buffer onto some particular code in
-another window, editing it separately from its original context ([[http://demonastery.org/2013/04/emacs-narrow-to-region-indirect/][a better
-description of this workflow]]).
-
-#+begin_src emacs-lisp
-  (require-package 'narrow-indirect)
 #+end_src
 
 *** projectile-rails
