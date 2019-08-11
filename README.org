@@ -1356,7 +1356,9 @@ Force =paradox= into a [[fullframe]]:
 #+end_src
 
 Automatically 'star' packages on GitHub after I install them (so I can easily
-follow changes to them):
+follow changes to them). Note that this requires a Personal Access Token with
+=public_repo= permission, added to the MacOS Keychain with an account name of
+=paradox-github-token=:
 
 #+begin_src emacs-lisp
   (let ((github-token (bw/get-keychain-password "paradox-github-token")))
